@@ -18,6 +18,7 @@ En el siguiente diagrama se puede como el SAL/T interactúa con las señales de 
 ## Configuración
 
 En la carpeta `model` se encuentran los diagramas de estado desarrollados con [YAKINDU Statechart Tools](https://www.itemis.com/en/yakindu/state-machine/) Professional Edition (version 3.5.12).
+
 Para importar se deben seguir los siguientes pasos:
 
 - Clonar este repositorio con el comando:
