@@ -18,9 +18,9 @@ extern "C" {
 RKH_SMA_DCLR(salt);
 
 /* ................... Declares states and pseudostates .................... */
-RKH_DCLR_BASIC_STATE Disabled, PreventiveBrake, Remote, Automatic, Intermittent, SpeedMissing, UsingHaslerSpeed, UsingPulseGenSpeed, UsingGPSSpeed;
-RKH_DCLR_COMP_STATE Enabled, Limited;
-RKH_DCLR_CHOICE_STATE Salt_C0, Salt_C1;
+RKH_DCLR_BASIC_STATE Disabled, PreventiveBrake, TotalStop, TotalIsolation, Drift, IntermittentTractionEnabled, IntermittentTractionDisabled, IntermittentBrake, Exiting, TimerCounting, TractionEnabled, TractionDisabled, EmergencyBrake, IntermittentTractionEnabled, IntermittentTractionDisabled, IntermittentBrake, SpeedMissing, UsingHaslerSpeed, UsingPulseGenSpeed, UsingGPSSpeed;
+RKH_DCLR_COMP_STATE Enabled, Remote, Intermittent, Limited, Automatic, Intermittent;
+RKH_DCLR_CHOICE_STATE Salt_C0, Salt_C1, Salt_C2, Salt_C3, Salt_C4;
 
 /* ------------------------------- Data types ------------------------------ */
 /* ............................. Active object ............................. */
@@ -34,12 +34,26 @@ struct Salt
     RKHTmEvt tmEvtObj3;
     RKHTmEvt tmEvtObj4;
     RKHTmEvt tmEvtObj5;
-    rInt PREV_BRAKE_TIMEOUT;
+    RKHTmEvt tmEvtObj6;
+    RKHTmEvt tmEvtObj7;
+    RKHTmEvt tmEvtObj8;
+    RKHTmEvt tmEvtObj9;
+    RKHTmEvt tmEvtObj10;
+    RKHTmEvt tmEvtObj11;
+    RKHTmEvt tmEvtObj12;
+    RKHTmEvt tmEvtObj13;
+    rInt PREVENTIVE_BRAKE_TIMEOUT;
+    rInt EMERGENCY_BRAKE_TIMEOUT;
     rInt REMOTE_CMD_TIMEOUT;
     rInt SPEED_HASLER_TIMEOUT;
     rInt SPEED_PULSE_TIMEOUT;
     rInt SPEED_GPS_TIMEOUT;
     rInt SPEED_MISSING_TIME;
+    rInt REMOTE_CMD_STOP;
+    rInt REMOTE_CMD_ISOLATE;
+    rInt REMOTE_CMD_DRIFT;
+    rInt REMOTE_CMD_INTERMITTENT;
+    rInt REMOTE_CMD_EXIT;
 };
 
 /* -------------------------- External variables --------------------------- */
