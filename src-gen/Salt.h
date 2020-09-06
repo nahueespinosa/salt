@@ -18,9 +18,9 @@ extern "C" {
 RKH_SMA_DCLR(salt);
 
 /* ................... Declares states and pseudostates .................... */
-RKH_DCLR_BASIC_STATE Disabled, PreventiveBrake, TotalStop, TotalIsolation, Drift, IntermittentTractionEnabled, IntermittentTractionDisabled, IntermittentBrake, Exiting, TimerCounting, TractionEnabled, TractionDisabled, EmergencyBrake, IntermittentTractionEnabled, IntermittentTractionDisabled, IntermittentBrake, SpeedMissing, UsingHaslerSpeed, UsingPulseGenSpeed, UsingGPSSpeed;
+RKH_DCLR_BASIC_STATE Disabled, PreventiveBrake, TotalStop, TotalIsolation, Drift, IntermittentTractionEnabled, IntermittentTractionDisabled, IntermittentBrake, UnknownCmd, ActiveCmd, TractionEnabled, TractionDisabled, EmergencyBrake, IntermittentTractionEnabled, IntermittentTractionDisabled, IntermittentBrake, SpeedMissing, UsingHaslerSpeed, UsingPulseGenSpeed, UsingGPSSpeed;
 RKH_DCLR_COMP_STATE Enabled, Remote, Intermittent, Limited, Automatic, Intermittent;
-RKH_DCLR_CHOICE_STATE Salt_C0, Salt_C1, Salt_C2, Salt_C3, Salt_C4;
+RKH_DCLR_CHOICE_STATE Salt_C0, Salt_C1, Salt_C2, Salt_C3, Salt_C4, Salt_C5;
 
 /* ------------------------------- Data types ------------------------------ */
 /* ............................. Active object ............................. */

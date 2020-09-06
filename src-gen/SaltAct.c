@@ -24,17 +24,17 @@
 /* ----------------------------- Local macros ------------------------------ */
 #define WaitTime0	RKH_TIME_SEC(me->PREVENTIVE_BRAKE_TIMEOUT)
 #define WaitTime1	RKH_TIME_SEC(3)
-#define WaitTime2	RKH_TIME_SEC(10)
+#define WaitTime2	RKH_TIME_SEC(3)
 #define WaitTime3	RKH_TIME_SEC(me->EMERGENCY_BRAKE_TIMEOUT)
 #define WaitTime4	RKH_TIME_SEC(1)
-#define WaitTime5	RKH_TIME_SEC(me->EMERGENCY_BRAKE_TIMEOUT)
-#define WaitTime6	RKH_TIME_SEC(3)
-#define WaitTime7	RKH_TIME_SEC(10)
-#define WaitTime8	RKH_TIME_SEC(me->EMERGENCY_BRAKE_TIMEOUT)
-#define WaitTime9	RKH_TIME_SEC(me->SPEED_HASLER_TIMEOUT)
-#define WaitTime10	RKH_TIME_SEC(me->SPEED_PULSE_TIMEOUT)
-#define WaitTime11	RKH_TIME_SEC(me->SPEED_GPS_TIMEOUT)
-#define WaitTime12	RKH_TIME_SEC(1)
+#define WaitTime5	RKH_TIME_SEC(1)
+#define WaitTime6	RKH_TIME_SEC(me->EMERGENCY_BRAKE_TIMEOUT)
+#define WaitTime7	RKH_TIME_SEC(3)
+#define WaitTime8	RKH_TIME_SEC(10)
+#define WaitTime9	RKH_TIME_SEC(me->EMERGENCY_BRAKE_TIMEOUT)
+#define WaitTime10	RKH_TIME_SEC(me->SPEED_HASLER_TIMEOUT)
+#define WaitTime11	RKH_TIME_SEC(me->SPEED_PULSE_TIMEOUT)
+#define WaitTime12	RKH_TIME_SEC(me->SPEED_GPS_TIMEOUT)
 #define WaitTime13	RKH_TIME_SEC(me->SPEED_MISSING_TIME)
 
 /* ------------------------------- Constants ------------------------------- */
@@ -43,7 +43,7 @@
 /* ---------------------------- Local variables ---------------------------- */
 static rbool_t isSpeedAvailable = false;
 static rInt currentCycle = 0;
-static rInt remoteTimer = 0;
+static rInt remoteCmdTimer = 0;
 static rInt currentCmd = 0;
 
 
@@ -79,8 +79,8 @@ Salt_ToSalt_C0Ext7(Salt *const me, RKH_EVT_T *pe)
 	RKH_TR_FWK_STATE(me, &IntermittentTractionEnabled);
 	RKH_TR_FWK_STATE(me, &IntermittentTractionDisabled);
 	RKH_TR_FWK_STATE(me, &IntermittentBrake);
-	RKH_TR_FWK_STATE(me, &Exiting);
-	RKH_TR_FWK_STATE(me, &TimerCounting);
+	RKH_TR_FWK_STATE(me, &UnknownCmd);
+	RKH_TR_FWK_STATE(me, &ActiveCmd);
 	RKH_TR_FWK_STATE(me, &Limited);
 	RKH_TR_FWK_STATE(me, &Automatic);
 	RKH_TR_FWK_STATE(me, &TractionEnabled);
@@ -121,13 +121,13 @@ Salt_ToSalt_C0Ext7(Salt *const me, RKH_EVT_T *pe)
 		RKH_TR_FWK_OBJ_NAME(Salt_ToIntermittentTractionEnabledExt13, "ToIntermittentTractionEnabledExt13");
 		RKH_TR_FWK_OBJ_NAME(Salt_IntermittentTractionDisabledToSalt_C1Ext15, "IntermittentTractionDisabledToSalt_C1Ext15");
 		RKH_TR_FWK_OBJ_NAME(Salt_IntermittentBrakeToIntermittentTractionEnabledExt16, "IntermittentBrakeToIntermittentTractionEnabledExt16");
-		RKH_TR_FWK_OBJ_NAME(Salt_ToTimerCountingExt20, "ToTimerCountingExt20");
-		RKH_TR_FWK_OBJ_NAME(Salt_TimerCountingToTimerCountingExt22, "TimerCountingToTimerCountingExt22");
-		RKH_TR_FWK_OBJ_NAME(Salt_ToIntermittentTractionEnabledExt31, "ToIntermittentTractionEnabledExt31");
-		RKH_TR_FWK_OBJ_NAME(Salt_IntermittentTractionDisabledToSalt_C2Ext33, "IntermittentTractionDisabledToSalt_C2Ext33");
-		RKH_TR_FWK_OBJ_NAME(Salt_IntermittentBrakeToIntermittentTractionEnabledExt34, "IntermittentBrakeToIntermittentTractionEnabledExt34");
-		RKH_TR_FWK_OBJ_NAME(Salt_TimerCountingToTimerCountingLoc10, "TimerCountingToTimerCountingLoc10");
-		RKH_TR_FWK_OBJ_NAME(Salt_SpeedMissingToSpeedMissingLoc21, "SpeedMissingToSpeedMissingLoc21");
+		RKH_TR_FWK_OBJ_NAME(Salt_ToActiveCmdExt20, "ToActiveCmdExt20");
+		RKH_TR_FWK_OBJ_NAME(Salt_ActiveCmdToActiveCmdExt21, "ActiveCmdToActiveCmdExt21");
+		RKH_TR_FWK_OBJ_NAME(Salt_ActiveCmdToSalt_C2Ext22, "ActiveCmdToSalt_C2Ext22");
+		RKH_TR_FWK_OBJ_NAME(Salt_ToIntermittentTractionEnabledExt33, "ToIntermittentTractionEnabledExt33");
+		RKH_TR_FWK_OBJ_NAME(Salt_IntermittentTractionDisabledToSalt_C3Ext35, "IntermittentTractionDisabledToSalt_C3Ext35");
+		RKH_TR_FWK_OBJ_NAME(Salt_IntermittentBrakeToIntermittentTractionEnabledExt36, "IntermittentBrakeToIntermittentTractionEnabledExt36");
+		RKH_TR_FWK_OBJ_NAME(Salt_SpeedMissingToSpeedMissingLoc20, "SpeedMissingToSpeedMissingLoc20");
 		RKH_TR_FWK_OBJ_NAME(Salt_enDisabled, "enDisabled");
 		RKH_TR_FWK_OBJ_NAME(Salt_enEnabled, "enEnabled");
 		RKH_TR_FWK_OBJ_NAME(Salt_enPreventiveBrake, "enPreventiveBrake");
@@ -152,20 +152,20 @@ Salt_ToSalt_C0Ext7(Salt *const me, RKH_EVT_T *pe)
 		RKH_TR_FWK_OBJ_NAME(Salt_exEmergencyBrake, "exEmergencyBrake");
 		RKH_TR_FWK_OBJ_NAME(Salt_exIntermittentBrake, "exIntermittentBrake");
 		RKH_TR_FWK_OBJ_NAME(Salt_isCondRemoteToLimited6, "isCondRemoteToLimited6");
-		RKH_TR_FWK_OBJ_NAME(Salt_isCondTimerCountingTo// TODO for Exit21, "isCondTimerCountingTo// TODO for Exit21");
-		RKH_TR_FWK_OBJ_NAME(Salt_isCondTimerCountingToTimerCounting22, "isCondTimerCountingToTimerCounting22");
-		RKH_TR_FWK_OBJ_NAME(Salt_isCondLimitedToRemote23, "isCondLimitedToRemote23");
-		RKH_TR_FWK_OBJ_NAME(Salt_isCondTractionEnabledToTractionDisabled26, "isCondTractionEnabledToTractionDisabled26");
-		RKH_TR_FWK_OBJ_NAME(Salt_isCondTractionDisabledToEmergencyBrake27, "isCondTractionDisabledToEmergencyBrake27");
-		RKH_TR_FWK_OBJ_NAME(Salt_isCondTractionDisabledToTractionEnabled28, "isCondTractionDisabledToTractionEnabled28");
+		RKH_TR_FWK_OBJ_NAME(Salt_isCondActiveCmdToActiveCmd21, "isCondActiveCmdToActiveCmd21");
+		RKH_TR_FWK_OBJ_NAME(Salt_isCondLimitedToRemote25, "isCondLimitedToRemote25");
+		RKH_TR_FWK_OBJ_NAME(Salt_isCondTractionEnabledToTractionDisabled28, "isCondTractionEnabledToTractionDisabled28");
+		RKH_TR_FWK_OBJ_NAME(Salt_isCondTractionDisabledToEmergencyBrake29, "isCondTractionDisabledToEmergencyBrake29");
+		RKH_TR_FWK_OBJ_NAME(Salt_isCondTractionDisabledToTractionEnabled30, "isCondTractionDisabledToTractionEnabled30");
 		RKH_TR_FWK_OBJ_NAME(Salt_isCondSalt_C0ToTotalStop8, "isCondSalt_C0ToTotalStop8");
 		RKH_TR_FWK_OBJ_NAME(Salt_isCondSalt_C0ToTotalIsolation9, "isCondSalt_C0ToTotalIsolation9");
 		RKH_TR_FWK_OBJ_NAME(Salt_isCondSalt_C0ToDrift10, "isCondSalt_C0ToDrift10");
 		RKH_TR_FWK_OBJ_NAME(Salt_isCondSalt_C0ToIntermittent11, "isCondSalt_C0ToIntermittent11");
 		RKH_TR_FWK_OBJ_NAME(Salt_isCondSalt_C1ToIntermittentTractionEnabled17, "isCondSalt_C1ToIntermittentTractionEnabled17");
-		RKH_TR_FWK_OBJ_NAME(Salt_isCondSalt_C2ToIntermittentTractionEnabled35, "isCondSalt_C2ToIntermittentTractionEnabled35");
-		RKH_TR_FWK_OBJ_NAME(Salt_isCondSalt_C3ToAutomatic38, "isCondSalt_C3ToAutomatic38");
-		RKH_TR_FWK_OBJ_NAME(Salt_isCondSalt_C4ToLimited41, "isCondSalt_C4ToLimited41");
+		RKH_TR_FWK_OBJ_NAME(Salt_isCondSalt_C2To// TODO for Exit23, "isCondSalt_C2To// TODO for Exit23");
+		RKH_TR_FWK_OBJ_NAME(Salt_isCondSalt_C3ToIntermittentTractionEnabled37, "isCondSalt_C3ToIntermittentTractionEnabled37");
+		RKH_TR_FWK_OBJ_NAME(Salt_isCondSalt_C4ToAutomatic40, "isCondSalt_C4ToAutomatic40");
+		RKH_TR_FWK_OBJ_NAME(Salt_isCondSalt_C5ToLimited43, "isCondSalt_C5ToLimited43");
 	#endif
 	
 	currentCmd = TODO: class org.yakindu.sct.model.stext.stext.impl.EventValueReferenceExpressionImpl;
@@ -190,43 +190,43 @@ Salt_IntermittentBrakeToIntermittentTractionEnabledExt16(Salt *const me, RKH_EVT
 }
 
 void 
-Salt_ToTimerCountingExt20(Salt *const me, RKH_EVT_T *pe)
+Salt_ToActiveCmdExt20(Salt *const me, RKH_EVT_T *pe)
 {
-	remoteTimer = 10;
+	remoteCmdTimer = 10;
 }
 
 void 
-Salt_TimerCountingToTimerCountingExt22(Salt *const me, RKH_EVT_T *pe)
+Salt_ActiveCmdToActiveCmdExt21(Salt *const me, RKH_EVT_T *pe)
 {
-	remoteTimer = 10;
+	remoteCmdTimer = 10;
 }
 
 void 
-Salt_ToIntermittentTractionEnabledExt31(Salt *const me, RKH_EVT_T *pe)
+Salt_ActiveCmdToSalt_C2Ext22(Salt *const me, RKH_EVT_T *pe)
+{
+	remoteCmdTimer--;
+}
+
+void 
+Salt_ToIntermittentTractionEnabledExt33(Salt *const me, RKH_EVT_T *pe)
 {
 	currentCycle = 0;
 }
 
 void 
-Salt_IntermittentTractionDisabledToSalt_C2Ext33(Salt *const me, RKH_EVT_T *pe)
+Salt_IntermittentTractionDisabledToSalt_C3Ext35(Salt *const me, RKH_EVT_T *pe)
 {
 	currentCycle++;
 }
 
 void 
-Salt_IntermittentBrakeToIntermittentTractionEnabledExt34(Salt *const me, RKH_EVT_T *pe)
+Salt_IntermittentBrakeToIntermittentTractionEnabledExt36(Salt *const me, RKH_EVT_T *pe)
 {
 	currentCycle = 0;
 }
 
 void 
-Salt_TimerCountingToTimerCountingLoc10(Salt *const me, RKH_EVT_T *pe)
-{
-	remoteTimer--;
-}
-
-void 
-Salt_SpeedMissingToSpeedMissingLoc21(Salt *const me, RKH_EVT_T *pe)
+Salt_SpeedMissingToSpeedMissingLoc20(Salt *const me, RKH_EVT_T *pe)
 {
 	TODO: class org.yakindu.sct.model.stext.stext.impl.EventRaisingExpressionImpl;
 }
@@ -304,7 +304,7 @@ Salt_enIntermittentBrake(Salt *const me)
 }
 
 void 
-Salt_enExiting(Salt *const me)
+Salt_enUnknownCmd(Salt *const me)
 {
 	RKH_SET_STATIC_EVENT(&me->tmEvtObj4, evTout4);
 	RKH_TMR_INIT(&me->tmEvtObj4.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj4), NULL);
@@ -312,11 +312,11 @@ Salt_enExiting(Salt *const me)
 }
 
 void 
-Salt_enTimerCounting(Salt *const me)
+Salt_enActiveCmd(Salt *const me)
 {
-	RKH_SET_STATIC_EVENT(&me->tmEvtObj12, evTout12);
-	RKH_TMR_INIT(&me->tmEvtObj12.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj12), NULL);
-	RKH_TMR_PERIODIC(&me->tmEvtObj12.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime12, WaitTime12);
+	RKH_SET_STATIC_EVENT(&me->tmEvtObj5, evTout5);
+	RKH_TMR_INIT(&me->tmEvtObj5.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj5), NULL);
+	RKH_TMR_ONESHOT(&me->tmEvtObj5.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime5);
 }
 
 void 
@@ -336,9 +336,9 @@ void
 Salt_enEmergencyBrake(Salt *const me)
 {
 	safetySignalActivateFE();
-	RKH_SET_STATIC_EVENT(&me->tmEvtObj5, evTout5);
-	RKH_TMR_INIT(&me->tmEvtObj5.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj5), NULL);
-	RKH_TMR_ONESHOT(&me->tmEvtObj5.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime5);
+	RKH_SET_STATIC_EVENT(&me->tmEvtObj6, evTout6);
+	RKH_TMR_INIT(&me->tmEvtObj6.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj6), NULL);
+	RKH_TMR_ONESHOT(&me->tmEvtObj6.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime6);
 }
 
 void 
@@ -346,27 +346,27 @@ Salt_enIntermittentTractionEnabled(Salt *const me)
 {
 	safetySignalDeactivateCT();
 	safetySignalDeactivateFE();
-	RKH_SET_STATIC_EVENT(&me->tmEvtObj6, evTout6);
-	RKH_TMR_INIT(&me->tmEvtObj6.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj6), NULL);
-	RKH_TMR_ONESHOT(&me->tmEvtObj6.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime6);
-}
-
-void 
-Salt_enIntermittentTractionDisabled(Salt *const me)
-{
-	safetySignalActivateCT();
 	RKH_SET_STATIC_EVENT(&me->tmEvtObj7, evTout7);
 	RKH_TMR_INIT(&me->tmEvtObj7.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj7), NULL);
 	RKH_TMR_ONESHOT(&me->tmEvtObj7.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime7);
 }
 
 void 
-Salt_enIntermittentBrake(Salt *const me)
+Salt_enIntermittentTractionDisabled(Salt *const me)
 {
-	safetySignalActivateFE();
+	safetySignalActivateCT();
 	RKH_SET_STATIC_EVENT(&me->tmEvtObj8, evTout8);
 	RKH_TMR_INIT(&me->tmEvtObj8.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj8), NULL);
 	RKH_TMR_ONESHOT(&me->tmEvtObj8.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime8);
+}
+
+void 
+Salt_enIntermittentBrake(Salt *const me)
+{
+	safetySignalActivateFE();
+	RKH_SET_STATIC_EVENT(&me->tmEvtObj9, evTout9);
+	RKH_TMR_INIT(&me->tmEvtObj9.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj9), NULL);
+	RKH_TMR_ONESHOT(&me->tmEvtObj9.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime9);
 }
 
 void 
@@ -383,9 +383,9 @@ Salt_enUsingHaslerSpeed(Salt *const me)
 {
 	isSpeedAvailable = true;
 	TODO: class org.yakindu.sct.model.stext.stext.impl.EventRaisingExpressionImpl;
-	RKH_SET_STATIC_EVENT(&me->tmEvtObj9, evTout9);
-	RKH_TMR_INIT(&me->tmEvtObj9.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj9), NULL);
-	RKH_TMR_ONESHOT(&me->tmEvtObj9.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime9);
+	RKH_SET_STATIC_EVENT(&me->tmEvtObj10, evTout10);
+	RKH_TMR_INIT(&me->tmEvtObj10.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj10), NULL);
+	RKH_TMR_ONESHOT(&me->tmEvtObj10.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime10);
 }
 
 void 
@@ -393,9 +393,9 @@ Salt_enUsingPulseGenSpeed(Salt *const me)
 {
 	isSpeedAvailable = true;
 	TODO: class org.yakindu.sct.model.stext.stext.impl.EventRaisingExpressionImpl;
-	RKH_SET_STATIC_EVENT(&me->tmEvtObj10, evTout10);
-	RKH_TMR_INIT(&me->tmEvtObj10.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj10), NULL);
-	RKH_TMR_ONESHOT(&me->tmEvtObj10.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime10);
+	RKH_SET_STATIC_EVENT(&me->tmEvtObj11, evTout11);
+	RKH_TMR_INIT(&me->tmEvtObj11.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj11), NULL);
+	RKH_TMR_ONESHOT(&me->tmEvtObj11.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime11);
 }
 
 void 
@@ -403,9 +403,9 @@ Salt_enUsingGPSSpeed(Salt *const me)
 {
 	isSpeedAvailable = true;
 	TODO: class org.yakindu.sct.model.stext.stext.impl.EventRaisingExpressionImpl;
-	RKH_SET_STATIC_EVENT(&me->tmEvtObj11, evTout11);
-	RKH_TMR_INIT(&me->tmEvtObj11.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj11), NULL);
-	RKH_TMR_ONESHOT(&me->tmEvtObj11.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime11);
+	RKH_SET_STATIC_EVENT(&me->tmEvtObj12, evTout12);
+	RKH_TMR_INIT(&me->tmEvtObj12.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj12), NULL);
+	RKH_TMR_ONESHOT(&me->tmEvtObj12.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime12);
 }
 
 /* ............................. Exit actions .............................. */
@@ -435,41 +435,41 @@ Salt_exIntermittentBrake(Salt *const me)
 }
 
 void 
-Salt_exExiting(Salt *const me)
+Salt_exUnknownCmd(Salt *const me)
 {
 	rkh_tmr_stop(&me->tmEvtObj4.tmr);
 }
 
 void 
-Salt_exTimerCounting(Salt *const me)
+Salt_exActiveCmd(Salt *const me)
 {
-	rkh_tmr_stop(&me->tmEvtObj12.tmr);
+	rkh_tmr_stop(&me->tmEvtObj5.tmr);
 }
 
 void 
 Salt_exEmergencyBrake(Salt *const me)
 {
 	safetySignalDeactivateFE();
-	rkh_tmr_stop(&me->tmEvtObj5.tmr);
+	rkh_tmr_stop(&me->tmEvtObj6.tmr);
 }
 
 void 
 Salt_exIntermittentTractionEnabled(Salt *const me)
 {
-	rkh_tmr_stop(&me->tmEvtObj6.tmr);
+	rkh_tmr_stop(&me->tmEvtObj7.tmr);
 }
 
 void 
 Salt_exIntermittentTractionDisabled(Salt *const me)
 {
-	rkh_tmr_stop(&me->tmEvtObj7.tmr);
+	rkh_tmr_stop(&me->tmEvtObj8.tmr);
 }
 
 void 
 Salt_exIntermittentBrake(Salt *const me)
 {
 	safetySignalDeactivateFE();
-	rkh_tmr_stop(&me->tmEvtObj8.tmr);
+	rkh_tmr_stop(&me->tmEvtObj9.tmr);
 }
 
 void 
@@ -481,19 +481,19 @@ Salt_exSpeedMissing(Salt *const me)
 void 
 Salt_exUsingHaslerSpeed(Salt *const me)
 {
-	rkh_tmr_stop(&me->tmEvtObj9.tmr);
+	rkh_tmr_stop(&me->tmEvtObj10.tmr);
 }
 
 void 
 Salt_exUsingPulseGenSpeed(Salt *const me)
 {
-	rkh_tmr_stop(&me->tmEvtObj10.tmr);
+	rkh_tmr_stop(&me->tmEvtObj11.tmr);
 }
 
 void 
 Salt_exUsingGPSSpeed(Salt *const me)
 {
-	rkh_tmr_stop(&me->tmEvtObj11.tmr);
+	rkh_tmr_stop(&me->tmEvtObj12.tmr);
 }
 
 /* ................................ Guards ................................. */
@@ -504,37 +504,31 @@ Salt_isCondRemoteToLimited6(Salt *const me, RKH_EVT_T *pe)
 }
 
 rbool_t 
-Salt_isCondTimerCountingTo// TODO for Exit21(Salt *const me, RKH_EVT_T *pe)
-{
-	return ((remoteTimer == 0)) ? true : false;
-}
-
-rbool_t 
-Salt_isCondTimerCountingToTimerCounting22(Salt *const me, RKH_EVT_T *pe)
+Salt_isCondActiveCmdToActiveCmd21(Salt *const me, RKH_EVT_T *pe)
 {
 	return ((TODO: class org.yakindu.sct.model.stext.stext.impl.EventValueReferenceExpressionImpl == currentCmd)) ? true : false;
 }
 
 rbool_t 
-Salt_isCondLimitedToRemote23(Salt *const me, RKH_EVT_T *pe)
+Salt_isCondLimitedToRemote25(Salt *const me, RKH_EVT_T *pe)
 {
 	return ((TODO: class org.yakindu.sct.model.stext.stext.impl.EventValueReferenceExpressionImpl != me->REMOTE_CMD_EXIT)) ? true : false;
 }
 
 rbool_t 
-Salt_isCondTractionEnabledToTractionDisabled26(Salt *const me, RKH_EVT_T *pe)
+Salt_isCondTractionEnabledToTractionDisabled28(Salt *const me, RKH_EVT_T *pe)
 {
 	return ((TODO: class org.yakindu.sct.model.stext.stext.impl.EventValueReferenceExpressionImpl > 25)) ? true : false;
 }
 
 rbool_t 
-Salt_isCondTractionDisabledToEmergencyBrake27(Salt *const me, RKH_EVT_T *pe)
+Salt_isCondTractionDisabledToEmergencyBrake29(Salt *const me, RKH_EVT_T *pe)
 {
 	return ((TODO: class org.yakindu.sct.model.stext.stext.impl.EventValueReferenceExpressionImpl > 35)) ? true : false;
 }
 
 rbool_t 
-Salt_isCondTractionDisabledToTractionEnabled28(Salt *const me, RKH_EVT_T *pe)
+Salt_isCondTractionDisabledToTractionEnabled30(Salt *const me, RKH_EVT_T *pe)
 {
 	return ((TODO: class org.yakindu.sct.model.stext.stext.impl.EventValueReferenceExpressionImpl < 20)) ? true : false;
 }
@@ -570,19 +564,25 @@ Salt_isCondSalt_C1ToIntermittentTractionEnabled17(Salt *const me, RKH_EVT_T *pe)
 }
 
 rbool_t 
-Salt_isCondSalt_C2ToIntermittentTractionEnabled35(Salt *const me, RKH_EVT_T *pe)
+Salt_isCondSalt_C2To// TODO for Exit23(Salt *const me, RKH_EVT_T *pe)
+{
+	return ((remoteCmdTimer == 0)) ? true : false;
+}
+
+rbool_t 
+Salt_isCondSalt_C3ToIntermittentTractionEnabled37(Salt *const me, RKH_EVT_T *pe)
 {
 	return ((currentCycle < 5)) ? true : false;
 }
 
 rbool_t 
-Salt_isCondSalt_C3ToAutomatic38(Salt *const me, RKH_EVT_T *pe)
+Salt_isCondSalt_C4ToAutomatic40(Salt *const me, RKH_EVT_T *pe)
 {
 	return (isSpeedAvailable) ? true : false;
 }
 
 rbool_t 
-Salt_isCondSalt_C4ToLimited41(Salt *const me, RKH_EVT_T *pe)
+Salt_isCondSalt_C5ToLimited43(Salt *const me, RKH_EVT_T *pe)
 {
 	return (isSpeedAvailable) ? true : false;
 }
