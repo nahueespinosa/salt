@@ -9,12 +9,6 @@ El SAL/T es un sistema que le permitirá al conductor la activación y desactiva
 
 Se considera un sistema crítico debido a que, en caso de fallar, puede ocasionar daños afectando negativamente la salud de las personas, al medio ambiente y/o generar grandes pérdidas materiales.
 
-### Diagrama de bloques funcionales
-
-En el siguiente diagrama se puede como el SAL/T interactúa con las señales de CT y FE de los subsistemas de seguridad de la formación y el resto de los sistemas involucrados.
-
-![Diagrama de Bloques Funcionales](docs/block_diagram.png)
-
 ## Configuración
 
 En la carpeta `model` se encuentran los diagramas de estado desarrollados con [YAKINDU Statechart Tools](https://www.itemis.com/en/yakindu/state-machine/) Professional Edition (version 3.5.12).
