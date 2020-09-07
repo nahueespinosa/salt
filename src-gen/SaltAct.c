@@ -22,15 +22,16 @@
 #include "SaltActRequired.h"
 
 /* ----------------------------- Local macros ------------------------------ */
-#define WaitTime0	RKH_TIME_SEC(me->SALT_INTERMITTENT_TIME_OFF)
-#define WaitTime1	RKH_TIME_SEC(me->SALT_INTERMITTENT_TIME_ON)
-#define WaitTime2	RKH_TIME_SEC(me->SALT_FE_TIMEOUT)
-#define WaitTime3	RKH_TIME_SEC(1)
+#define WaitTime0	RKH_TIME_SEC(me->SALT_FE_TIMEOUT)
+#define WaitTime1	RKH_TIME_SEC(me->SALT_INTERMITTENT_TIME_OFF)
+#define WaitTime2	RKH_TIME_SEC(me->SALT_INTERMITTENT_TIME_ON)
+#define WaitTime3	RKH_TIME_SEC(me->SALT_FE_TIMEOUT)
 #define WaitTime4	RKH_TIME_SEC(1)
-#define WaitTime5	RKH_TIME_SEC(me->SALT_FE_TIMEOUT)
-#define WaitTime6	RKH_TIME_SEC(me->SALT_INTERMITTENT_TIME_OFF)
-#define WaitTime7	RKH_TIME_SEC(me->SALT_INTERMITTENT_TIME_ON)
-#define WaitTime8	RKH_TIME_SEC(me->SALT_FE_TIMEOUT)
+#define WaitTime5	RKH_TIME_SEC(1)
+#define WaitTime6	RKH_TIME_SEC(me->SALT_FE_TIMEOUT)
+#define WaitTime7	RKH_TIME_SEC(me->SALT_INTERMITTENT_TIME_OFF)
+#define WaitTime8	RKH_TIME_SEC(me->SALT_INTERMITTENT_TIME_ON)
+#define WaitTime9	RKH_TIME_SEC(me->SALT_FE_TIMEOUT)
 
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */
@@ -100,6 +101,7 @@ Salt_ToSalt_C0Ext7(Salt *const me, RKH_EVT_T *pe)
 	RKH_TR_FWK_TIMER(&me->tmEvtObj6.tmr);
 	RKH_TR_FWK_TIMER(&me->tmEvtObj7.tmr);
 	RKH_TR_FWK_TIMER(&me->tmEvtObj8.tmr);
+	RKH_TR_FWK_TIMER(&me->tmEvtObj9.tmr);
 	#if 0
 		RKH_TR_FWK_OBJ_NAME(Salt_ToSalt_C0Ext7, "ToSalt_C0Ext7");
 		RKH_TR_FWK_OBJ_NAME(Salt_ToIntermittentTractionEnabledExt13, "ToIntermittentTractionEnabledExt13");
@@ -220,6 +222,9 @@ Salt_enPreventiveBrake(Salt *const me)
 {
 	safetySignalActivateCT();
 	safetySignalActivateFE();
+	RKH_SET_STATIC_EVENT(&me->tmEvtObj0, evTout0);
+	RKH_TMR_INIT(&me->tmEvtObj0.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj0), NULL);
+	RKH_TMR_ONESHOT(&me->tmEvtObj0.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime0);
 }
 
 void 
@@ -248,43 +253,43 @@ Salt_enIntermittentTractionEnabled(Salt *const me)
 {
 	safetySignalDeactivateCT();
 	safetySignalDeactivateFE();
-	RKH_SET_STATIC_EVENT(&me->tmEvtObj0, evTout0);
-	RKH_TMR_INIT(&me->tmEvtObj0.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj0), NULL);
-	RKH_TMR_ONESHOT(&me->tmEvtObj0.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime0);
-}
-
-void 
-Salt_enIntermittentTractionDisabled(Salt *const me)
-{
-	safetySignalActivateCT();
 	RKH_SET_STATIC_EVENT(&me->tmEvtObj1, evTout1);
 	RKH_TMR_INIT(&me->tmEvtObj1.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj1), NULL);
 	RKH_TMR_ONESHOT(&me->tmEvtObj1.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime1);
 }
 
 void 
-Salt_enIntermittentBrake(Salt *const me)
+Salt_enIntermittentTractionDisabled(Salt *const me)
 {
-	safetySignalActivateFE();
+	safetySignalActivateCT();
 	RKH_SET_STATIC_EVENT(&me->tmEvtObj2, evTout2);
 	RKH_TMR_INIT(&me->tmEvtObj2.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj2), NULL);
 	RKH_TMR_ONESHOT(&me->tmEvtObj2.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime2);
 }
 
 void 
-Salt_enUnknownCmd(Salt *const me)
+Salt_enIntermittentBrake(Salt *const me)
 {
+	safetySignalActivateFE();
 	RKH_SET_STATIC_EVENT(&me->tmEvtObj3, evTout3);
 	RKH_TMR_INIT(&me->tmEvtObj3.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj3), NULL);
 	RKH_TMR_ONESHOT(&me->tmEvtObj3.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime3);
 }
 
 void 
-Salt_enActiveCmd(Salt *const me)
+Salt_enUnknownCmd(Salt *const me)
 {
 	RKH_SET_STATIC_EVENT(&me->tmEvtObj4, evTout4);
 	RKH_TMR_INIT(&me->tmEvtObj4.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj4), NULL);
 	RKH_TMR_ONESHOT(&me->tmEvtObj4.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime4);
+}
+
+void 
+Salt_enActiveCmd(Salt *const me)
+{
+	RKH_SET_STATIC_EVENT(&me->tmEvtObj5, evTout5);
+	RKH_TMR_INIT(&me->tmEvtObj5.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj5), NULL);
+	RKH_TMR_ONESHOT(&me->tmEvtObj5.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime5);
 }
 
 void 
@@ -304,9 +309,9 @@ void
 Salt_enEmergencyBrake(Salt *const me)
 {
 	safetySignalActivateFE();
-	RKH_SET_STATIC_EVENT(&me->tmEvtObj5, evTout5);
-	RKH_TMR_INIT(&me->tmEvtObj5.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj5), NULL);
-	RKH_TMR_ONESHOT(&me->tmEvtObj5.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime5);
+	RKH_SET_STATIC_EVENT(&me->tmEvtObj6, evTout6);
+	RKH_TMR_INIT(&me->tmEvtObj6.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj6), NULL);
+	RKH_TMR_ONESHOT(&me->tmEvtObj6.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime6);
 }
 
 void 
@@ -314,85 +319,91 @@ Salt_enIntermittentTractionEnabled(Salt *const me)
 {
 	safetySignalDeactivateCT();
 	safetySignalDeactivateFE();
-	RKH_SET_STATIC_EVENT(&me->tmEvtObj6, evTout6);
-	RKH_TMR_INIT(&me->tmEvtObj6.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj6), NULL);
-	RKH_TMR_ONESHOT(&me->tmEvtObj6.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime6);
-}
-
-void 
-Salt_enIntermittentTractionDisabled(Salt *const me)
-{
-	safetySignalActivateCT();
 	RKH_SET_STATIC_EVENT(&me->tmEvtObj7, evTout7);
 	RKH_TMR_INIT(&me->tmEvtObj7.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj7), NULL);
 	RKH_TMR_ONESHOT(&me->tmEvtObj7.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime7);
 }
 
 void 
-Salt_enIntermittentBrake(Salt *const me)
+Salt_enIntermittentTractionDisabled(Salt *const me)
 {
-	safetySignalActivateFE();
+	safetySignalActivateCT();
 	RKH_SET_STATIC_EVENT(&me->tmEvtObj8, evTout8);
 	RKH_TMR_INIT(&me->tmEvtObj8.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj8), NULL);
 	RKH_TMR_ONESHOT(&me->tmEvtObj8.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime8);
 }
 
+void 
+Salt_enIntermittentBrake(Salt *const me)
+{
+	safetySignalActivateFE();
+	RKH_SET_STATIC_EVENT(&me->tmEvtObj9, evTout9);
+	RKH_TMR_INIT(&me->tmEvtObj9.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj9), NULL);
+	RKH_TMR_ONESHOT(&me->tmEvtObj9.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime9);
+}
+
 /* ............................. Exit actions .............................. */
 void 
-Salt_exIntermittentTractionEnabled(Salt *const me)
+Salt_exPreventiveBrake(Salt *const me)
 {
 	rkh_tmr_stop(&me->tmEvtObj0.tmr);
 }
 
 void 
-Salt_exIntermittentTractionDisabled(Salt *const me)
+Salt_exIntermittentTractionEnabled(Salt *const me)
 {
 	rkh_tmr_stop(&me->tmEvtObj1.tmr);
+}
+
+void 
+Salt_exIntermittentTractionDisabled(Salt *const me)
+{
+	rkh_tmr_stop(&me->tmEvtObj2.tmr);
 }
 
 void 
 Salt_exIntermittentBrake(Salt *const me)
 {
 	safetySignalDeactivateFE();
-	rkh_tmr_stop(&me->tmEvtObj2.tmr);
+	rkh_tmr_stop(&me->tmEvtObj3.tmr);
 }
 
 void 
 Salt_exUnknownCmd(Salt *const me)
 {
-	rkh_tmr_stop(&me->tmEvtObj3.tmr);
+	rkh_tmr_stop(&me->tmEvtObj4.tmr);
 }
 
 void 
 Salt_exActiveCmd(Salt *const me)
 {
-	rkh_tmr_stop(&me->tmEvtObj4.tmr);
+	rkh_tmr_stop(&me->tmEvtObj5.tmr);
 }
 
 void 
 Salt_exEmergencyBrake(Salt *const me)
 {
 	safetySignalDeactivateFE();
-	rkh_tmr_stop(&me->tmEvtObj5.tmr);
+	rkh_tmr_stop(&me->tmEvtObj6.tmr);
 }
 
 void 
 Salt_exIntermittentTractionEnabled(Salt *const me)
 {
-	rkh_tmr_stop(&me->tmEvtObj6.tmr);
+	rkh_tmr_stop(&me->tmEvtObj7.tmr);
 }
 
 void 
 Salt_exIntermittentTractionDisabled(Salt *const me)
 {
-	rkh_tmr_stop(&me->tmEvtObj7.tmr);
+	rkh_tmr_stop(&me->tmEvtObj8.tmr);
 }
 
 void 
 Salt_exIntermittentBrake(Salt *const me)
 {
 	safetySignalDeactivateFE();
-	rkh_tmr_stop(&me->tmEvtObj8.tmr);
+	rkh_tmr_stop(&me->tmEvtObj9.tmr);
 }
 
 /* ................................ Guards ................................. */

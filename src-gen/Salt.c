@@ -21,7 +21,7 @@
 /* ----------------------------- Local macros ------------------------------ */
 /* ........................ States and pseudostates ........................ */
 RKH_CREATE_BASIC_STATE(Disabled, Salt_enDisabled, NULL, RKH_ROOT, NULL);
-RKH_CREATE_BASIC_STATE(PreventiveBrake, Salt_enPreventiveBrake, NULL, &Enabled, NULL);
+RKH_CREATE_BASIC_STATE(PreventiveBrake, Salt_enPreventiveBrake, Salt_exPreventiveBrake, &Enabled, NULL);
 RKH_CREATE_BASIC_STATE(TotalStop, Salt_enTotalStop, NULL, &Remote, NULL);
 RKH_CREATE_BASIC_STATE(TotalIsolation, Salt_enTotalIsolation, NULL, &Remote, NULL);
 RKH_CREATE_BASIC_STATE(Drift, Salt_enDrift, NULL, &Remote, NULL);
@@ -55,7 +55,7 @@ RKH_CREATE_TRANS_TABLE(Enabled)
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(PreventiveBrake)
-	RKH_TRREG(evSpeedLost, NULL, NULL, &Limited),
+	RKH_TRREG(evTout0, NULL, NULL, &Limited),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(Remote)
@@ -75,24 +75,24 @@ RKH_CREATE_TRANS_TABLE(Intermittent)
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(IntermittentTractionEnabled)
-	RKH_TRREG(evTout0, NULL, NULL, &IntermittentTractionDisabled),
+	RKH_TRREG(evTout1, NULL, NULL, &IntermittentTractionDisabled),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(IntermittentTractionDisabled)
-	RKH_TRREG(evTout1, NULL, Salt_IntermittentTractionDisabledToSalt_C1Ext15, &Salt_C1),
+	RKH_TRREG(evTout2, NULL, Salt_IntermittentTractionDisabledToSalt_C1Ext15, &Salt_C1),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(IntermittentBrake)
-	RKH_TRREG(evTout2, NULL, Salt_IntermittentBrakeToIntermittentTractionEnabledExt16, &IntermittentTractionEnabled),
+	RKH_TRREG(evTout3, NULL, Salt_IntermittentBrakeToIntermittentTractionEnabledExt16, &IntermittentTractionEnabled),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(UnknownCmd)
-	RKH_TRREG(evTout3, NULL, NULL, &// TODO for Exit),
+	RKH_TRREG(evTout4, NULL, NULL, &// TODO for Exit),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(ActiveCmd)
 	RKH_TRREG(evRemoteCmd, Salt_isCondActiveCmdToActiveCmd21, Salt_ActiveCmdToActiveCmdExt21, &ActiveCmd),
-	RKH_TRREG(evTout4, NULL, Salt_ActiveCmdToSalt_C2Ext22, &Salt_C2),
+	RKH_TRREG(evTout5, NULL, Salt_ActiveCmdToSalt_C2Ext22, &Salt_C2),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(Limited)
@@ -113,7 +113,7 @@ RKH_CREATE_TRANS_TABLE(TractionDisabled)
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(EmergencyBrake)
-	RKH_TRREG(evTout5, NULL, NULL, &TractionDisabled),
+	RKH_TRREG(evTout6, NULL, NULL, &TractionDisabled),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(Intermittent)
@@ -121,15 +121,15 @@ RKH_CREATE_TRANS_TABLE(Intermittent)
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(IntermittentTractionEnabled)
-	RKH_TRREG(evTout6, NULL, NULL, &IntermittentTractionDisabled),
+	RKH_TRREG(evTout7, NULL, NULL, &IntermittentTractionDisabled),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(IntermittentTractionDisabled)
-	RKH_TRREG(evTout7, NULL, Salt_IntermittentTractionDisabledToSalt_C3Ext35, &Salt_C3),
+	RKH_TRREG(evTout8, NULL, Salt_IntermittentTractionDisabledToSalt_C3Ext35, &Salt_C3),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(IntermittentBrake)
-	RKH_TRREG(evTout8, NULL, Salt_IntermittentBrakeToIntermittentTractionEnabledExt36, &IntermittentTractionEnabled),
+	RKH_TRREG(evTout9, NULL, Salt_IntermittentBrakeToIntermittentTractionEnabledExt36, &IntermittentTractionEnabled),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(Waiting2)

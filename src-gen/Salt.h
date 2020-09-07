@@ -37,6 +37,7 @@ struct Salt
     RKHTmEvt tmEvtObj6;
     RKHTmEvt tmEvtObj7;
     RKHTmEvt tmEvtObj8;
+    RKHTmEvt tmEvtObj9;
     rInt REMOTE_CMD_TIMEOUT;
     rInt SALT_CT_LIMIT_UP;
     rInt SALT_CT_LIMIT_DOWN;

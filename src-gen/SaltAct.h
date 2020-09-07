@@ -63,6 +63,7 @@ void Salt_enIntermittentTractionDisabled(Salt *const me);
 void Salt_enIntermittentBrake(Salt *const me);
 
 /* ......................... Declares exit actions ......................... */
+void Salt_exPreventiveBrake(Salt *const me);
 void Salt_exIntermittentTractionEnabled(Salt *const me);
 void Salt_exIntermittentTractionDisabled(Salt *const me);
 void Salt_exIntermittentBrake(Salt *const me);

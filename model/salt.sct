@@ -15,7 +15,7 @@
             <outgoingTransitions xmi:id="_K6hFcPEqEequ19raZtcvXg" specification="" target="_HwzigPEqEequ19raZtcvXg"/>
           </vertices>
           <vertices xsi:type="sgraph:State" xmi:id="_t7j2gO4uEeqiXa7skLniIg" specification="entry /&#xD;&#xA;safetySignalActivateCT();&#xD;&#xA;safetySignalActivateFE()" name="PreventiveBrake" incomingTransitions="_MbqIEPEqEequ19raZtcvXg">
-            <outgoingTransitions xmi:id="_dfi6kO4vEeqiXa7skLniIg" specification="evSpeedLost" target="_NuoMQO4_EeqiXa7skLniIg"/>
+            <outgoingTransitions xmi:id="_dfi6kO4vEeqiXa7skLniIg" specification="after SALT_FE_TIMEOUT s" target="_NuoMQO4_EeqiXa7skLniIg"/>
           </vertices>
           <vertices xsi:type="sgraph:State" xmi:id="_7gSpAO49EeqiXa7skLniIg" specification="" name="Remote" incomingTransitions="_9zNG0O49EeqiXa7skLniIg">
             <outgoingTransitions xmi:id="_45uHkPErEequ19raZtcvXg" specification="# REMOTE_EXIT >" target="_NuoMQO4_EeqiXa7skLniIg"/>
@@ -381,11 +381,11 @@
     <edges xmi:id="_dflW0O4vEeqiXa7skLniIg" type="Transition" element="_dfi6kO4vEeqiXa7skLniIg" source="_SsPc3--fEeqeQLH1Xn1paA" target="_SsPc-O-fEeqeQLH1Xn1paA">
       <children xsi:type="notation:DecorationNode" xmi:id="_dflW1O4vEeqiXa7skLniIg" type="TransitionExpression">
         <styles xsi:type="notation:ShapeStyle" xmi:id="_dflW1e4vEeqiXa7skLniIg"/>
-        <layoutConstraint xsi:type="notation:Location" xmi:id="_dflW1u4vEeqiXa7skLniIg" x="-5" y="-52"/>
+        <layoutConstraint xsi:type="notation:Location" xmi:id="_dflW1u4vEeqiXa7skLniIg" x="-5" y="-94"/>
       </children>
       <styles xsi:type="notation:ConnectorStyle" xmi:id="_dflW0e4vEeqiXa7skLniIg" routing="Rectilinear" lineColor="4210752"/>
       <styles xsi:type="notation:FontStyle" xmi:id="_dflW0-4vEeqiXa7skLniIg" fontName="Verdana"/>
-      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_dflW0u4vEeqiXa7skLniIg" points="[-62, 50, 3, -57]$[-62, 104, 3, -3]"/>
+      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_dflW0u4vEeqiXa7skLniIg" points="[-130, 50, -65, -57]$[-130, 104, -65, -3]"/>
       <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_dfmk8O4vEeqiXa7skLniIg" id="(0.9510040160642569,0.3367983367983368)"/>
       <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_EKorUO4wEeqiXa7skLniIg" id="(0.8035714285714286,0.013782658084059068)"/>
     </edges>
