@@ -48,7 +48,7 @@ static rInt currentCmd = 0;
 void 
 Salt_ToSalt_C0Ext7(Salt *const me, RKH_EVT_T *pe)
 {
-	me->REMOTE_CMD_TIMEOUT = 8;
+	me->REMOTE_CMD_TIMEOUT = 10;
 	me->SALT_CT_LIMIT_UP = 30;
 	me->SALT_CT_LIMIT_DOWN = 25;
 	me->SALT_FE_LIMIT = 36;
@@ -67,9 +67,9 @@ Salt_ToSalt_C0Ext7(Salt *const me, RKH_EVT_T *pe)
 	RKH_TR_FWK_STATE(me, &Enabled);
 	RKH_TR_FWK_STATE(me, &PreventiveBrake);
 	RKH_TR_FWK_STATE(me, &Remote);
-	RKH_TR_FWK_STATE(me, &TotalStop);
-	RKH_TR_FWK_STATE(me, &TotalIsolation);
-	RKH_TR_FWK_STATE(me, &Drift);
+	RKH_TR_FWK_STATE(me, &Stopped);
+	RKH_TR_FWK_STATE(me, &Isolated);
+	RKH_TR_FWK_STATE(me, &Adrift);
 	RKH_TR_FWK_STATE(me, &Intermittent);
 	RKH_TR_FWK_STATE(me, &IntermittentTractionEnabled);
 	RKH_TR_FWK_STATE(me, &IntermittentTractionDisabled);
@@ -116,9 +116,9 @@ Salt_ToSalt_C0Ext7(Salt *const me, RKH_EVT_T *pe)
 		RKH_TR_FWK_OBJ_NAME(Salt_enDisabled, "enDisabled");
 		RKH_TR_FWK_OBJ_NAME(Salt_enEnabled, "enEnabled");
 		RKH_TR_FWK_OBJ_NAME(Salt_enPreventiveBrake, "enPreventiveBrake");
-		RKH_TR_FWK_OBJ_NAME(Salt_enTotalStop, "enTotalStop");
-		RKH_TR_FWK_OBJ_NAME(Salt_enTotalIsolation, "enTotalIsolation");
-		RKH_TR_FWK_OBJ_NAME(Salt_enDrift, "enDrift");
+		RKH_TR_FWK_OBJ_NAME(Salt_enStopped, "enStopped");
+		RKH_TR_FWK_OBJ_NAME(Salt_enIsolated, "enIsolated");
+		RKH_TR_FWK_OBJ_NAME(Salt_enAdrift, "enAdrift");
 		RKH_TR_FWK_OBJ_NAME(Salt_enIntermittentTractionEnabled, "enIntermittentTractionEnabled");
 		RKH_TR_FWK_OBJ_NAME(Salt_enIntermittentTractionDisabled, "enIntermittentTractionDisabled");
 		RKH_TR_FWK_OBJ_NAME(Salt_enIntermittentBrake, "enIntermittentBrake");
@@ -138,9 +138,9 @@ Salt_ToSalt_C0Ext7(Salt *const me, RKH_EVT_T *pe)
 		RKH_TR_FWK_OBJ_NAME(Salt_isCondTractionEnabledToTractionDisabled28, "isCondTractionEnabledToTractionDisabled28");
 		RKH_TR_FWK_OBJ_NAME(Salt_isCondTractionDisabledToEmergencyBrake29, "isCondTractionDisabledToEmergencyBrake29");
 		RKH_TR_FWK_OBJ_NAME(Salt_isCondTractionDisabledToTractionEnabled30, "isCondTractionDisabledToTractionEnabled30");
-		RKH_TR_FWK_OBJ_NAME(Salt_isCondSalt_C0ToTotalStop8, "isCondSalt_C0ToTotalStop8");
-		RKH_TR_FWK_OBJ_NAME(Salt_isCondSalt_C0ToTotalIsolation9, "isCondSalt_C0ToTotalIsolation9");
-		RKH_TR_FWK_OBJ_NAME(Salt_isCondSalt_C0ToDrift10, "isCondSalt_C0ToDrift10");
+		RKH_TR_FWK_OBJ_NAME(Salt_isCondSalt_C0ToStopped8, "isCondSalt_C0ToStopped8");
+		RKH_TR_FWK_OBJ_NAME(Salt_isCondSalt_C0ToIsolated9, "isCondSalt_C0ToIsolated9");
+		RKH_TR_FWK_OBJ_NAME(Salt_isCondSalt_C0ToAdrift10, "isCondSalt_C0ToAdrift10");
 		RKH_TR_FWK_OBJ_NAME(Salt_isCondSalt_C0ToIntermittent11, "isCondSalt_C0ToIntermittent11");
 		RKH_TR_FWK_OBJ_NAME(Salt_isCondSalt_C1ToIntermittentTractionEnabled17, "isCondSalt_C1ToIntermittentTractionEnabled17");
 		RKH_TR_FWK_OBJ_NAME(Salt_isCondSalt_C2To// TODO for Exit23, "isCondSalt_C2To// TODO for Exit23");
@@ -228,24 +228,24 @@ Salt_enPreventiveBrake(Salt *const me)
 }
 
 void 
-Salt_enTotalStop(Salt *const me)
+Salt_enStopped(Salt *const me)
 {
 	safetySignalActivateCT();
 	safetySignalActivateFE();
 }
 
 void 
-Salt_enTotalIsolation(Salt *const me)
+Salt_enIsolated(Salt *const me)
 {
 	safetySignalDeactivateCT();
 	safetySignalDeactivateFE();
 }
 
 void 
-Salt_enDrift(Salt *const me)
+Salt_enAdrift(Salt *const me)
 {
-	safetySignalDeactivateCT();
-	safetySignalActivateFE();
+	safetySignalActivateCT();
+	safetySignalDeactivateFE();
 }
 
 void 
@@ -444,19 +444,19 @@ Salt_isCondTractionDisabledToTractionEnabled30(Salt *const me, RKH_EVT_T *pe)
 }
 
 rbool_t 
-Salt_isCondSalt_C0ToTotalStop8(Salt *const me, RKH_EVT_T *pe)
+Salt_isCondSalt_C0ToStopped8(Salt *const me, RKH_EVT_T *pe)
 {
 	return ((currentCmd == me->REMOTE_CMD_STOP)) ? true : false;
 }
 
 rbool_t 
-Salt_isCondSalt_C0ToTotalIsolation9(Salt *const me, RKH_EVT_T *pe)
+Salt_isCondSalt_C0ToIsolated9(Salt *const me, RKH_EVT_T *pe)
 {
 	return ((currentCmd == me->REMOTE_CMD_ISOLATE)) ? true : false;
 }
 
 rbool_t 
-Salt_isCondSalt_C0ToDrift10(Salt *const me, RKH_EVT_T *pe)
+Salt_isCondSalt_C0ToAdrift10(Salt *const me, RKH_EVT_T *pe)
 {
 	return ((currentCmd == me->REMOTE_CMD_DRIFT)) ? true : false;
 }

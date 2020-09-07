@@ -22,9 +22,9 @@
 /* ........................ States and pseudostates ........................ */
 RKH_CREATE_BASIC_STATE(Disabled, Salt_enDisabled, NULL, RKH_ROOT, NULL);
 RKH_CREATE_BASIC_STATE(PreventiveBrake, Salt_enPreventiveBrake, Salt_exPreventiveBrake, &Enabled, NULL);
-RKH_CREATE_BASIC_STATE(TotalStop, Salt_enTotalStop, NULL, &Remote, NULL);
-RKH_CREATE_BASIC_STATE(TotalIsolation, Salt_enTotalIsolation, NULL, &Remote, NULL);
-RKH_CREATE_BASIC_STATE(Drift, Salt_enDrift, NULL, &Remote, NULL);
+RKH_CREATE_BASIC_STATE(Stopped, Salt_enStopped, NULL, &Remote, NULL);
+RKH_CREATE_BASIC_STATE(Isolated, Salt_enIsolated, NULL, &Remote, NULL);
+RKH_CREATE_BASIC_STATE(Adrift, Salt_enAdrift, NULL, &Remote, NULL);
 RKH_CREATE_BASIC_STATE(IntermittentTractionEnabled, Salt_enIntermittentTractionEnabled, Salt_exIntermittentTractionEnabled, &Intermittent, NULL);
 RKH_CREATE_BASIC_STATE(IntermittentTractionDisabled, Salt_enIntermittentTractionDisabled, Salt_exIntermittentTractionDisabled, &Intermittent, NULL);
 RKH_CREATE_BASIC_STATE(IntermittentBrake, Salt_enIntermittentBrake, Salt_exIntermittentBrake, &Intermittent, NULL);
@@ -62,13 +62,13 @@ RKH_CREATE_TRANS_TABLE(Remote)
 	RKH_TRREG(evRemoteCmd, Salt_isCondRemoteToLimited6, NULL, &Limited),
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_TRANS_TABLE(TotalStop)
+RKH_CREATE_TRANS_TABLE(Stopped)
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_TRANS_TABLE(TotalIsolation)
+RKH_CREATE_TRANS_TABLE(Isolated)
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_TRANS_TABLE(Drift)
+RKH_CREATE_TRANS_TABLE(Adrift)
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(Intermittent)
@@ -148,9 +148,9 @@ RKH_CREATE_CHOICE_STATE(Salt_C2);
 RKH_CREATE_CHOICE_STATE(Salt_C3);
 
 RKH_CREATE_BRANCH_TABLE(Salt_C0)
-	RKH_BRANCH(Salt_isCondSalt_C0ToTotalStop8, NULL, &TotalStop),
-	RKH_BRANCH(Salt_isCondSalt_C0ToTotalIsolation9, NULL, &TotalIsolation),
-	RKH_BRANCH(Salt_isCondSalt_C0ToDrift10, NULL, &Drift),
+	RKH_BRANCH(Salt_isCondSalt_C0ToStopped8, NULL, &Stopped),
+	RKH_BRANCH(Salt_isCondSalt_C0ToIsolated9, NULL, &Isolated),
+	RKH_BRANCH(Salt_isCondSalt_C0ToAdrift10, NULL, &Adrift),
 	RKH_BRANCH(Salt_isCondSalt_C0ToIntermittent11, NULL, &Intermittent),
 	RKH_BRANCH(ELSE, NULL, &UnknownCmd),
 RKH_END_BRANCH_TABLE
