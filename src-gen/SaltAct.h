@@ -42,7 +42,6 @@ void Salt_ActiveCmdToSalt_C2Ext22(Salt *const me, RKH_EVT_T *pe);
 void Salt_ToIntermittentTractionEnabledExt33(Salt *const me, RKH_EVT_T *pe);
 void Salt_IntermittentTractionDisabledToSalt_C3Ext35(Salt *const me, RKH_EVT_T *pe);
 void Salt_IntermittentBrakeToIntermittentTractionEnabledExt36(Salt *const me, RKH_EVT_T *pe);
-void Salt_SpeedMissingToSpeedMissingLoc20(Salt *const me, RKH_EVT_T *pe);
 
 /* ......................... Declares entry actions ........................ */
 void Salt_enDisabled(Salt *const me);
@@ -62,13 +61,8 @@ void Salt_enEmergencyBrake(Salt *const me);
 void Salt_enIntermittentTractionEnabled(Salt *const me);
 void Salt_enIntermittentTractionDisabled(Salt *const me);
 void Salt_enIntermittentBrake(Salt *const me);
-void Salt_enSpeedMissing(Salt *const me);
-void Salt_enUsingHaslerSpeed(Salt *const me);
-void Salt_enUsingPulseGenSpeed(Salt *const me);
-void Salt_enUsingGPSSpeed(Salt *const me);
 
 /* ......................... Declares exit actions ......................... */
-void Salt_exPreventiveBrake(Salt *const me);
 void Salt_exIntermittentTractionEnabled(Salt *const me);
 void Salt_exIntermittentTractionDisabled(Salt *const me);
 void Salt_exIntermittentBrake(Salt *const me);
@@ -78,10 +72,6 @@ void Salt_exEmergencyBrake(Salt *const me);
 void Salt_exIntermittentTractionEnabled(Salt *const me);
 void Salt_exIntermittentTractionDisabled(Salt *const me);
 void Salt_exIntermittentBrake(Salt *const me);
-void Salt_exSpeedMissing(Salt *const me);
-void Salt_exUsingHaslerSpeed(Salt *const me);
-void Salt_exUsingPulseGenSpeed(Salt *const me);
-void Salt_exUsingGPSSpeed(Salt *const me);
 
 /* ............................ Declares guards ............................ */
 rbool_t Salt_isCondRemoteToLimited6(Salt *const me, RKH_EVT_T *pe);
@@ -97,8 +87,6 @@ rbool_t Salt_isCondSalt_C0ToIntermittent11(Salt *const me, RKH_EVT_T *pe);
 rbool_t Salt_isCondSalt_C1ToIntermittentTractionEnabled17(Salt *const me, RKH_EVT_T *pe);
 rbool_t Salt_isCondSalt_C2To// TODO for Exit23(Salt *const me, RKH_EVT_T *pe);
 rbool_t Salt_isCondSalt_C3ToIntermittentTractionEnabled37(Salt *const me, RKH_EVT_T *pe);
-rbool_t Salt_isCondSalt_C4ToAutomatic40(Salt *const me, RKH_EVT_T *pe);
-rbool_t Salt_isCondSalt_C5ToLimited43(Salt *const me, RKH_EVT_T *pe);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

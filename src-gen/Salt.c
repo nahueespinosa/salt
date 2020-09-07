@@ -21,7 +21,7 @@
 /* ----------------------------- Local macros ------------------------------ */
 /* ........................ States and pseudostates ........................ */
 RKH_CREATE_BASIC_STATE(Disabled, Salt_enDisabled, NULL, RKH_ROOT, NULL);
-RKH_CREATE_BASIC_STATE(PreventiveBrake, Salt_enPreventiveBrake, Salt_exPreventiveBrake, &Enabled, NULL);
+RKH_CREATE_BASIC_STATE(PreventiveBrake, Salt_enPreventiveBrake, NULL, &Enabled, NULL);
 RKH_CREATE_BASIC_STATE(TotalStop, Salt_enTotalStop, NULL, &Remote, NULL);
 RKH_CREATE_BASIC_STATE(TotalIsolation, Salt_enTotalIsolation, NULL, &Remote, NULL);
 RKH_CREATE_BASIC_STATE(Drift, Salt_enDrift, NULL, &Remote, NULL);
@@ -36,15 +36,13 @@ RKH_CREATE_BASIC_STATE(EmergencyBrake, Salt_enEmergencyBrake, Salt_exEmergencyBr
 RKH_CREATE_BASIC_STATE(IntermittentTractionEnabled, Salt_enIntermittentTractionEnabled, Salt_exIntermittentTractionEnabled, &Intermittent, NULL);
 RKH_CREATE_BASIC_STATE(IntermittentTractionDisabled, Salt_enIntermittentTractionDisabled, Salt_exIntermittentTractionDisabled, &Intermittent, NULL);
 RKH_CREATE_BASIC_STATE(IntermittentBrake, Salt_enIntermittentBrake, Salt_exIntermittentBrake, &Intermittent, NULL);
-RKH_CREATE_BASIC_STATE(SpeedMissing, Salt_enSpeedMissing, Salt_exSpeedMissing, RKH_ROOT, NULL);
-RKH_CREATE_BASIC_STATE(UsingHaslerSpeed, Salt_enUsingHaslerSpeed, Salt_exUsingHaslerSpeed, RKH_ROOT, NULL);
-RKH_CREATE_BASIC_STATE(UsingPulseGenSpeed, Salt_enUsingPulseGenSpeed, Salt_exUsingPulseGenSpeed, RKH_ROOT, NULL);
-RKH_CREATE_BASIC_STATE(UsingGPSSpeed, Salt_enUsingGPSSpeed, Salt_exUsingGPSSpeed, RKH_ROOT, NULL);
+RKH_CREATE_BASIC_STATE(Waiting2, NULL, NULL, &Limited, NULL);
+RKH_CREATE_BASIC_STATE(Waiting1, NULL, NULL, &Enabled, NULL);
 
-RKH_CREATE_COMP_REGION_STATE(Enabled, Salt_enEnabled, NULL, RKH_ROOT, &Salt_C5, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
+RKH_CREATE_COMP_REGION_STATE(Enabled, Salt_enEnabled, NULL, RKH_ROOT, &Waiting1, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_COMP_REGION_STATE(Remote, NULL, NULL, &Enabled, &Salt_C0, Salt_ToSalt_C0Ext7, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_COMP_REGION_STATE(Intermittent, NULL, NULL, &Remote, &IntermittentTractionEnabled, Salt_ToIntermittentTractionEnabledExt13, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
-RKH_CREATE_COMP_REGION_STATE(Limited, NULL, NULL, &Enabled, &Salt_C4, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
+RKH_CREATE_COMP_REGION_STATE(Limited, NULL, NULL, &Enabled, &Waiting2, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_COMP_REGION_STATE(Automatic, NULL, NULL, &Limited, &TractionEnabled, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_COMP_REGION_STATE(Intermittent, NULL, NULL, &Limited, &IntermittentTractionEnabled, Salt_ToIntermittentTractionEnabledExt33, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 
@@ -57,7 +55,7 @@ RKH_CREATE_TRANS_TABLE(Enabled)
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(PreventiveBrake)
-	RKH_TRREG(evTout0, NULL, NULL, &Limited),
+	RKH_TRREG(evSpeedLost, NULL, NULL, &Limited),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(Remote)
@@ -77,24 +75,24 @@ RKH_CREATE_TRANS_TABLE(Intermittent)
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(IntermittentTractionEnabled)
-	RKH_TRREG(evTout1, NULL, NULL, &IntermittentTractionDisabled),
+	RKH_TRREG(evTout0, NULL, NULL, &IntermittentTractionDisabled),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(IntermittentTractionDisabled)
-	RKH_TRREG(evTout2, NULL, Salt_IntermittentTractionDisabledToSalt_C1Ext15, &Salt_C1),
+	RKH_TRREG(evTout1, NULL, Salt_IntermittentTractionDisabledToSalt_C1Ext15, &Salt_C1),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(IntermittentBrake)
-	RKH_TRREG(evTout3, NULL, Salt_IntermittentBrakeToIntermittentTractionEnabledExt16, &IntermittentTractionEnabled),
+	RKH_TRREG(evTout2, NULL, Salt_IntermittentBrakeToIntermittentTractionEnabledExt16, &IntermittentTractionEnabled),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(UnknownCmd)
-	RKH_TRREG(evTout4, NULL, NULL, &// TODO for Exit),
+	RKH_TRREG(evTout3, NULL, NULL, &// TODO for Exit),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(ActiveCmd)
 	RKH_TRREG(evRemoteCmd, Salt_isCondActiveCmdToActiveCmd21, Salt_ActiveCmdToActiveCmdExt21, &ActiveCmd),
-	RKH_TRREG(evTout5, NULL, Salt_ActiveCmdToSalt_C2Ext22, &Salt_C2),
+	RKH_TRREG(evTout4, NULL, Salt_ActiveCmdToSalt_C2Ext22, &Salt_C2),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(Limited)
@@ -115,7 +113,7 @@ RKH_CREATE_TRANS_TABLE(TractionDisabled)
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(EmergencyBrake)
-	RKH_TRREG(evTout6, NULL, NULL, &TractionDisabled),
+	RKH_TRREG(evTout5, NULL, NULL, &TractionDisabled),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(Intermittent)
@@ -123,48 +121,31 @@ RKH_CREATE_TRANS_TABLE(Intermittent)
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(IntermittentTractionEnabled)
-	RKH_TRREG(evTout7, NULL, NULL, &IntermittentTractionDisabled),
+	RKH_TRREG(evTout6, NULL, NULL, &IntermittentTractionDisabled),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(IntermittentTractionDisabled)
-	RKH_TRREG(evTout8, NULL, Salt_IntermittentTractionDisabledToSalt_C3Ext35, &Salt_C3),
+	RKH_TRREG(evTout7, NULL, Salt_IntermittentTractionDisabledToSalt_C3Ext35, &Salt_C3),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_TRANS_TABLE(IntermittentBrake)
-	RKH_TRREG(evTout9, NULL, Salt_IntermittentBrakeToIntermittentTractionEnabledExt36, &IntermittentTractionEnabled),
+	RKH_TRREG(evTout8, NULL, Salt_IntermittentBrakeToIntermittentTractionEnabledExt36, &IntermittentTractionEnabled),
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_TRANS_TABLE(SpeedMissing)
-	RKH_TRREG(evHaslerSpeedValid, NULL, NULL, &UsingHaslerSpeed),
-	RKH_TRREG(evPulseGenSpeedValid, NULL, NULL, &UsingPulseGenSpeed),
-	RKH_TRREG(evGPSSpeedValid, NULL, NULL, &UsingGPSSpeed),
-	RKH_TRINT(evTout13, NULL, Salt_SpeedMissingToSpeedMissingLoc20),
+RKH_CREATE_TRANS_TABLE(Waiting2)
+	RKH_TRREG(evSpeedLost, NULL, NULL, &Intermittent),
+	RKH_TRREG(evSpeedAvailable, NULL, NULL, &Automatic),
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_TRANS_TABLE(UsingHaslerSpeed)
-	RKH_TRREG(evTout10, NULL, NULL, &SpeedMissing),
-	RKH_TRREG(evHaslerSpeedValid, NULL, NULL, &UsingHaslerSpeed),
-RKH_END_TRANS_TABLE
-
-RKH_CREATE_TRANS_TABLE(UsingPulseGenSpeed)
-	RKH_TRREG(evTout11, NULL, NULL, &SpeedMissing),
-	RKH_TRREG(evHaslerSpeedValid, NULL, NULL, &UsingHaslerSpeed),
-	RKH_TRREG(evPulseGenSpeedValid, NULL, NULL, &UsingPulseGenSpeed),
-RKH_END_TRANS_TABLE
-
-RKH_CREATE_TRANS_TABLE(UsingGPSSpeed)
-	RKH_TRREG(evTout12, NULL, NULL, &SpeedMissing),
-	RKH_TRREG(evPulseGenSpeedValid, NULL, NULL, &UsingPulseGenSpeed),
-	RKH_TRREG(evGPSSpeedValid, NULL, NULL, &UsingGPSSpeed),
-	RKH_TRREG(evHaslerSpeedValid, NULL, NULL, &UsingHaslerSpeed),
+RKH_CREATE_TRANS_TABLE(Waiting1)
+	RKH_TRREG(evSpeedLost, NULL, NULL, &PreventiveBrake),
+	RKH_TRREG(evSpeedAvailable, NULL, NULL, &Automatic),
 RKH_END_TRANS_TABLE
 
 RKH_CREATE_CHOICE_STATE(Salt_C0);
 RKH_CREATE_CHOICE_STATE(Salt_C1);
 RKH_CREATE_CHOICE_STATE(Salt_C2);
 RKH_CREATE_CHOICE_STATE(Salt_C3);
-RKH_CREATE_CHOICE_STATE(Salt_C4);
-RKH_CREATE_CHOICE_STATE(Salt_C5);
 
 RKH_CREATE_BRANCH_TABLE(Salt_C0)
 	RKH_BRANCH(Salt_isCondSalt_C0ToTotalStop8, NULL, &TotalStop),
@@ -187,16 +168,6 @@ RKH_END_BRANCH_TABLE
 RKH_CREATE_BRANCH_TABLE(Salt_C3)
 	RKH_BRANCH(Salt_isCondSalt_C3ToIntermittentTractionEnabled37, NULL, &IntermittentTractionEnabled),
 	RKH_BRANCH(ELSE, NULL, &IntermittentBrake),
-RKH_END_BRANCH_TABLE
-
-RKH_CREATE_BRANCH_TABLE(Salt_C4)
-	RKH_BRANCH(Salt_isCondSalt_C4ToAutomatic40, NULL, &Automatic),
-	RKH_BRANCH(ELSE, NULL, &Intermittent),
-RKH_END_BRANCH_TABLE
-
-RKH_CREATE_BRANCH_TABLE(Salt_C5)
-	RKH_BRANCH(Salt_isCondSalt_C5ToLimited43, NULL, &Limited),
-	RKH_BRANCH(ELSE, NULL, &PreventiveBrake),
 RKH_END_BRANCH_TABLE
 
 

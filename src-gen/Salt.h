@@ -18,9 +18,9 @@ extern "C" {
 RKH_SMA_DCLR(salt);
 
 /* ................... Declares states and pseudostates .................... */
-RKH_DCLR_BASIC_STATE Disabled, PreventiveBrake, TotalStop, TotalIsolation, Drift, IntermittentTractionEnabled, IntermittentTractionDisabled, IntermittentBrake, UnknownCmd, ActiveCmd, TractionEnabled, TractionDisabled, EmergencyBrake, IntermittentTractionEnabled, IntermittentTractionDisabled, IntermittentBrake, SpeedMissing, UsingHaslerSpeed, UsingPulseGenSpeed, UsingGPSSpeed;
+RKH_DCLR_BASIC_STATE Disabled, PreventiveBrake, TotalStop, TotalIsolation, Drift, IntermittentTractionEnabled, IntermittentTractionDisabled, IntermittentBrake, UnknownCmd, ActiveCmd, TractionEnabled, TractionDisabled, EmergencyBrake, IntermittentTractionEnabled, IntermittentTractionDisabled, IntermittentBrake, Waiting2, Waiting1;
 RKH_DCLR_COMP_STATE Enabled, Remote, Intermittent, Limited, Automatic, Intermittent;
-RKH_DCLR_CHOICE_STATE Salt_C0, Salt_C1, Salt_C2, Salt_C3, Salt_C4, Salt_C5;
+RKH_DCLR_CHOICE_STATE Salt_C0, Salt_C1, Salt_C2, Salt_C3;
 
 /* ------------------------------- Data types ------------------------------ */
 /* ............................. Active object ............................. */
@@ -37,23 +37,18 @@ struct Salt
     RKHTmEvt tmEvtObj6;
     RKHTmEvt tmEvtObj7;
     RKHTmEvt tmEvtObj8;
-    RKHTmEvt tmEvtObj9;
-    RKHTmEvt tmEvtObj10;
-    RKHTmEvt tmEvtObj11;
-    RKHTmEvt tmEvtObj12;
-    RKHTmEvt tmEvtObj13;
-    rInt PREVENTIVE_BRAKE_TIMEOUT;
-    rInt EMERGENCY_BRAKE_TIMEOUT;
     rInt REMOTE_CMD_TIMEOUT;
-    rInt SPEED_HASLER_TIMEOUT;
-    rInt SPEED_PULSE_TIMEOUT;
-    rInt SPEED_GPS_TIMEOUT;
-    rInt SPEED_MISSING_TIME;
+    rInt SALT_CT_LIMIT_UP;
+    rInt SALT_CT_LIMIT_DOWN;
+    rInt SALT_FE_LIMIT;
+    rInt SALT_FE_TIMEOUT;
+    rInt SALT_INTERMITTENT_TIME_OFF;
+    rInt SALT_INTERMITTENT_TIME_ON;
+    rInt REMOTE_CMD_EXIT;
     rInt REMOTE_CMD_STOP;
     rInt REMOTE_CMD_ISOLATE;
     rInt REMOTE_CMD_DRIFT;
     rInt REMOTE_CMD_INTERMITTENT;
-    rInt REMOTE_CMD_EXIT;
 };
 
 /* -------------------------- External variables --------------------------- */
