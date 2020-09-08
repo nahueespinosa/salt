@@ -123,7 +123,6 @@ Salt_ToSalt_C0Ext7(Salt *const me, RKH_EVT_T *pe)
 		RKH_TR_FWK_OBJ_NAME(Salt_enIntermittentTractionDisabled, "enIntermittentTractionDisabled");
 		RKH_TR_FWK_OBJ_NAME(Salt_enIntermittentBrake, "enIntermittentBrake");
 		RKH_TR_FWK_OBJ_NAME(Salt_enTractionEnabled, "enTractionEnabled");
-		RKH_TR_FWK_OBJ_NAME(Salt_enTractionEnabled, "enTractionEnabled");
 		RKH_TR_FWK_OBJ_NAME(Salt_enTractionDisabled, "enTractionDisabled");
 		RKH_TR_FWK_OBJ_NAME(Salt_enEmergencyBrake, "enEmergencyBrake");
 		RKH_TR_FWK_OBJ_NAME(Salt_enIntermittentTractionEnabled, "enIntermittentTractionEnabled");

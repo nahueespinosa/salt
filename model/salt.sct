@@ -83,7 +83,7 @@
                   <vertices xsi:type="sgraph:Entry" xmi:id="_wqlnsO8iEeqY74L_xqJvdQ">
                     <outgoingTransitions xmi:id="_Hz9hkO8kEeqY74L_xqJvdQ" specification="" target="_zyD5gO8jEeqY74L_xqJvdQ"/>
                   </vertices>
-                  <vertices xsi:type="sgraph:State" xmi:id="_zyD5gO8jEeqY74L_xqJvdQ" specification="entry / safetySignalDeactivateCT()&#xD;&#xA;entry / safetySignalDeactivateFE()" name="TractionEnabled" incomingTransitions="_Hz9hkO8kEeqY74L_xqJvdQ _fq6voO8kEeqY74L_xqJvdQ">
+                  <vertices xsi:type="sgraph:State" xmi:id="_zyD5gO8jEeqY74L_xqJvdQ" specification="entry /&#xD;&#xA;safetySignalDeactivateCT();&#xD;&#xA;safetySignalDeactivateFE()" name="TractionEnabled" incomingTransitions="_Hz9hkO8kEeqY74L_xqJvdQ _fq6voO8kEeqY74L_xqJvdQ">
                     <outgoingTransitions xmi:id="_KPiMIO8kEeqY74L_xqJvdQ" specification="evSpeedAvailable&#xD;&#xA;[valueof(evSpeedAvailable) > SALT_CT_LIMIT_UP]" target="_6_iz4O8jEeqY74L_xqJvdQ"/>
                   </vertices>
                   <vertices xsi:type="sgraph:State" xmi:id="_6_iz4O8jEeqY74L_xqJvdQ" specification="entry / safetySignalActivateCT()" name="TractionDisabled" incomingTransitions="_KPiMIO8kEeqY74L_xqJvdQ _UBeAQO8kEeqY74L_xqJvdQ">
