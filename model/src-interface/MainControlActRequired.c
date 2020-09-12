@@ -1,6 +1,6 @@
 /**
- *  \file       SaltActRequired.c
- *  \brief      This file implements the required operations for Salt
+ *  \file       MainControlActRequired.c
+ *  \brief      This file implements the required operations for MainControl
  *              active object.
  */
 
@@ -14,7 +14,7 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
-#include "../src-interface/signals.h"
+#include "signals.h"
 #include "rkhtrc_record.h"
 #include "MainControl.h"
 #include "bsp.h"

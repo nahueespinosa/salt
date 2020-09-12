@@ -1,5 +1,5 @@
 /**
- *  \file       BlinkyActAccess.h
+ *  \file       MainControlActAccess.h
  *  \brief
  */
 
