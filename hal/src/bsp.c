@@ -50,8 +50,10 @@
 /* ----------------------------- Include files ----------------------------- */
 #include "rkh.h"
 #include "rkhfwk_sched.h"
+#include "rkhfwk_pubsub.h"
 #include "bsp.h"
 #include "MainControl.h"
+#include "SwitchMonitor.h"
 
 RKH_THIS_MODULE
 
@@ -92,7 +94,11 @@ void bsp_init( int argc, char *argv[] )
     RKH_FILTER_OFF_EVENT( RKH_TE_TMR_TOUT );
     RKH_FILTER_OFF_EVENT( RKH_TE_SM_STATE );
     RKH_FILTER_OFF_SMA( mainControl );
+    RKH_FILTER_OFF_SMA( switchMonitor );
     RKH_FILTER_OFF_ALL_SIGNALS();
+
+    rkh_pubsub_init();
+    rkh_pubsub_subscribe(0, mainControl); // Subscribe to the main channel of events
 
     RKH_TRC_OPEN();
 
