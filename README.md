@@ -11,12 +11,7 @@ Se considera un sistema crítico debido a que, en caso de fallar, puede ocasiona
 
 ## Configuración
 
+Este proyecto es compatible con el framework de desarrollo de la plataforma CIAA llamado [firmware_v3](https://github.com/epernia/firmware_v3).
+
 En la carpeta `model` se encuentran los diagramas de estado desarrollados con [YAKINDU Statechart Tools](https://www.itemis.com/en/yakindu/state-machine/) Professional Edition (version 3.5.12).
-
-Para importar se deben seguir los siguientes pasos:
-
-- Clonar este repositorio con el comando:
-```
-$ git clone https://github.com/nahueespinosa/salt
-```
-- Seleccionar el menú `File -> Import -> Existing Projects into Workspace` y buscar la carpeta del proyecto.
+Para importar se debe seleccionar el menú `File -> Import -> Existing Projects into Workspace` y buscar la carpeta `model` dentro del proyecto.
