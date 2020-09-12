@@ -1,6 +1,6 @@
 GeneratorModel for yakindu::c::rkh {
 
-	statechart salt {
+	statechart mainControl {
 
 		feature Outlet {
 			targetProject = "salt"
@@ -8,4 +8,5 @@ GeneratorModel for yakindu::c::rkh {
 			libraryTargetFolder = "src"
 		}
 	}
+
 }

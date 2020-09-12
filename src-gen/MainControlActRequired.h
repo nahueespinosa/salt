@@ -1,5 +1,5 @@
 /**
- *  \file       SaltActRequired.h
+ *  \file       MainControlActRequired.h
  *  \brief
  */
 
@@ -13,12 +13,12 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __SALTACTREQUIRED_H__
-#define __SALTACTREQUIRED_H__
+#ifndef __MAINCONTROLACTREQUIRED_H__
+#define __MAINCONTROLACTREQUIRED_H__
 
 /* ----------------------------- Include files ----------------------------- */
 #include "rkhtype.h"
-#include "SaltActAccess.h"
+#include "MainControlActAccess.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -36,6 +36,7 @@ void safetySignalActivateCT(void);
 void safetySignalDeactivateCT(void);
 void safetySignalActivateFE(void);
 void safetySignalDeactivateFE(void);
+rInt speedRead(void);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
