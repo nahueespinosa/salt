@@ -64,13 +64,13 @@
               <vertices xsi:type="sgraph:Entry" xmi:id="_quUOsO4_EeqiXa7skLniIg" name="">
                 <outgoingTransitions xmi:id="_p_4mgPEgEequ19raZtcvXg" specification="" target="_kqPAYPE0Eequ19raZtcvXg"/>
               </vertices>
-              <vertices xsi:type="sgraph:State" xmi:id="_kqPAYPE0Eequ19raZtcvXg" name="Waiting2" incomingTransitions="_p_4mgPEgEequ19raZtcvXg">
+              <vertices xsi:type="sgraph:State" xmi:id="_kqPAYPE0Eequ19raZtcvXg" name="Waiting" incomingTransitions="_p_4mgPEgEequ19raZtcvXg">
                 <outgoingTransitions xmi:id="_5BhCkPE0Eequ19raZtcvXg" specification="evSpeedLost" target="_L9AP4O46EeqiXa7skLniIg"/>
                 <outgoingTransitions xmi:id="_77DbgPE0Eequ19raZtcvXg" specification="evSpeedAvailable" target="_AIKJ0O4vEeqiXa7skLniIg"/>
               </vertices>
             </regions>
           </vertices>
-          <vertices xsi:type="sgraph:State" xmi:id="_HwzigPEqEequ19raZtcvXg" name="Waiting1" incomingTransitions="_K6hFcPEqEequ19raZtcvXg">
+          <vertices xsi:type="sgraph:State" xmi:id="_HwzigPEqEequ19raZtcvXg" name="Starting" incomingTransitions="_K6hFcPEqEequ19raZtcvXg">
             <outgoingTransitions xmi:id="_MbqIEPEqEequ19raZtcvXg" specification="evSpeedLost" target="_t7j2gO4uEeqiXa7skLniIg"/>
             <outgoingTransitions xmi:id="_Zez1UPEqEequ19raZtcvXg" specification="evSpeedAvailable" target="_AIKJ0O4vEeqiXa7skLniIg"/>
           </vertices>

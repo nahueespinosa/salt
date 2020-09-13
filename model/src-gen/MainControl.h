@@ -18,7 +18,7 @@ extern "C" {
 RKH_SMA_DCLR(mainControl);
 
 /* ................... Declares states and pseudostates .................... */
-RKH_DCLR_BASIC_STATE Disabled, PreventiveBrake, TractionEnabled, TractionDisabled, EmergencyBrake, IntermittentTractionEnabled, IntermittentTractionDisabled, IntermittentBrake, Waiting2, Waiting1, Stopped, Isolated, Adrift;
+RKH_DCLR_BASIC_STATE Disabled, PreventiveBrake, TractionEnabled, TractionDisabled, EmergencyBrake, IntermittentTractionEnabled, IntermittentTractionDisabled, IntermittentBrake, Waiting, Starting, Stopped, Isolated, Adrift;
 RKH_DCLR_COMP_STATE Enabled, Limited, Automatic, Intermittent, Remote;
 RKH_DCLR_CHOICE_STATE MainControl_C0;
 

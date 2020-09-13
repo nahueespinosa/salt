@@ -28,14 +28,14 @@ RKH_CREATE_BASIC_STATE(EmergencyBrake, MainControl_enEmergencyBrake, MainControl
 RKH_CREATE_BASIC_STATE(IntermittentTractionEnabled, MainControl_enIntermittentTractionEnabled, MainControl_exIntermittentTractionEnabled, &Intermittent, NULL);
 RKH_CREATE_BASIC_STATE(IntermittentTractionDisabled, MainControl_enIntermittentTractionDisabled, MainControl_exIntermittentTractionDisabled, &Intermittent, NULL);
 RKH_CREATE_BASIC_STATE(IntermittentBrake, MainControl_enIntermittentBrake, MainControl_exIntermittentBrake, &Intermittent, NULL);
-RKH_CREATE_BASIC_STATE(Waiting2, NULL, NULL, &Limited, NULL);
-RKH_CREATE_BASIC_STATE(Waiting1, NULL, NULL, &Enabled, NULL);
+RKH_CREATE_BASIC_STATE(Waiting, NULL, NULL, &Limited, NULL);
+RKH_CREATE_BASIC_STATE(Starting, NULL, NULL, &Enabled, NULL);
 RKH_CREATE_BASIC_STATE(Stopped, MainControl_enStopped, NULL, &Remote, NULL);
 RKH_CREATE_BASIC_STATE(Isolated, MainControl_enIsolated, NULL, &Remote, NULL);
 RKH_CREATE_BASIC_STATE(Adrift, MainControl_enAdrift, NULL, &Remote, NULL);
 
-RKH_CREATE_COMP_REGION_STATE(Enabled, MainControl_enEnabled, NULL, RKH_ROOT, &Waiting1, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
-RKH_CREATE_COMP_REGION_STATE(Limited, NULL, NULL, &Enabled, &Waiting2, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
+RKH_CREATE_COMP_REGION_STATE(Enabled, MainControl_enEnabled, NULL, RKH_ROOT, &Starting, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
+RKH_CREATE_COMP_REGION_STATE(Limited, NULL, NULL, &Enabled, &Waiting, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_COMP_REGION_STATE(Automatic, NULL, NULL, &Limited, &TractionEnabled, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_COMP_REGION_STATE(Intermittent, NULL, NULL, &Limited, &IntermittentTractionEnabled, MainControl_ToIntermittentTractionEnabledExt15, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
 RKH_CREATE_COMP_REGION_STATE(Remote, NULL, NULL, &Enabled, NULL, NULL, RKH_NO_HISTORY, NULL, NULL, NULL, NULL);
@@ -91,12 +91,12 @@ RKH_CREATE_TRANS_TABLE(IntermittentBrake)
 	RKH_TRREG(evTout4, NULL, MainControl_IntermittentBrakeToIntermittentTractionEnabledExt18, &IntermittentTractionEnabled),
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_TRANS_TABLE(Waiting2)
+RKH_CREATE_TRANS_TABLE(Waiting)
 	RKH_TRREG(evSpeedLost, NULL, NULL, &Intermittent),
 	RKH_TRREG(evSpeedAvailable, NULL, NULL, &Automatic),
 RKH_END_TRANS_TABLE
 
-RKH_CREATE_TRANS_TABLE(Waiting1)
+RKH_CREATE_TRANS_TABLE(Starting)
 	RKH_TRREG(evSpeedLost, NULL, NULL, &PreventiveBrake),
 	RKH_TRREG(evSpeedAvailable, NULL, NULL, &Automatic),
 RKH_END_TRANS_TABLE

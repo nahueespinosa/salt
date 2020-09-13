@@ -62,8 +62,8 @@ MainControl_ToDisabledExt0(MainControl *const me, RKH_EVT_T *pe)
 	RKH_TR_FWK_STATE(me, &IntermittentTractionEnabled);
 	RKH_TR_FWK_STATE(me, &IntermittentTractionDisabled);
 	RKH_TR_FWK_STATE(me, &IntermittentBrake);
-	RKH_TR_FWK_STATE(me, &Waiting2);
-	RKH_TR_FWK_STATE(me, &Waiting1);
+	RKH_TR_FWK_STATE(me, &Waiting);
+	RKH_TR_FWK_STATE(me, &Starting);
 	RKH_TR_FWK_STATE(me, &Remote);
 	RKH_TR_FWK_STATE(me, &Stopped);
 	RKH_TR_FWK_STATE(me, &Isolated);
