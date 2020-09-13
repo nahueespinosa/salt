@@ -33,10 +33,12 @@ extern "C" {
 /* -------------------------- Function prototypes -------------------------- */
 /* ........................ Declares effect actions ........................ */
 void SwitchMonitor_ToSwitchOffExt0(SwitchMonitor *const me, RKH_EVT_T *pe);
-void SwitchMonitor_SwitchOffToSwitchOnExt1(SwitchMonitor *const me, RKH_EVT_T *pe);
-void SwitchMonitor_SwitchOnToSwitchOffExt2(SwitchMonitor *const me, RKH_EVT_T *pe);
-void SwitchMonitor_SwitchOffToSwitchOffLoc0(SwitchMonitor *const me, RKH_EVT_T *pe);
-void SwitchMonitor_SwitchOnToSwitchOnLoc1(SwitchMonitor *const me, RKH_EVT_T *pe);
+void SwitchMonitor_SwitchMonitor_C0ToSwitchMonitor_C1Ext3(SwitchMonitor *const me, RKH_EVT_T *pe);
+void SwitchMonitor_SwitchMonitor_C0ToSwitchOffExt4(SwitchMonitor *const me, RKH_EVT_T *pe);
+void SwitchMonitor_SwitchMonitor_C1ToSwitchOnExt5(SwitchMonitor *const me, RKH_EVT_T *pe);
+void SwitchMonitor_SwitchMonitor_C2ToSwitchMonitor_C3Ext7(SwitchMonitor *const me, RKH_EVT_T *pe);
+void SwitchMonitor_SwitchMonitor_C2ToSwitchOnExt8(SwitchMonitor *const me, RKH_EVT_T *pe);
+void SwitchMonitor_SwitchMonitor_C3ToSwitchOffExt9(SwitchMonitor *const me, RKH_EVT_T *pe);
 
 /* ......................... Declares entry actions ........................ */
 void SwitchMonitor_enSwitchOff(SwitchMonitor *const me);
@@ -47,8 +49,10 @@ void SwitchMonitor_exSwitchOff(SwitchMonitor *const me);
 void SwitchMonitor_exSwitchOn(SwitchMonitor *const me);
 
 /* ............................ Declares guards ............................ */
-rbool_t SwitchMonitor_isCondSwitchOffToSwitchOn1(SwitchMonitor *const me, RKH_EVT_T *pe);
-rbool_t SwitchMonitor_isCondSwitchOnToSwitchOff2(SwitchMonitor *const me, RKH_EVT_T *pe);
+rbool_t SwitchMonitor_isCondSwitchMonitor_C0ToSwitchMonitor_C13(SwitchMonitor *const me, RKH_EVT_T *pe);
+rbool_t SwitchMonitor_isCondSwitchMonitor_C1ToSwitchOn5(SwitchMonitor *const me, RKH_EVT_T *pe);
+rbool_t SwitchMonitor_isCondSwitchMonitor_C2ToSwitchMonitor_C37(SwitchMonitor *const me, RKH_EVT_T *pe);
+rbool_t SwitchMonitor_isCondSwitchMonitor_C3ToSwitchOff9(SwitchMonitor *const me, RKH_EVT_T *pe);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

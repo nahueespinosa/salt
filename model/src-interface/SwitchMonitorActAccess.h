@@ -13,8 +13,8 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __MAINCONTROLACTACCESS_H__
-#define __MAINCONTROLACTACCESS_H__
+#ifndef __SWITCHMONITORACTACCESS_H__
+#define __SWITCHMONITORACTACCESS_H__
 
 /* ----------------------------- Include files ----------------------------- */
 #include "switch.h"

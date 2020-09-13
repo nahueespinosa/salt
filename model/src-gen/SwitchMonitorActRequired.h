@@ -32,7 +32,7 @@
 /* -------------------------- Function prototypes -------------------------- */
 void switchInit(void);
 void switchUpdate(void);
-bool_t switchRead(void);
+rbool_t switchRead(void);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

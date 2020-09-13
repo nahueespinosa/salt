@@ -105,7 +105,7 @@ void relayUpdate(void) {
       case RELAY_FE_2:
          /* Solo se pueden detectar inconsistencias si la llave está habilitada,
           * porque de lo contrario estos relés se desactivan por hardware. */
-         if( relayControlRead(i) != relayRead(i) && switchReadCurrent() == ON ) {
+         if( relayControlRead(i) != relayRead(i) && switchRead() == ON ) {
             relayConfig[i].errorCount++;
          } else {
             relayConfig[i].errorCount = 0;
