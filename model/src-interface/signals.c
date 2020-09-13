@@ -36,11 +36,9 @@ signals_publishSymbols(void)
     RKH_TR_FWK_SIG(evRemoteExit);
     RKH_TR_FWK_SIG(evSpeedAvailable);
     RKH_TR_FWK_SIG(evSpeedLost);
-    RKH_TR_FWK_SIG(evTout0);
-    RKH_TR_FWK_SIG(evTout1);
-    RKH_TR_FWK_SIG(evTout2);
-    RKH_TR_FWK_SIG(evTout3);
-    RKH_TR_FWK_SIG(evTout4);
+    RKH_TR_FWK_SIG(evHaslerSpeedValid);
+    RKH_TR_FWK_SIG(evPulseGenSpeedValid);
+    RKH_TR_FWK_SIG(evGPSSpeedValid);
     RKH_TR_FWK_SIG(evTout0);
     RKH_TR_FWK_SIG(evTout1);
     RKH_TR_FWK_SIG(evTout2);

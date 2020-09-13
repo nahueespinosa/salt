@@ -1,6 +1,6 @@
 /**
- *  \file       signals.h
- *  \brief      Event signal definitions.
+ *  \file       SpeedMonitorActRequired.h
+ *  \brief
  */
 
 /* -------------------------- Development history -------------------------- */
@@ -13,45 +13,23 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __SIGNALS_H__
-#define __SIGNALS_H__
+#ifndef __SPEEDMONITORACTREQUIRED_H__
+#define __SPEEDMONITORACTREQUIRED_H__
 
 /* ----------------------------- Include files ----------------------------- */
-#include "../src-interface/priorities.h"
+#include "rkhtype.h"
+#include "SpeedMonitorActAccess.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
-extern "C" {
+	extern "C" {
 #endif
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-/* ................................ Signals ................................ */
-typedef enum Signals
-{
-   evSwitchOn,
-   evSwitchOff,
-   evRemoteStop,
-   evRemoteIsolate,
-   evRemoteDrift,
-   evRemoteExit,
-   evSpeedAvailable,
-   evSpeedLost,
-   evHaslerSpeedValid,
-   evPulseGenSpeedValid,
-   evGPSSpeedValid,
-   evTout0,
-   evTout1,
-   evTout2,
-   evTout3,
-   evTout4,
-   TERMINATE
-} Signals;
-
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-void signals_publishSymbols(void);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

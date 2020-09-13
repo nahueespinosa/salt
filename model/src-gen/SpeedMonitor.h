@@ -1,23 +1,11 @@
-/**
- *  \file       signals.h
- *  \brief      Event signal definitions.
- */
-
-/* -------------------------- Development history -------------------------- */
-/*
- */
-
-/* -------------------------------- Authors -------------------------------- */
-/*
- */
-
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __SIGNALS_H__
-#define __SIGNALS_H__
+#ifndef __SPEEDMONITOR_H__
+#define __SPEEDMONITOR_H__
 
 /* ----------------------------- Include files ----------------------------- */
-#include "../src-interface/priorities.h"
+#include "rkhsma.h"
+#include "rkhtmr.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -26,33 +14,29 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-/* ................................ Signals ................................ */
-typedef enum Signals
-{
-   evSwitchOn,
-   evSwitchOff,
-   evRemoteStop,
-   evRemoteIsolate,
-   evRemoteDrift,
-   evRemoteExit,
-   evSpeedAvailable,
-   evSpeedLost,
-   evHaslerSpeedValid,
-   evPulseGenSpeedValid,
-   evGPSSpeedValid,
-   evTout0,
-   evTout1,
-   evTout2,
-   evTout3,
-   evTout4,
-   TERMINATE
-} Signals;
+/* ........................ Declares active object ......................... */
+RKH_SMA_DCLR(speedMonitor);
+
+/* ................... Declares states and pseudostates .................... */
+RKH_DCLR_BASIC_STATE SpeedMissing, UsingHaslerSpeed, UsingPulseGenSpeed, UsingGPSSpeed;
 
 /* ------------------------------- Data types ------------------------------ */
+/* ............................. Active object ............................. */
+typedef struct SpeedMonitor SpeedMonitor;
+struct SpeedMonitor
+{
+    RKH_SMA_T sma;      /* base structure */
+    RKHTmEvt tmEvtObj0;
+    RKHTmEvt tmEvtObj1;
+    RKHTmEvt tmEvtObj2;
+    RKHTmEvt tmEvtObj3;
+    rInt SPEED_HASLER_TIMEOUT;
+    rInt SPEED_PULSE_TIMEOUT;
+    rInt SPEED_GPS_TIMEOUT;
+};
+
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-void signals_publishSymbols(void);
-
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus
 }

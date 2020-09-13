@@ -25,6 +25,7 @@ typedef enum Priorities Priorities;
 enum Priorities
 {
     MainControlPrio,
+    SpeedMonitorPrio,
     SwitchMonitorPrio,
 };
 
