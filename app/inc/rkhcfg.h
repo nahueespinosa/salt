@@ -17,7 +17,7 @@
  *	Specify the maximum number of state machine applications (SMA) to be used
  *	by the application (can be a number in the range [1..64]).
  */
-#define RKH_CFG_FWK_MAX_SMA             2u
+#define RKH_CFG_FWK_MAX_SMA             3u
 
 /**
  *	If the dynamic event support (see #RKH_CFG_FWK_DYN_EVT_EN) is set to
@@ -204,7 +204,7 @@
  *  hierarchical state machines uses up to 4 levels. Currently
  *  #RKH_CFG_SMA_MAX_HCAL_DEPTH cannot exceed 8.
  */
-#define RKH_CFG_SMA_MAX_HCAL_DEPTH      2u
+#define RKH_CFG_SMA_MAX_HCAL_DEPTH      4u
 
 /**
  *	Specify the maximum number of linked transition segments. The smaller
@@ -440,7 +440,7 @@
  *	If the #RKH_CFG_TRC_QUE_EN is set to 1 then RKH will include all trace
  *	records related to the native queues.
  */
-#define RKH_CFG_TRC_QUE_EN               RKH_DISABLED
+#define RKH_CFG_TRC_QUE_EN              RKH_DISABLED
 
 /**
  *	If the #RKH_CFG_TRC_SMA_EN is set to 1 then RKH will include all trace
@@ -452,7 +452,7 @@
  *	If the #RKH_CFG_TRC_TMR_EN is set to 1 then RKH will include all trace
  *	records related to the native software timer.
  */
-#define RKH_CFG_TRC_TMR_EN              RKH_ENABLED
+#define RKH_CFG_TRC_TMR_EN              RKH_DISABLED
 
 /**
  *	If the #RKH_CFG_TRC_SM_EN is set to 1 then RKH will include all trace
@@ -476,13 +476,13 @@
  *	If the #RKH_CFG_TRC_SM_INIT_EN and #RKH_CFG_TRC_SM_EN are set to 1 then
  *	RKH will include the "init state machine" trace record.
  */
-#define RKH_CFG_TRC_SM_INIT_EN          RKH_DISABLED
+#define RKH_CFG_TRC_SM_INIT_EN          RKH_ENABLED
 
 /**
  *	If the #RKH_CFG_TRC_SM_DCH_EN and #RKH_CFG_TRC_SM_EN are set to 1 then
  *	RKH will include the "start a state machine" trace record.
  */
-#define RKH_CFG_TRC_SM_DCH_EN          RKH_DISABLED
+#define RKH_CFG_TRC_SM_DCH_EN           RKH_ENABLED
 
 /**
  *	If the #RKH_CFG_TRC_SM_CLRH_EN and #RKH_CFG_TRC_SM_EN are set to 1 then
