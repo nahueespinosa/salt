@@ -39,7 +39,7 @@ static rInt currentCycle = 0;
 /* ---------------------------- Local functions ---------------------------- */
 /* ............................ Effect actions ............................. */
 void 
-MainControl_ToIntermittentTractionEnabledExt15(MainControl *const me, RKH_EVT_T *pe)
+MainControl_ToDisabledExt0(MainControl *const me, RKH_EVT_T *pe)
 {
 	me->SALT_CT_LIMIT_UP = 30;
 	me->SALT_CT_LIMIT_DOWN = 25;
@@ -82,6 +82,7 @@ MainControl_ToIntermittentTractionEnabledExt15(MainControl *const me, RKH_EVT_T 
 	RKH_TR_FWK_TIMER(&me->tmEvtObj3.tmr);
 	RKH_TR_FWK_TIMER(&me->tmEvtObj4.tmr);
 	#if 0
+		RKH_TR_FWK_OBJ_NAME(MainControl_ToDisabledExt0, "ToDisabledExt0");
 		RKH_TR_FWK_OBJ_NAME(MainControl_ToIntermittentTractionEnabledExt15, "ToIntermittentTractionEnabledExt15");
 		RKH_TR_FWK_OBJ_NAME(MainControl_IntermittentTractionDisabledToMainControl_C0Ext17, "IntermittentTractionDisabledToMainControl_C0Ext17");
 		RKH_TR_FWK_OBJ_NAME(MainControl_IntermittentBrakeToIntermittentTractionEnabledExt18, "IntermittentBrakeToIntermittentTractionEnabledExt18");
@@ -105,6 +106,12 @@ MainControl_ToIntermittentTractionEnabledExt15(MainControl *const me, RKH_EVT_T 
 		RKH_TR_FWK_OBJ_NAME(MainControl_isCondMainControl_C0ToIntermittentTractionEnabled19, "isCondMainControl_C0ToIntermittentTractionEnabled19");
 	#endif
 	
+	safetyInit();
+}
+
+void 
+MainControl_ToIntermittentTractionEnabledExt15(MainControl *const me, RKH_EVT_T *pe)
+{
 	currentCycle = 0;
 }
 

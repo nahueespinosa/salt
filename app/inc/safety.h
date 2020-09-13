@@ -17,6 +17,13 @@ extern "C" {
 /*=====[Prototypes (declarations) of public functions]=======================*/
 
 /**
+ * @brief Inicializar el componente de señales de seguridad
+ *
+ * Inicializa los módulos de bajo nivel para el control de los relés.
+ */
+void safetyInit(void);
+
+/**
  * @brief Habilitar el modo aislado limitado
  *
  * Acciona los relés correspondientes e informa al registrador de eventos.

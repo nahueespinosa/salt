@@ -32,6 +32,7 @@ extern "C" {
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 /* ........................ Declares effect actions ........................ */
+void MainControl_ToDisabledExt0(MainControl *const me, RKH_EVT_T *pe);
 void MainControl_ToIntermittentTractionEnabledExt15(MainControl *const me, RKH_EVT_T *pe);
 void MainControl_IntermittentTractionDisabledToMainControl_C0Ext17(MainControl *const me, RKH_EVT_T *pe);
 void MainControl_IntermittentBrakeToIntermittentTractionEnabledExt18(MainControl *const me, RKH_EVT_T *pe);

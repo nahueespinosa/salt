@@ -123,7 +123,7 @@ RKH_END_BRANCH_TABLE
 
 
 /* ............................. Active object ............................. */
-RKH_SMA_CREATE(MainControl, mainControl, MainControlPrio, HCAL, &Disabled, MainControl_ToIntermittentTractionEnabledExt15, NULL);
+RKH_SMA_CREATE(MainControl, mainControl, MainControlPrio, HCAL, &Disabled, MainControl_ToDisabledExt0, NULL);
 RKH_SMA_DEF_PTR(mainControl);
 
 /* ------------------------------- Constants ------------------------------- */

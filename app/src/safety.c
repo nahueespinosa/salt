@@ -12,6 +12,10 @@
 
 /*=====[Implementation of public functions]==================================*/
 
+void safetyInit(void) {
+   relayInit();
+}
+
 void safetyIsolatedModeEnable(void) {
    relayWrite(RELAY_CT_1, ON);
    relayWrite(RELAY_CT_2, OFF);
