@@ -19,8 +19,6 @@
 extern "C" {
 #endif
 
-/*=====[Definition macros of public constants]===============================*/
-
 /*=====[Prototypes (declarations) of public functions]=======================*/
 
 //! Inicializar las entradas de la llave rotativa

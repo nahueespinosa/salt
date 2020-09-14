@@ -13,8 +13,6 @@
 //! GPIO de entrada de la llave rotativa
 #define SWITCH_GPIO           GPIO8
 
-/*=====[Definitions of private global variables]=============================*/
-
 /*=====[Implementation of public functions]==================================*/
 
 void switchInit(void) {
