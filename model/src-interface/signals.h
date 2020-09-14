@@ -45,6 +45,7 @@ typedef enum Signals
    evTout2,
    evTout3,
    evTout4,
+   evTout5,
    TERMINATE
 } Signals;
 

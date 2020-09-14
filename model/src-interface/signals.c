@@ -44,6 +44,7 @@ signals_publishSymbols(void)
     RKH_TR_FWK_SIG(evTout2);
     RKH_TR_FWK_SIG(evTout3);
     RKH_TR_FWK_SIG(evTout4);
+    RKH_TR_FWK_SIG(evTout5);
 
     RKH_TR_FWK_SIG(RKH_SM_CREATION_EVENT);
     RKH_TR_FWK_SIG(RKH_COMPLETION_EVENT);

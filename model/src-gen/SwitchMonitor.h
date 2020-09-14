@@ -18,8 +18,7 @@ extern "C" {
 RKH_SMA_DCLR(switchMonitor);
 
 /* ................... Declares states and pseudostates .................... */
-RKH_DCLR_BASIC_STATE SwitchOff, SwitchOn;
-RKH_DCLR_CHOICE_STATE SwitchMonitor_C0, SwitchMonitor_C1, SwitchMonitor_C2, SwitchMonitor_C3;
+RKH_DCLR_BASIC_STATE SwitchOff, SwitchOn, SwitchRising, SwitchFalling;
 
 /* ------------------------------- Data types ------------------------------ */
 /* ............................. Active object ............................. */
@@ -29,6 +28,10 @@ struct SwitchMonitor
     RKH_SMA_T sma;      /* base structure */
     RKHTmEvt tmEvtObj0;
     RKHTmEvt tmEvtObj1;
+    RKHTmEvt tmEvtObj2;
+    RKHTmEvt tmEvtObj3;
+    RKHTmEvt tmEvtObj4;
+    RKHTmEvt tmEvtObj5;
 };
 
 /* -------------------------- External variables --------------------------- */

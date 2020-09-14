@@ -96,7 +96,7 @@ void bsp_init( int argc, char *argv[] )
     RKH_FILTER_OFF_EVENT( RKH_TE_SM_STATE );
     RKH_FILTER_OFF_SMA( mainControl );
     // RKH_FILTER_OFF_SMA( speedMonitor );
-    // RKH_FILTER_OFF_SMA( switchMonitor );
+    RKH_FILTER_OFF_SMA( switchMonitor );
     RKH_FILTER_OFF_ALL_SIGNALS();
 
     rkh_pubsub_init();
