@@ -1,120 +1,134 @@
-/**
- *  \file       as1116.h
- *  \brief      AS1116 driver.
- */
+/*=============================================================================
+ * Author: Nahuel Espinosa <nahue.espinosa@gmail.com>
+ * Date: 2020/09/14
+ *===========================================================================*/
 
+/*=====[Avoid multiple inclusion - begin]====================================*/
 
-/* -------------------------- Development history -------------------------- */
-/*
- *  2019.06.17  IMD  v1.0.00  Initial version
- */
-
-/* -------------------------------- Authors -------------------------------- */
-/*
- *  IMD  Ivan Mariano Di Vito divitoivan@gmail.com.com
- */
-
-/* --------------------------------- Notes --------------------------------- */
-
-/*
- * https://ar.mouser.com/datasheet/2/588/AS1116_DS000167_2-00-1511460.pdf
- *
- */
-
-/* --------------------------------- Module -------------------------------- */
 #ifndef __AS1116_H__
 #define __AS1116_H__
 
-/* ----------------------------- Include files ----------------------------- */
-#include "rkh.h"
-#include "sapi_spi.h"
+/*=====[Inclusions of public function dependencies]==========================*/
 
-/* ---------------------- External C language linkage ---------------------- */
+#include "sapi.h"
+
+/*=====[C++ - begin]=========================================================*/
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/* --------------------------------- Macros -------------------------------- */
-/* -------------------------------- Constants ------------------------------ */
+/*=====[Definition macros of public constants]===============================*/
 
-#define PANEL_REG_MASK                   0x1F
-#define PANEL_READ_BIT                   (1<<6)
-#define PANEL_NUM_DIGITS                    8
+// decode enable mode register mask
+#define AS1116_DECODE_ENABLE_DIGIT0       (1<<0)
+#define AS1116_DECODE_ENABLE_DIGIT1       (1<<1)
+#define AS1116_DECODE_ENABLE_DIGIT2       (1<<2)
+#define AS1116_DECODE_ENABLE_DIGIT3       (1<<3)
+#define AS1116_DECODE_ENABLE_DIGIT4       (1<<4)
+#define AS1116_DECODE_ENABLE_DIGIT5       (1<<5)
+#define AS1116_DECODE_ENABLE_DIGIT6       (1<<6)
+#define AS1116_DECODE_ENABLE_DIGIT7       (1<<7)
 
-#define PANEL_SEGMENT_G_POS                 0
-#define PANEL_SEGMENT_F_POS                 1
-#define PANEL_SEGMENT_E_POS                 2
-#define PANEL_SEGMENT_D_POS                 3
-#define PANEL_SEGMENT_C_POS                 4
-#define PANEL_SEGMENT_B_POS                 5
-#define PANEL_SEGMENT_A_POS                 6
-#define PANEL_SEGMENT_DP_POS                7
+// segment positions
+#define AS1116_SEGMENT_G_POS              0
+#define AS1116_SEGMENT_F_POS              1
+#define AS1116_SEGMENT_E_POS              2
+#define AS1116_SEGMENT_D_POS              3
+#define AS1116_SEGMENT_C_POS              4
+#define AS1116_SEGMENT_B_POS              5
+#define AS1116_SEGMENT_A_POS              6
+#define AS1116_SEGMENT_DP_POS             7
 
-#define AS_REG_NOP                       0x00
-#define PANEL_REG_DIGIT0                0x01
-#define PANEL_REG_DIGIT1                0x02
-#define PANEL_REG_DIGIT2                0x03
-#define PANEL_REG_DIGIT3                0x04
-#define PANEL_REG_DIGIT4                0x05
-#define PANEL_REG_DIGIT5                0x06
-#define PANEL_REG_DIGIT6                0x07
-#define PANEL_REG_DIGIT7                0x08
-#define PANEL_REG_DECODE_MODE           0x09
-#define PANEL_REG_GLOBAL_INTENSITY          0x0A
-#define PANEL_REG_SCAN_LIMIT            0x0B
-#define PANEL_REG_SHUTDOWN              0x0C
-#define PANEL_REG_FEATURE               0x0E
-#define PANEL_REG_DISPLAY_TEST_MODE         0x0F
-#define PANEL_REG_DIG01_INTENSITY          0x10
-#define PANEL_REG_DIG23_INTENSITY          0x11
-#define PANEL_REG_DIG45_INTENSITY          0x12
-#define PANEL_REG_DIG67_INTENSITY          0x13
-#define PANEL_REG_DIG0_DIAGNOSTIC          0x14
-#define PANEL_REG_DIG1_DIAGNOSTIC          0x15
-#define PANEL_REG_DIG2_DIAGNOSTIC          0x16
-#define PANEL_REG_DIG3_DIAGNOSTIC          0x17
-#define PANEL_REG_DIG4_DIAGNOSTIC          0x18
-#define PANEL_REG_DIG5_DIAGNOSTIC          0x19
-#define PANEL_REG_DIG6_DIAGNOSTIC          0x1A
-#define PANEL_REG_DIG7_DIAGNOSTIC          0x1B
+/*==================[typedef]================================================*/
 
-// feature register
-#define PANEL_FEATURE_CLK_EN_bm           (1<<0)
-#define PANEL_FEATURE_REG_RES_bm       (1<<1)
-#define PANEL_FEATURE_DECODE_SEL_bm       (1<<2)
-#define PANEL_FEATURE_BLINK_EN_bm         (1<<4)
-#define PANEL_FEATURE_BLINK_FREQ_SEL_bm      (1<<5)
-#define PANEL_FEATURE_SYNC_bm          (1<<6)
-#define PANEL_FEATURE_BLINK_START_bm      (1<<7)
+typedef enum {
+   AS1116_DECODE_DISABLE_ALL = 0x00,
+   AS1116_DECODE_ENABLE_ALL  = 0xFF
+} as1116DecodeEnableMode_t;
 
-// shutdown register
-#define PANEL_SHUTDOWN_OFF_MODE_RESET      (0x00)
-#define PANEL_SHUTDOWN_OFF_MODE            (0x80)
-#define PANEL_SHUTDOWN_NORMAL_MODE_RESET  (0x01)
-#define PANEL_SHUTDOWN_NORMAL_MODE        (0x81)
+typedef enum {
+   AS1116_DECODE_CODE_B = 0,
+   AS1116_DECODE_HEX    = 1
+} as1116DecodeMode_t;
 
-static const rui8_t digitRegMap[] = {
-        PANEL_REG_DIGIT0,
-        PANEL_REG_DIGIT1,
-        PANEL_REG_DIGIT2,
-        PANEL_REG_DIGIT3,
-        PANEL_REG_DIGIT4,
-        PANEL_REG_DIGIT5,
-        PANEL_REG_DIGIT6,
-        PANEL_REG_DIGIT7,
-};
-/* ------------------------------- Data types ------------------------------ */
-/* -------------------------- External variables --------------------------- */
-/* -------------------------- Function prototypes -------------------------- */
-void as1116Init(gpioMap_t sselPin);
-void as1116SetDigit(rui8_t digit, rui8_t data);
+typedef enum {
+   AS1116_DUTY_1_16  = 0x00,
+   AS1116_DUTY_2_16  = 0x01,
+   AS1116_DUTY_3_16  = 0x02,
+   AS1116_DUTY_4_16  = 0x03,
+   AS1116_DUTY_5_16  = 0x04,
+   AS1116_DUTY_6_16  = 0x05,
+   AS1116_DUTY_7_16  = 0x06,
+   AS1116_DUTY_8_16  = 0x07,
+   AS1116_DUTY_9_16  = 0x08,
+   AS1116_DUTY_10_16 = 0x09,
+   AS1116_DUTY_11_16 = 0x0A,
+   AS1116_DUTY_12_16 = 0x0B,
+   AS1116_DUTY_13_16 = 0x0C,
+   AS1116_DUTY_14_16 = 0x0D,
+   AS1116_DUTY_15_16 = 0x0E,
+   AS1116_DUTY_16_16 = 0x0F,
+   AS1116_MAX_INTENSITY = 0x0F
+} as1116Intensity_t;
 
-/* -------------------- External C language linkage end -------------------- */
+typedef enum {
+   AS1116_LIMIT_1_DIGITS = 0x0,
+   AS1116_LIMIT_2_DIGITS = 0x1,
+   AS1116_LIMIT_3_DIGITS = 0x2,
+   AS1116_LIMIT_4_DIGITS = 0x3,
+   AS1116_LIMIT_5_DIGITS = 0x4,
+   AS1116_LIMIT_6_DIGITS = 0x5,
+   AS1116_LIMIT_7_DIGITS = 0x6,
+   AS1116_LIMIT_8_DIGITS = 0x7
+} as1116ScanLimit_t;
+
+typedef enum {
+   AS1116_INTERNAL_OSC  = 0,     /* Internal oscillator is used for system clock */
+   AS1116_SERIAL_CLK    = 1      /* Pin CLK of the serial interface operates as system clock */
+} as1116ClockSource_t;
+
+typedef struct {
+   as1116DecodeMode_t         decode_mode;
+   as1116DecodeEnableMode_t   decode_enable_mode;
+   as1116Intensity_t          global_intensity;
+   as1116ScanLimit_t          scan_limit;
+   as1116ClockSource_t        clock_source;
+} as1116Config_t;
+
+typedef enum {
+   DIGIT0,
+   DIGIT1,
+   DIGIT2,
+   DIGIT3,
+   DIGIT4,
+   DIGIT5,
+   DIGIT6,
+   DIGIT7,
+} as1116DigitMap_t;
+
+typedef enum {
+   AS1116_TEST_FAILED = 0,
+   AS1116_TEST_OK     = 1
+} as1116TestResult_t;
+
+typedef enum {
+   AS1116_TEST_SHORT  = 0,
+   AS1116_TEST_OPEN   = 1
+} as1116TestType_t;
+
+/*=====[Prototypes (declarations) of public functions]=======================*/
+
+void as1116Init( as1116Config_t config );
+void as1116WriteDigit( as1116DigitMap_t digit, uint8_t data );
+as1116TestResult_t as1116Test( as1116TestType_t type );
+
+/*=====[C++ - end]===========================================================*/
+
 #ifdef __cplusplus
 }
 #endif
 
-/* ------------------------------ Module end ------------------------------- */
-#endif
+/*=====[Avoid multiple inclusion - end]======================================*/
 
-/* ------------------------------ End of file ------------------------------ */
+#endif
