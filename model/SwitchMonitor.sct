@@ -6,10 +6,10 @@
         <outgoingTransitions xmi:id="_FPYy4_VBEeqskp5e76VOlw" specification="/ switchInit();&#xD;&#xA;switchCounter = 0" target="_FPXkx_VBEeqskp5e76VOlw"/>
       </vertices>
       <vertices xsi:type="sgraph:State" xmi:id="_FPXkx_VBEeqskp5e76VOlw" specification="" name="SwitchOff" incomingTransitions="_FPYy4_VBEeqskp5e76VOlw _vtP7UPXpEeq6Moi25ks08g _yXMZEPXpEeq6Moi25ks08g _EpuVQPXqEeq6Moi25ks08g">
-        <outgoingTransitions xmi:id="_kDuTcPXpEeq6Moi25ks08g" specification="every 100 ms" target="_iezkEPXpEeq6Moi25ks08g"/>
+        <outgoingTransitions xmi:id="_kDuTcPXpEeq6Moi25ks08g" specification="after 100 ms" target="_iezkEPXpEeq6Moi25ks08g"/>
       </vertices>
       <vertices xsi:type="sgraph:State" xmi:id="_K_nS0PVGEeqskp5e76VOlw" specification="" name="SwitchOn" incomingTransitions="_4k0gUPXmEeq6Moi25ks08g _IsN6UPXqEeq6Moi25ks08g _KweREPXqEeq6Moi25ks08g">
-        <outgoingTransitions xmi:id="_-ANqoPXpEeq6Moi25ks08g" specification="every 100 ms" target="_7y9I4PXpEeq6Moi25ks08g"/>
+        <outgoingTransitions xmi:id="_-ANqoPXpEeq6Moi25ks08g" specification="after 100 ms" target="_7y9I4PXpEeq6Moi25ks08g"/>
       </vertices>
       <vertices xsi:type="sgraph:Choice" xmi:id="_iezkEPXpEeq6Moi25ks08g" incomingTransitions="_kDuTcPXpEeq6Moi25ks08g">
         <outgoingTransitions xmi:id="_vSRW4PXmEeq6Moi25ks08g" specification="[switchRead() == true] /&#xD;&#xA;switchCounter++" target="_qEimYPXpEeq6Moi25ks08g"/>

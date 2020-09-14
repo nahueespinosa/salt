@@ -111,7 +111,7 @@ SwitchMonitor_enSwitchOff(SwitchMonitor *const me)
 {
 	RKH_SET_STATIC_EVENT(&me->tmEvtObj0, evTout0);
 	RKH_TMR_INIT(&me->tmEvtObj0.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj0), NULL);
-	RKH_TMR_PERIODIC(&me->tmEvtObj0.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime0, WaitTime0);
+	RKH_TMR_ONESHOT(&me->tmEvtObj0.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime0);
 }
 
 void 
@@ -119,7 +119,7 @@ SwitchMonitor_enSwitchOn(SwitchMonitor *const me)
 {
 	RKH_SET_STATIC_EVENT(&me->tmEvtObj1, evTout1);
 	RKH_TMR_INIT(&me->tmEvtObj1.tmr, RKH_UPCAST(RKH_EVT_T, &me->tmEvtObj1), NULL);
-	RKH_TMR_PERIODIC(&me->tmEvtObj1.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime1, WaitTime1);
+	RKH_TMR_ONESHOT(&me->tmEvtObj1.tmr, RKH_UPCAST(RKH_SMA_T, me), WaitTime1);
 }
 
 /* ............................. Exit actions .............................. */
