@@ -54,7 +54,10 @@ void panelInit(void) {
 
    digitConfig.intensity = AS1116_DUTY_7_16;
    digitConfig.decodeEnable = AS1116_DECODE_DISABLED;
-   digitConfig.usedMask = 0xFF;
+   digitConfig.usedMask = 0 |
+         ledPosition[PANEL_LED_ON] | ledPosition[PANEL_LED_AL] |
+         ledPosition[PANEL_LED_CT] | ledPosition[PANEL_LED_FE] |
+         ledPosition[PANEL_LED_REMOTE] | ledPosition[PANEL_LED_GPS];
 
    as1116DigitConfig( DIGIT_RED, digitConfig );
    as1116DigitConfig( DIGIT_GREEN, digitConfig );
