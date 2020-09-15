@@ -20,6 +20,10 @@
 
 /*=====[Definitions of private global variables]=============================*/
 
+/**
+ * Tabla interna para almacenar la relación entre los leds del sistema y
+ * su posición dentro del dígito correpondiente
+ */
 static const uint8_t ledPosition[PANEL_LED_MAX] = {
    AS1116_SEGMENT_A_POS,
    AS1116_SEGMENT_F_POS,
@@ -29,10 +33,16 @@ static const uint8_t ledPosition[PANEL_LED_MAX] = {
    AS1116_SEGMENT_D_POS
 };
 
+//! Valor interno del dígito conectado al los leds rojos
 static uint8_t digitRed;
+
+//! Valor interno del dígito conectado al los leds verdes
 static uint8_t digitGreen;
+
+//! Valor interno del dígito conectado al los leds azules
 static uint8_t digitBlue;
 
+//! Estado interno que indica si el display está habilitado
 static bool_t displayEnabled = false;
 
 /*=====[Implementation of public functions]==================================*/
@@ -43,7 +53,7 @@ void panelInit(void) {
 
    config.clockSource = AS1116_INTERNAL_OSC;
    config.globalIntensity = AS1116_DUTY_7_16;
-   config.scanLimit = AS1116_LIMIT_7_DIGITS;
+   config.scanLimit = AS1116_LIMIT_8_DIGITS;
    config.decodeMode = AS1116_DECODE_MODE_B;
 
    as1116Init(config);
@@ -55,8 +65,8 @@ void panelInit(void) {
    digitConfig.intensity = AS1116_DUTY_7_16;
    digitConfig.decodeEnable = AS1116_DECODE_DISABLED;
    digitConfig.usedMask = 0 |
-         (1 << ledPosition[PANEL_LED_ON]) | (1 << ledPosition[PANEL_LED_AL]) |
-         (1 << ledPosition[PANEL_LED_CT]) | (1 << ledPosition[PANEL_LED_FE]) |
+         (1 << ledPosition[PANEL_LED_ON])     | (1 << ledPosition[PANEL_LED_AL]) |
+         (1 << ledPosition[PANEL_LED_CT])     | (1 << ledPosition[PANEL_LED_FE]) |
          (1 << ledPosition[PANEL_LED_REMOTE]) | (1 << ledPosition[PANEL_LED_GPS]);
 
    as1116DigitConfig( DIGIT_RED, digitConfig );
@@ -154,7 +164,11 @@ void panelDisplayDashedLine( void ) {
 bool_t panelTest( void ) {
    if( as1116Test(AS1116_TEST_OPEN) == AS1116_TEST_FAILED ) {
       return false;
-   } else {
-      return true;
    }
+
+   if( as1116Test(AS1116_TEST_SHORT) == AS1116_TEST_FAILED ) {
+      return false;
+   }
+
+   return true;
 }

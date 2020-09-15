@@ -106,7 +106,7 @@ static as1116DigitConfig_t digitConfig[AS1116_DIGITS_MAX];
  * @param[in]  reg         Dirección del registro
  * @param[in]  data        Valor a escribir
  */
-void as1116RegisterWrite( uint8_t reg, uint8_t data );
+static void as1116RegisterWrite( uint8_t reg, uint8_t data );
 
 /**
  * @brief Leer un valor de un registro del integrado AS1116
@@ -116,7 +116,7 @@ void as1116RegisterWrite( uint8_t reg, uint8_t data );
  * @param[in]  reg         Dirección del registro
  * @return                 Valor leido
  */
-uint8_t as1116RegisterRead( uint8_t reg );
+static uint8_t as1116RegisterRead( uint8_t reg );
 
 /*=====[Implementation of public functions]==================================*/
 
