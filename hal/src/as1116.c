@@ -15,7 +15,7 @@
 #define AS1116_REG_MASK                   0x1F
 #define AS1116_READ_BIT                   (1<<6)
 
-// register map
+// Register map
 #define AS1116_REG_NOP                    0x00
 #define AS1116_REG_DIGIT0                 0x01
 #define AS1116_REG_DIGIT1                 0x02
@@ -44,11 +44,11 @@
 #define AS1116_REG_DIG6_DIAGNOSTIC        0x1A
 #define AS1116_REG_DIG7_DIAGNOSTIC        0x1B
 
-// decode mode register
+// Decode Mode register
 #define AS1116_DECODE_MODE_DISABLE_ALL    0x00
 #define AS1116_DECODE_MODE_ENABLE_ALL     0xFF
 
-// feature register
+// Feature register
 #define AS1116_FEATURE_CLK_EN             (1<<0)
 #define AS1116_FEATURE_REG_RES            (1<<1)
 #define AS1116_FEATURE_DECODE_SEL         (1<<2)
@@ -199,6 +199,23 @@ as1116TestResult_t as1116Test( as1116TestType_t type ) {
    } while( value & AS1116_TEST_LED_RUNNING );
 
    if( value & AS1116_TEST_LED_GLOBAL ) {
+      return AS1116_TEST_FAILED;
+   }
+
+   return AS1116_TEST_OK;
+}
+
+as1116TestResult_t as1116DigitDiagnosticRead( as1116DigitMap_t digit ) {
+
+   uint8_t value;
+
+   if( !initialized ){
+      return AS1116_TEST_FAILED;
+   }
+
+   value = as1116RegisterRead( digit + AS1116_REG_DIG0_DIAGNOSTIC );
+
+   if( value & digitConfig[digit].usedMask != 0x00 ) {
       return AS1116_TEST_FAILED;
    }
 
