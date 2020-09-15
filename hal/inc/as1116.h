@@ -20,15 +20,7 @@ extern "C" {
 
 /*=====[Definition macros of public constants]===============================*/
 
-// decode enable mode register mask
-#define AS1116_DECODE_ENABLE_DIGIT0       (1<<0)
-#define AS1116_DECODE_ENABLE_DIGIT1       (1<<1)
-#define AS1116_DECODE_ENABLE_DIGIT2       (1<<2)
-#define AS1116_DECODE_ENABLE_DIGIT3       (1<<3)
-#define AS1116_DECODE_ENABLE_DIGIT4       (1<<4)
-#define AS1116_DECODE_ENABLE_DIGIT5       (1<<5)
-#define AS1116_DECODE_ENABLE_DIGIT6       (1<<6)
-#define AS1116_DECODE_ENABLE_DIGIT7       (1<<7)
+#define AS1116_DIGITS_MAX                 8
 
 // segment positions
 #define AS1116_SEGMENT_G_POS              0
@@ -43,9 +35,9 @@ extern "C" {
 /*==================[typedef]================================================*/
 
 typedef enum {
-   AS1116_DECODE_DISABLE_ALL = 0x00,
-   AS1116_DECODE_ENABLE_ALL  = 0xFF
-} as1116DecodeEnableMode_t;
+   AS1116_DECODE_DISABLED = 0,   /* Decode mode disabled */
+   AS1116_DECODE_ENABLED  = 1    /* Code-B/HEX decode mode enabled */
+} as1116DecodeEnable_t;
 
 typedef enum {
    AS1116_DECODE_CODE_B = 0,
@@ -89,12 +81,17 @@ typedef enum {
 } as1116ClockSource_t;
 
 typedef struct {
-   as1116DecodeMode_t         decode_mode;
-   as1116DecodeEnableMode_t   decode_enable_mode;
-   as1116Intensity_t          global_intensity;
-   as1116ScanLimit_t          scan_limit;
-   as1116ClockSource_t        clock_source;
+   as1116DecodeMode_t decodeMode;
+   as1116Intensity_t globalIntensity;
+   as1116ScanLimit_t scanLimit;
+   as1116ClockSource_t clockSource;
 } as1116Config_t;
+
+typedef struct {
+   as1116DecodeEnable_t decodeEnable;
+   as1116Intensity_t intensity;
+   uint8_t usedMask;
+} as1116DigitConfig_t;
 
 typedef enum {
    DIGIT0,
@@ -120,7 +117,8 @@ typedef enum {
 /*=====[Prototypes (declarations) of public functions]=======================*/
 
 void as1116Init( as1116Config_t config );
-void as1116WriteDigit( as1116DigitMap_t digit, uint8_t data );
+void as1116DigitConfig( as1116DigitMap_t digit, as1116DigitConfig_t config );
+void as1116DigitWrite( as1116DigitMap_t digit, uint8_t data );
 as1116TestResult_t as1116Test( as1116TestType_t type );
 
 /*=====[C++ - end]===========================================================*/

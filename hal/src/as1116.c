@@ -44,6 +44,10 @@
 #define AS1116_REG_DIG6_DIAGNOSTIC        0x1A
 #define AS1116_REG_DIG7_DIAGNOSTIC        0x1B
 
+// decode mode register
+#define AS1116_DECODE_MODE_DISABLE_ALL    0x00
+#define AS1116_DECODE_MODE_ENABLE_ALL     0xFF
+
 // feature register
 #define AS1116_FEATURE_CLK_EN             (1<<0)
 #define AS1116_FEATURE_REG_RES            (1<<1)
@@ -81,10 +85,12 @@ static const unsigned char BitReverseTable256[256] = {
 static uint8_t as1116Buffer[2];
 static bool_t initialized = false;
 
+static as1116DigitConfig_t digitConfig[AS1116_DIGITS_MAX];
+
 /*=====[Prototypes (declarations) of private functions]======================*/
 
-void as1116WriteReg( uint8_t reg, uint8_t data );
-uint8_t as1116ReadReg( uint8_t reg );
+void as1116RegisterWrite( uint8_t reg, uint8_t data );
+uint8_t as1116RegisterRead( uint8_t reg );
 
 /*=====[Implementation of public functions]==================================*/
 
@@ -96,21 +102,75 @@ void as1116Init( as1116Config_t config ) {
    gpioConfig( AS1116_SSEL_PIN, GPIO_OUTPUT );
    gpioWrite( AS1116_SSEL_PIN, ON );
 
-   as1116WriteReg( AS1116_REG_SHUTDOWN, AS1116_SHUTDOWN_NORMAL_MODE_RESET );
-   as1116WriteReg( AS1116_REG_DECODE_MODE, config.decode_enable_mode );
-   as1116WriteReg( AS1116_REG_GLOBAL_INTENSITY, config.global_intensity );
-   as1116WriteReg( AS1116_REG_SCAN_LIMIT, config.scan_limit );
-   as1116WriteReg( AS1116_REG_FEATURE, 0x00 | config.clock_source );
+   delay(100);
+
+   as1116RegisterWrite( AS1116_REG_SHUTDOWN, AS1116_SHUTDOWN_NORMAL_MODE_RESET );
+   as1116RegisterWrite( AS1116_REG_DECODE_MODE, AS1116_DECODE_MODE_DISABLE_ALL );
+   as1116RegisterWrite( AS1116_REG_GLOBAL_INTENSITY, config.globalIntensity );
+   as1116RegisterWrite( AS1116_REG_SCAN_LIMIT, config.scanLimit );
+   as1116RegisterWrite( AS1116_REG_FEATURE, 0x00 | config.clockSource | (config.decodeMode << 2) );
+
+   as1116RegisterWrite( AS1116_REG_DISPLAY_TEST_MODE, 0x00);
 
 }
 
-void as1116WriteDigit( as1116DigitMap_t digit, uint8_t data ){
+void as1116DigitConfig( as1116DigitMap_t digit, as1116DigitConfig_t config ) {
 
-   if( digit + AS1116_REG_DIGIT0 > AS1116_REG_DIGIT7 ){
+   uint8_t index;
+   uint8_t value;
+   uint8_t reg;
+
+   if( !initialized ){
       return;
    }
 
-   as1116WriteReg( digit + AS1116_REG_DIGIT0, data );
+   digitConfig[digit] = config;
+
+   value = 0x00;
+   for( index = 0 ; index < AS1116_DIGITS_MAX ; index++ ) {
+      value |= digitConfig[index].decodeEnable << index;
+   }
+
+   as1116RegisterWrite( AS1116_REG_DECODE_MODE, value );
+
+   switch(digit) {
+      case DIGIT0:
+      case DIGIT1:
+         reg = AS1116_REG_DIG01_INTENSITY;
+         value = digitConfig[DIGIT0].intensity | (digitConfig[DIGIT1].intensity << 4);
+         break;
+      case DIGIT2:
+      case DIGIT3:
+         reg = AS1116_REG_DIG23_INTENSITY;
+         value = digitConfig[DIGIT2].intensity | (digitConfig[DIGIT3].intensity << 4);
+         break;
+      case DIGIT4:
+      case DIGIT5:
+         reg = AS1116_REG_DIG45_INTENSITY;
+         value = digitConfig[DIGIT4].intensity | (digitConfig[DIGIT5].intensity << 4);
+         break;
+      case DIGIT6:
+      case DIGIT7:
+         reg = AS1116_REG_DIG67_INTENSITY;
+         value = digitConfig[DIGIT6].intensity | (digitConfig[DIGIT7].intensity << 4);
+         break;
+   }
+
+   as1116RegisterWrite( reg, value );
+
+}
+
+void as1116DigitWrite( as1116DigitMap_t digit, uint8_t data ){
+
+   if( !initialized ){
+      return;
+   }
+
+   if( digit >= AS1116_DIGITS_MAX ){
+      return;
+   }
+
+   as1116RegisterWrite( digit + AS1116_REG_DIGIT0, data );
 
 }
 
@@ -132,11 +192,11 @@ as1116TestResult_t as1116Test( as1116TestType_t type ) {
          break;
    }
 
-   as1116WriteReg( AS1116_REG_DISPLAY_TEST_MODE, cmd );
+   as1116RegisterWrite( AS1116_REG_DISPLAY_TEST_MODE, cmd );
 
    do {
       delay(1);
-      value = as1116ReadReg( AS1116_REG_DISPLAY_TEST_MODE );
+      value = as1116RegisterRead( AS1116_REG_DISPLAY_TEST_MODE );
 
    } while( value & AS1116_TEST_LED_RUNNING );
 
@@ -149,7 +209,7 @@ as1116TestResult_t as1116Test( as1116TestType_t type ) {
 
 /*=====[Implementation of private functions]=================================*/
 
-void as1116WriteReg( uint8_t reg, uint8_t data ){
+void as1116RegisterWrite( uint8_t reg, uint8_t data ){
 
    if( !initialized ){
       return;
@@ -163,7 +223,7 @@ void as1116WriteReg( uint8_t reg, uint8_t data ){
    gpioWrite( AS1116_SSEL_PIN, ON );
 }
 
-uint8_t as1116ReadReg( uint8_t reg ){
+uint8_t as1116RegisterRead( uint8_t reg ){
 
    if( !initialized ){
       return 0;
@@ -177,5 +237,5 @@ uint8_t as1116ReadReg( uint8_t reg ){
    gpioWrite( AS1116_SSEL_PIN, ON );
    spiRead( AS1116_SPI, as1116Buffer+1, 1 );
 
-   return as1116Buffer[1];
+   return BitReverseTable256[as1116Buffer[1]];
 }
