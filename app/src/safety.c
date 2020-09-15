@@ -42,6 +42,8 @@ void safetyIsolatedModeDisable(void) {
    relayWrite(RELAY_FE_2, OFF);
    relayWrite(RELAY_FE_3, OFF);
 
+   relayWrite(RELAY_REG_2, OFF);
+   relayWrite(RELAY_REG_3, OFF);
    relayWrite(RELAY_REG_4, OFF);
 
    panelLedWrite(PANEL_LED_AL, PANEL_LED_OFF);
