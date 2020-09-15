@@ -135,22 +135,26 @@ void as1116DigitConfig( as1116DigitMap_t digit, as1116DigitConfig_t config ) {
       case AS1116_DIGIT0:
       case AS1116_DIGIT1:
          reg = AS1116_REG_DIG01_INTENSITY;
-         value = digitConfig[AS1116_DIGIT0].intensity | (digitConfig[AS1116_DIGIT1].intensity << 4);
+         value = digitConfig[AS1116_DIGIT0].intensity |
+                (digitConfig[AS1116_DIGIT1].intensity << 4);
          break;
       case AS1116_DIGIT2:
       case AS1116_DIGIT3:
          reg = AS1116_REG_DIG23_INTENSITY;
-         value = digitConfig[AS1116_DIGIT2].intensity | (digitConfig[AS1116_DIGIT3].intensity << 4);
+         value = digitConfig[AS1116_DIGIT2].intensity |
+                (digitConfig[AS1116_DIGIT3].intensity << 4);
          break;
       case AS1116_DIGIT4:
       case AS1116_DIGIT5:
          reg = AS1116_REG_DIG45_INTENSITY;
-         value = digitConfig[AS1116_DIGIT4].intensity | (digitConfig[AS1116_DIGIT5].intensity << 4);
+         value = digitConfig[AS1116_DIGIT4].intensity |
+                (digitConfig[AS1116_DIGIT5].intensity << 4);
          break;
       case AS1116_DIGIT6:
       case AS1116_DIGIT7:
          reg = AS1116_REG_DIG67_INTENSITY;
-         value = digitConfig[AS1116_DIGIT6].intensity | (digitConfig[AS1116_DIGIT7].intensity << 4);
+         value = digitConfig[AS1116_DIGIT6].intensity |
+                (digitConfig[AS1116_DIGIT7].intensity << 4);
          break;
    }
 
