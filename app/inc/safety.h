@@ -77,8 +77,6 @@ void safetySignalActivateFE(void);
  */
 void safetySignalDeactivateFE(void);
 
-/*=====[Prototypes (declarations) of public interrupt functions]=============*/
-
 /*=====[C++ - end]===========================================================*/
 
 #ifdef __cplusplus
