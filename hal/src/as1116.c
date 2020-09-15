@@ -57,13 +57,13 @@
 #define AS1116_FEATURE_SYNC               (1<<6)
 #define AS1116_FEATURE_BLINK_START        (1<<7)
 
-// shutdown register
+// Shutdown register
 #define AS1116_SHUTDOWN_OFF_MODE_RESET    (0x00)
 #define AS1116_SHUTDOWN_OFF_MODE          (0x80)
 #define AS1116_SHUTDOWN_NORMAL_MODE_RESET (0x01)
 #define AS1116_SHUTDOWN_NORMAL_MODE       (0x81)
 
-// display test register
+// Display test register
 #define AS1116_TEST_LED_OPTICAL           (1<<0)
 #define AS1116_TEST_LED_SHORT             (1<<1)
 #define AS1116_TEST_LED_OPEN              (1<<2)
@@ -72,35 +72,62 @@
 #define AS1116_TEST_REXT_OPEN             (1<<5)
 #define AS1116_TEST_REXT_SHORT            (1<<6)
 
+// Definiciones necesarias para construir la tabla de consulta
 #define R2(n)     n,     n + 2*64,     n + 1*64,     n + 3*64
 #define R4(n)  R2(n), R2(n + 2*16), R2(n + 1*16), R2(n + 3*16)
 #define R6(n)  R4(n), R4(n + 2*4 ), R4(n + 1*4 ), R4(n + 3*4 )
 
 /*=====[Definitions of private global variables]=============================*/
 
-static const unsigned char BitReverseTable256[256] = {
+//! Tabla interna para invertir los bits necesaria para transmisión y recepción
+static const unsigned char bitReverseTable[256] = {
    R6(0), R6(2), R6(1), R6(3)
 };
 
+//! Buffer interno de transmisión y recepción de datos
 static uint8_t as1116Buffer[2];
+
+//! Indicador para saber si el módulo está inicializado
 static bool_t initialized = false;
 
+//! Indicador para saber la cantidad de dígitos utilizados
+static bool_t usedDigits = 0;
+
+//! Tabla interna para almacenar la configuración de los dígitos
 static as1116DigitConfig_t digitConfig[AS1116_DIGITS_MAX];
 
 /*=====[Prototypes (declarations) of private functions]======================*/
 
+/**
+ * @brief Escribir un valor en un registro del integrado AS1116
+ *
+ * Si el módulo no está inicializado, no ejecuta ninguna acción.
+ *
+ * @param[in]  reg         Dirección del registro
+ * @param[in]  data        Valor a escribir
+ */
 void as1116RegisterWrite( uint8_t reg, uint8_t data );
+
+/**
+ * @brief Leer un valor de un registro del integrado AS1116
+ *
+ * Si el módulo no está inicializado, no ejecuta ninguna acción.
+ *
+ * @param[in]  reg         Dirección del registro
+ * @return                 Valor leido
+ */
 uint8_t as1116RegisterRead( uint8_t reg );
 
 /*=====[Implementation of public functions]==================================*/
 
 void as1116Init( as1116Config_t config ) {
-
    initialized = true;
 
    spiInit( AS1116_SPI );
    gpioConfig( AS1116_SSEL_PIN, GPIO_OUTPUT );
    gpioWrite( AS1116_SSEL_PIN, ON );
+
+   usedDigits = config.scanLimit + 1;
 
    as1116RegisterWrite( AS1116_REG_SHUTDOWN, AS1116_SHUTDOWN_NORMAL_MODE_RESET );
    as1116RegisterWrite( AS1116_REG_DECODE_MODE_ENABLE, AS1116_DECODE_MODE_DISABLE_ALL );
@@ -109,16 +136,18 @@ void as1116Init( as1116Config_t config ) {
    as1116RegisterWrite( AS1116_REG_FEATURE, 0x00 | config.clockSource | (config.decodeMode << 2) );
 
    as1116RegisterWrite( AS1116_REG_DISPLAY_TEST_MODE, 0x00);
-
 }
 
 void as1116DigitConfig( as1116DigitMap_t digit, as1116DigitConfig_t config ) {
-
    uint8_t index;
    uint8_t value;
    uint8_t reg;
 
    if( !initialized ){
+      return;
+   }
+
+   if( digit >= usedDigits ){
       return;
    }
 
@@ -159,7 +188,6 @@ void as1116DigitConfig( as1116DigitMap_t digit, as1116DigitConfig_t config ) {
    }
 
    as1116RegisterWrite( reg, value );
-
 }
 
 void as1116DigitWrite( as1116DigitMap_t digit, uint8_t data ){
@@ -168,18 +196,17 @@ void as1116DigitWrite( as1116DigitMap_t digit, uint8_t data ){
       return;
    }
 
-   if( digit >= AS1116_DIGITS_MAX ){
+   if( digit >= usedDigits ){
       return;
    }
 
    as1116RegisterWrite( digit + AS1116_REG_DIGIT0, data );
-
 }
 
 as1116TestResult_t as1116Test( as1116TestType_t type ) {
-
    uint8_t cmd;
    uint8_t value;
+   as1116DigitMap_t digit;
 
    if( !initialized ){
       return AS1116_TEST_FAILED;
@@ -199,28 +226,16 @@ as1116TestResult_t as1116Test( as1116TestType_t type ) {
    do {
       delay(1);
       value = as1116RegisterRead( AS1116_REG_DISPLAY_TEST_MODE );
+   } while( (value & AS1116_TEST_LED_RUNNING) != 0 );
 
-   } while( value & AS1116_TEST_LED_RUNNING );
+   if( (value & AS1116_TEST_LED_GLOBAL) != 0 ) {
+      for( digit = 0 ; digit < usedDigits ; digit++ ) {
+         value = as1116RegisterRead( digit + AS1116_REG_DIG0_DIAGNOSTIC );
 
-   if( value & AS1116_TEST_LED_GLOBAL ) {
-      return AS1116_TEST_FAILED;
-   }
-
-   return AS1116_TEST_OK;
-}
-
-as1116TestResult_t as1116DigitDiagnosticRead( as1116DigitMap_t digit ) {
-
-   uint8_t value;
-
-   if( !initialized ){
-      return AS1116_TEST_FAILED;
-   }
-
-   value = as1116RegisterRead( digit + AS1116_REG_DIG0_DIAGNOSTIC );
-
-   if( value & digitConfig[digit].usedMask != 0x00 ) {
-      return AS1116_TEST_FAILED;
+         if( (value & digitConfig[digit].usedMask) != 0 ) {
+            return AS1116_TEST_FAILED;
+         }
+      }
    }
 
    return AS1116_TEST_OK;
@@ -229,13 +244,12 @@ as1116TestResult_t as1116DigitDiagnosticRead( as1116DigitMap_t digit ) {
 /*=====[Implementation of private functions]=================================*/
 
 void as1116RegisterWrite( uint8_t reg, uint8_t data ){
-
    if( !initialized ){
       return;
    }
 
-   as1116Buffer[0] = BitReverseTable256[data];
-   as1116Buffer[1] = BitReverseTable256[(reg & AS1116_REG_MASK)];
+   as1116Buffer[0] = bitReverseTable[data];
+   as1116Buffer[1] = bitReverseTable[(reg & AS1116_REG_MASK)];
 
    gpioWrite( AS1116_SSEL_PIN, OFF );
    spiWrite( AS1116_SPI, as1116Buffer, 2 );
@@ -243,12 +257,11 @@ void as1116RegisterWrite( uint8_t reg, uint8_t data ){
 }
 
 uint8_t as1116RegisterRead( uint8_t reg ){
-
    if( !initialized ){
       return 0;
    }
 
-   as1116Buffer[0] = BitReverseTable256[(reg & AS1116_REG_MASK) | AS1116_READ_BIT];
+   as1116Buffer[0] = bitReverseTable[(reg & AS1116_REG_MASK) | AS1116_READ_BIT];
    as1116Buffer[1] = 0x00;
 
    gpioWrite( AS1116_SSEL_PIN, OFF );
@@ -256,5 +269,5 @@ uint8_t as1116RegisterRead( uint8_t reg ){
    gpioWrite( AS1116_SSEL_PIN, ON );
    spiRead( AS1116_SPI, as1116Buffer+1, 1 );
 
-   return BitReverseTable256[as1116Buffer[1]];
+   return as1116Buffer[1];
 }
