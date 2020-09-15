@@ -41,10 +41,11 @@ typedef enum {
 
 void panelInit( void );
 void panelLedWrite( ledMap_t led, ledColor_t color );
-void panelDisplayWrite( uint32_t value );
-void panelDisplayDashedLine( void );
-void panelDisplayOff( void );
 void panelDisplayOn( void );
+void panelDisplayOff( void );
+void panelDisplayWrite( float value );
+void panelDisplayDashedLine( void );
+
 bool_t panelTest( void );
 
 /*=====[C++ - end]===========================================================*/

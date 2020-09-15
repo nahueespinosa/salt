@@ -38,7 +38,6 @@ static bool_t displayEnabled = false;
 /*=====[Implementation of public functions]==================================*/
 
 void panelInit(void) {
-
    as1116Config_t config;
    as1116DigitConfig_t digitConfig;
 
@@ -74,11 +73,9 @@ void panelInit(void) {
    as1116DigitConfig( DIGIT3, digitConfig );
 
    panelDisplayOff();
-
 }
 
 void panelLedWrite( ledMap_t led, ledColor_t color ) {
-
    uint8_t value = 0;
 
    value = (1 << ledPosition[led]);
@@ -102,39 +99,53 @@ void panelLedWrite( ledMap_t led, ledColor_t color ) {
    as1116DigitWrite( DIGIT_RED, digitRed );
    as1116DigitWrite( DIGIT_GREEN, digitGreen );
    as1116DigitWrite( DIGIT_BLUE, digitBlue );
-
 }
 
-void panelDisplayWrite( uint32_t value ) {
+void panelDisplayOn( void ) {
+   displayEnabled = true;
+}
 
+void panelDisplayOff( void ) {
+   displayEnabled = false;
+   as1116DigitWrite( DIGIT0, AS1116_DIGIT_CODE_BLANK );
+   as1116DigitWrite( DIGIT1, AS1116_DIGIT_CODE_BLANK );
+   as1116DigitWrite( DIGIT2, AS1116_DIGIT_CODE_BLANK );
+   as1116DigitWrite( DIGIT3, AS1116_DIGIT_CODE_BLANK );
+}
+
+void panelDisplayWrite( float value ) {
+   uint8_t digitValues[4];
+
+   if( displayEnabled == false ) {
+      return;
+   }
+
+   if( value >= 1000 || value < 0 ) {
+      panelDisplayDashedLine();
+      return;
+   }
+
+   digitValues[3] = value / 100;
+   value -= digitValues[3] * 100;
+   digitValues[2] = value / 10;
+   value -= digitValues[2] * 10;
+   digitValues[1] = value / 1;
+   value -= digitValues[1] * 1;
+   digitValues[0] = value * 10;
+
+   as1116DigitWrite( DIGIT3, digitValues[3] );
+   as1116DigitWrite( DIGIT2, digitValues[2] );
+   as1116DigitWrite( DIGIT1, digitValues[1] | AS1116_DIGIT_CODE_DOT);
+   as1116DigitWrite( DIGIT0, digitValues[0] );
 }
 
 void panelDisplayDashedLine( void ) {
-
    if( displayEnabled == true ) {
       as1116DigitWrite( DIGIT0, AS1116_DIGIT_CODE_DASH );
       as1116DigitWrite( DIGIT1, AS1116_DIGIT_CODE_DASH );
       as1116DigitWrite( DIGIT2, AS1116_DIGIT_CODE_DASH );
       as1116DigitWrite( DIGIT3, AS1116_DIGIT_CODE_DASH );
    }
-
-}
-
-void panelDisplayOff( void ) {
-
-   displayEnabled = false;
-
-   as1116DigitWrite( DIGIT0, AS1116_DIGIT_CODE_BLANK );
-   as1116DigitWrite( DIGIT1, AS1116_DIGIT_CODE_BLANK );
-   as1116DigitWrite( DIGIT2, AS1116_DIGIT_CODE_BLANK );
-   as1116DigitWrite( DIGIT3, AS1116_DIGIT_CODE_BLANK );
-
-}
-
-void panelDisplayOn( void ) {
-
-   displayEnabled = true;
-
 }
 
 bool_t panelTest( void ) {
