@@ -20,8 +20,6 @@ extern "C" {
 
 /*=====[Definition macros of public constants]===============================*/
 
-#define AS1116_DIGITS_MAX                 8
-
 // segment positions
 #define AS1116_SEGMENT_G_POS              0
 #define AS1116_SEGMENT_F_POS              1
@@ -40,8 +38,8 @@ typedef enum {
 } as1116DecodeEnable_t;
 
 typedef enum {
-   AS1116_DECODE_CODE_B = 0,
-   AS1116_DECODE_HEX    = 1
+   AS1116_DECODE_MODE_B   = 0,
+   AS1116_DECODE_MODE_HEX = 1
 } as1116DecodeMode_t;
 
 typedef enum {
@@ -94,14 +92,15 @@ typedef struct {
 } as1116DigitConfig_t;
 
 typedef enum {
-   DIGIT0,
-   DIGIT1,
-   DIGIT2,
-   DIGIT3,
-   DIGIT4,
-   DIGIT5,
-   DIGIT6,
-   DIGIT7,
+   AS1116_DIGIT0,
+   AS1116_DIGIT1,
+   AS1116_DIGIT2,
+   AS1116_DIGIT3,
+   AS1116_DIGIT4,
+   AS1116_DIGIT5,
+   AS1116_DIGIT6,
+   AS1116_DIGIT7,
+   AS1116_DIGITS_MAX
 } as1116DigitMap_t;
 
 typedef enum {

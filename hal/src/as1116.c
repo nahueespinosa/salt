@@ -25,7 +25,7 @@
 #define AS1116_REG_DIGIT5                 0x06
 #define AS1116_REG_DIGIT6                 0x07
 #define AS1116_REG_DIGIT7                 0x08
-#define AS1116_REG_DECODE_MODE            0x09
+#define AS1116_REG_DECODE_MODE_ENABLE     0x09
 #define AS1116_REG_GLOBAL_INTENSITY       0x0A
 #define AS1116_REG_SCAN_LIMIT             0x0B
 #define AS1116_REG_SHUTDOWN               0x0C
@@ -102,10 +102,8 @@ void as1116Init( as1116Config_t config ) {
    gpioConfig( AS1116_SSEL_PIN, GPIO_OUTPUT );
    gpioWrite( AS1116_SSEL_PIN, ON );
 
-   delay(100);
-
    as1116RegisterWrite( AS1116_REG_SHUTDOWN, AS1116_SHUTDOWN_NORMAL_MODE_RESET );
-   as1116RegisterWrite( AS1116_REG_DECODE_MODE, AS1116_DECODE_MODE_DISABLE_ALL );
+   as1116RegisterWrite( AS1116_REG_DECODE_MODE_ENABLE, AS1116_DECODE_MODE_DISABLE_ALL );
    as1116RegisterWrite( AS1116_REG_GLOBAL_INTENSITY, config.globalIntensity );
    as1116RegisterWrite( AS1116_REG_SCAN_LIMIT, config.scanLimit );
    as1116RegisterWrite( AS1116_REG_FEATURE, 0x00 | config.clockSource | (config.decodeMode << 2) );
@@ -131,28 +129,28 @@ void as1116DigitConfig( as1116DigitMap_t digit, as1116DigitConfig_t config ) {
       value |= digitConfig[index].decodeEnable << index;
    }
 
-   as1116RegisterWrite( AS1116_REG_DECODE_MODE, value );
+   as1116RegisterWrite( AS1116_REG_DECODE_MODE_ENABLE, value );
 
    switch(digit) {
-      case DIGIT0:
-      case DIGIT1:
+      case AS1116_DIGIT0:
+      case AS1116_DIGIT1:
          reg = AS1116_REG_DIG01_INTENSITY;
-         value = digitConfig[DIGIT0].intensity | (digitConfig[DIGIT1].intensity << 4);
+         value = digitConfig[AS1116_DIGIT0].intensity | (digitConfig[AS1116_DIGIT1].intensity << 4);
          break;
-      case DIGIT2:
-      case DIGIT3:
+      case AS1116_DIGIT2:
+      case AS1116_DIGIT3:
          reg = AS1116_REG_DIG23_INTENSITY;
-         value = digitConfig[DIGIT2].intensity | (digitConfig[DIGIT3].intensity << 4);
+         value = digitConfig[AS1116_DIGIT2].intensity | (digitConfig[AS1116_DIGIT3].intensity << 4);
          break;
-      case DIGIT4:
-      case DIGIT5:
+      case AS1116_DIGIT4:
+      case AS1116_DIGIT5:
          reg = AS1116_REG_DIG45_INTENSITY;
-         value = digitConfig[DIGIT4].intensity | (digitConfig[DIGIT5].intensity << 4);
+         value = digitConfig[AS1116_DIGIT4].intensity | (digitConfig[AS1116_DIGIT5].intensity << 4);
          break;
-      case DIGIT6:
-      case DIGIT7:
+      case AS1116_DIGIT6:
+      case AS1116_DIGIT7:
          reg = AS1116_REG_DIG67_INTENSITY;
-         value = digitConfig[DIGIT6].intensity | (digitConfig[DIGIT7].intensity << 4);
+         value = digitConfig[AS1116_DIGIT6].intensity | (digitConfig[AS1116_DIGIT7].intensity << 4);
          break;
    }
 
