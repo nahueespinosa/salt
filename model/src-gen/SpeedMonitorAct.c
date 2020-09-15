@@ -41,6 +41,7 @@ void
 SpeedMonitor_SpeedMissingToSpeedMissingLoc0(SpeedMonitor *const me, RKH_EVT_T *pe)
 {
 	rkh_pubsub_publish(0, &evSpeedLostObj, me);
+	panelDisplayDashedLine();
 }
 
 /* ............................. Entry actions ............................. */

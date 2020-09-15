@@ -30,6 +30,7 @@
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
+void panelDisplayDashedLine(void);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

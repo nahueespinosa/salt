@@ -17,6 +17,7 @@
 #define __SPEEDMONITORACTACCESS_H__
 
 /* ----------------------------- Include files ----------------------------- */
+#include "panel.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus

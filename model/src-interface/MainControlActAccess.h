@@ -18,6 +18,7 @@
 
 /* ----------------------------- Include files ----------------------------- */
 #include "safety.h"
+#include "panel.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus

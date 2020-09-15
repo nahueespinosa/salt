@@ -37,6 +37,8 @@ void safetySignalActivateCT(void);
 void safetySignalDeactivateCT(void);
 void safetySignalActivateFE(void);
 void safetySignalDeactivateFE(void);
+void panelDisplayOff(void);
+void panelDisplayOn(void);
 rInt speedRead(void);
 
 /* -------------------- External C language linkage end -------------------- */

@@ -45,8 +45,8 @@ MainControl_ToDisabledExt0(MainControl *const me, RKH_EVT_T *pe)
 	me->SALT_CT_LIMIT_DOWN = 25;
 	me->SALT_FE_LIMIT = 36;
 	me->SALT_FE_TIMEOUT = 10;
-	me->SALT_INTERMITTENT_TIME_OFF = 3;
-	me->SALT_INTERMITTENT_TIME_ON = 3;
+	me->SALT_INTERMITTENT_TIME_OFF = 2;
+	me->SALT_INTERMITTENT_TIME_ON = 2;
 		
 	RKH_TR_FWK_AO(me);
 	RKH_TR_FWK_QUEUE(&RKH_UPCAST(RKH_SMA_T, me)->equeue);
@@ -132,12 +132,14 @@ void
 MainControl_enDisabled(MainControl *const me)
 {
 	safetyIsolatedModeDisable();
+	panelDisplayOff();
 }
 
 void 
 MainControl_enEnabled(MainControl *const me)
 {
 	safetyIsolatedModeEnable();
+	panelDisplayOn();
 }
 
 void 
