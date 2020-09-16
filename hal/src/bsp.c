@@ -52,6 +52,7 @@
 #include "rkhfwk_sched.h"
 #include "rkhfwk_pubsub.h"
 #include "bsp.h"
+#include "panel.h"
 #include "MainControl.h"
 #include "SwitchMonitor.h"
 #include "SpeedMonitor.h"
@@ -88,6 +89,9 @@ void bsp_init( int argc, char *argv[] )
     gpioConfig( 0, GPIO_ENABLE );
     gpioConfig( LED1, GPIO_OUTPUT );
 
+    panelInit();
+    panelLedWrite( PANEL_LED_ON, PANEL_LED_GREEN );
+
     rkh_fwk_init();
 
     RKH_FILTER_ON_GROUP( RKH_TRC_ALL_GROUPS );
@@ -95,7 +99,7 @@ void bsp_init( int argc, char *argv[] )
     // RKH_FILTER_OFF_EVENT( RKH_TE_TMR_TOUT );
     RKH_FILTER_OFF_EVENT( RKH_TE_SM_STATE );
     RKH_FILTER_OFF_SMA( mainControl );
-    // RKH_FILTER_OFF_SMA( speedMonitor );
+    RKH_FILTER_OFF_SMA( speedMonitor );
     RKH_FILTER_OFF_SMA( switchMonitor );
     RKH_FILTER_OFF_ALL_SIGNALS();
 

@@ -17,8 +17,6 @@
 #include "rkhfwk_sched.h"
 #include "bsp.h"
 
-#include "panel.h"
-
 #include "MainControl.h"
 #include "SwitchMonitor.h"
 #include "SpeedMonitor.h"
@@ -40,9 +38,6 @@ static RKH_EVT_T *speedMonitor_qsto[QSTO_SIZE];
 int main( int argc, char *argv[] )
 {
     bsp_init( argc, argv );
-
-    panelInit();
-    panelLedWrite( PANEL_LED_ON, PANEL_LED_GREEN );
 
     RKH_SMA_ACTIVATE( mainControl, mainControl_qsto, QSTO_SIZE, 0, 0 );
     RKH_SMA_ACTIVATE( speedMonitor, speedMonitor_qsto, QSTO_SIZE, 0, 0 );
