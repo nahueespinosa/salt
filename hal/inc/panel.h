@@ -79,6 +79,9 @@ void panelDisplayOff( void );
  * Muestra el valor pasado como argumento en el display (debe ser menor a 1000).
  * El formato está fijado a tres dígitos enteros para las unidades, decenas y
  * centenas más un dígito decimal después del punto.
+ *
+ * Si el valor pasado como argumento excede el rango máximo, muestra "----"
+ * en el display.
  */
 void panelDisplayWrite( float value );
 
