@@ -93,7 +93,7 @@ void panelDisplayWrite( float value );
 void panelDisplayDashedLine( void );
 
 /**
- * @brief Realiza un prueba de funcionamiento en los leds y el display
+ * @brief Realiza una prueba de funcionamiento en los leds y el display
  *
  * Realiza una prueba de cortocircuito seguida de una prueba de circuito
  * abierto en los leds conectados.

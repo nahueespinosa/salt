@@ -17,7 +17,8 @@
 #define __SIGNALS_H__
 
 /* ----------------------------- Include files ----------------------------- */
-#include "../src-interface/priorities.h"
+#include "priorities.h"
+#include "rkhfwk_pubsub.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
