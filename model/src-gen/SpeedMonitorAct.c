@@ -25,7 +25,7 @@
 #define WaitTime0	RKH_TIME_SEC(me->SPEED_HASLER_TIMEOUT)
 #define WaitTime1	RKH_TIME_SEC(me->SPEED_PULSE_TIMEOUT)
 #define WaitTime2	RKH_TIME_SEC(me->SPEED_GPS_TIMEOUT)
-#define WaitTime3	RKH_TIME_SEC(2)
+#define WaitTime3	RKH_TIME_SEC(1)
 
 /* ------------------------------- Constants ------------------------------- */
 /* ---------------------------- Local data types --------------------------- */

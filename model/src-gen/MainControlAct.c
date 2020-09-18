@@ -44,7 +44,7 @@ MainControl_ToDisabledExt0(MainControl *const me, RKH_EVT_T *pe)
 	me->SALT_CT_LIMIT_UP = 30;
 	me->SALT_CT_LIMIT_DOWN = 25;
 	me->SALT_FE_LIMIT = 36;
-	me->SALT_FE_TIMEOUT = 10;
+	me->SALT_FE_TIMEOUT = 5;
 	me->SALT_INTERMITTENT_TIME_OFF = 2;
 	me->SALT_INTERMITTENT_TIME_ON = 2;
 		

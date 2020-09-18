@@ -5,7 +5,7 @@
       <vertices xsi:type="sgraph:Entry" xmi:id="_lo_UMfEfEequ19raZtcvXg">
         <outgoingTransitions xmi:id="_lo_UMvEfEequ19raZtcvXg" specification="" target="_lo_7QPEfEequ19raZtcvXg"/>
       </vertices>
-      <vertices xsi:type="sgraph:State" xmi:id="_lo_7QPEfEequ19raZtcvXg" specification="every 2 s /&#xD;&#xA;raise evSpeedLost;&#xD;&#xA;panelDisplayDashedLine()" name="SpeedMissing" incomingTransitions="_2xQYgfYIEeq6Moi25ks08g _lo_UMvEfEequ19raZtcvXg _2nSkPPYIEeq6Moi25ks08g _2snJFPYIEeq6Moi25ks08g">
+      <vertices xsi:type="sgraph:State" xmi:id="_lo_7QPEfEequ19raZtcvXg" specification="every 1 s /&#xD;&#xA;raise evSpeedLost;&#xD;&#xA;panelDisplayDashedLine()" name="SpeedMissing" incomingTransitions="_2xQYgfYIEeq6Moi25ks08g _lo_UMvEfEequ19raZtcvXg _2nSkPPYIEeq6Moi25ks08g _2snJFPYIEeq6Moi25ks08g">
         <outgoingTransitions xmi:id="_2nQH8PYIEeq6Moi25ks08g" specification="evHaslerSpeedValid" target="_2nQvFfYIEeq6Moi25ks08g"/>
         <outgoingTransitions xmi:id="_2sks0PYIEeq6Moi25ks08g" specification="evPulseGenSpeedValid" target="_2slT-PYIEeq6Moi25ks08g"/>
         <outgoingTransitions xmi:id="_2xOjUPYIEeq6Moi25ks08g" specification="evGPSSpeedValid" target="_2xOjbPYIEeq6Moi25ks08g"/>
