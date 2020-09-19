@@ -13,18 +13,16 @@ USE_SAPI=y
 USE_RKH=y
 
 #EXTRA INCLUDE PATHS
-INCLUDES += -I$(PROGRAM_PATH_AND_NAME)/app/inc
-INCLUDES += -I$(PROGRAM_PATH_AND_NAME)/hal/inc
-INCLUDES += -I$(PROGRAM_PATH_AND_NAME)/model/src-gen
-INCLUDES += -I$(PROGRAM_PATH_AND_NAME)/model/src-interface
+INCLUDES += -Iapp/inc
+INCLUDES += -Ibsp/inc
+INCLUDES += -Imodel/src-gen
+INCLUDES += -Imodel/src-gen-interface
 
 #EXTRA SOURCE FILES
-SRC += $(wildcard $(PROGRAM_PATH_AND_NAME)/app/src/*.c)
-SRC += $(wildcard $(PROGRAM_PATH_AND_NAME)/hal/src/*.c)
-SRC += $(wildcard $(PROGRAM_PATH_AND_NAME)/model/src-gen/*.c)
-SRC += $(wildcard $(PROGRAM_PATH_AND_NAME)/model/src-interface/*.c)
-#SRC +=  $(PROGRAM_PATH_AND_NAME)app/src/*.c
-#SRC +=  $(PROGRAM_PATH_AND_NAME)hal/src/*.c 
+SRC += $(wildcard app/src/*.c)
+SRC += $(wildcard bsp/src/*.c)
+SRC += $(wildcard model/src-gen/*.c)
+SRC += $(wildcard model/src-gen-interface/*.c)
 
 #EXTRA DEFINITIONS
 DEFINES+=__EDUCIAA_EID__
