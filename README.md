@@ -11,7 +11,9 @@ Se considera un sistema crítico debido a que, en caso de fallar, puede ocasiona
 
 ## Configuración
 
-Este proyecto es compatible con el framework de desarrollo de la plataforma CIAA llamado [firmware_v3](https://github.com/epernia/firmware_v3).
+Para compilar el proyecto se requieren las herramientas `arm-none-eabi-*` que se pueden obtener desde [GCC ARM Embedded](https://developer.arm.com/open-source/gnu-toolchain/gnu-rm).
+
+El script de opciones de configuración para `OpenOCD` se encuentra dentro de la carpeta `scripts`.
 
 En la carpeta `model` se encuentran los diagramas de estado desarrollados con [YAKINDU Statechart Tools](https://www.itemis.com/en/yakindu/state-machine/) Professional Edition (version 3.5.12).
 Para importar se debe seleccionar el menú `File -> Import -> Existing Projects into Workspace` y buscar la carpeta `model` dentro del proyecto.
