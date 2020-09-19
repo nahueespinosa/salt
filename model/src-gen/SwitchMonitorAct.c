@@ -67,7 +67,7 @@ SwitchMonitor_ToSwitchOffExt0(SwitchMonitor *const me, RKH_EVT_T *pe)
 		RKH_TR_FWK_OBJ_NAME(SwitchMonitor_isCondSwitchFallingToSwitchOn6, "isCondSwitchFallingToSwitchOn6");
 	#endif
 	
-	switchInit();
+	SwitchMonitorInit();
 }
 
 void 

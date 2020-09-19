@@ -106,7 +106,7 @@ MainControl_ToDisabledExt0(MainControl *const me, RKH_EVT_T *pe)
 		RKH_TR_FWK_OBJ_NAME(MainControl_isCondMainControl_C0ToIntermittentTractionEnabled19, "isCondMainControl_C0ToIntermittentTractionEnabled19");
 	#endif
 	
-	safetyInit();
+	MainControlInit();
 }
 
 void 

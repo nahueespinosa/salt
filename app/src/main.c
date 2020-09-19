@@ -64,8 +64,9 @@ int main( int argc, char *argv[] )
 static void setupTraceFilters(void) {
    RKH_FILTER_ON_GROUP( RKH_TRC_ALL_GROUPS );
    RKH_FILTER_ON_EVENT( RKH_TRC_ALL_EVENTS );
-   // RKH_FILTER_OFF_EVENT( RKH_TE_TMR_TOUT );
    RKH_FILTER_OFF_EVENT( RKH_TE_SM_STATE );
+   // RKH_FILTER_OFF_EVENT(RKH_TE_SMA_FIFO);
+   // RKH_FILTER_OFF_EVENT(RKH_TE_SMA_LIFO);
    RKH_FILTER_OFF_SMA( mainControl );
    RKH_FILTER_OFF_SMA( speedMonitor );
    RKH_FILTER_OFF_SMA( switchMonitor );

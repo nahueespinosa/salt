@@ -1,6 +1,6 @@
 /**
- *  \file       MainControlActRequired.c
- *  \brief      This file implements the required operations for MainControl
+ *  \file       SpeedMonitorActRequired.c
+ *  \brief      This file implements the required operations for SpeedMonitor
  *              active object.
  */
 
@@ -17,7 +17,7 @@
 #include "bsp.h"
 #include "signals.h"
 #include "rkhtrc_record.h"
-#include "MainControl.h"
+#include "SpeedMonitor.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -28,13 +28,8 @@
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
 void
-MainControlInit(void) {
+SpeedMonitorInit(void) {
 
-}
-
-rInt
-speedRead(void) {
-   return 0;
 }
 
 /* ------------------------------ End of file ------------------------------ */

@@ -30,7 +30,7 @@
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-void switchInit(void);
+void SwitchMonitorInit(void);
 rbool_t switchRead(void);
 
 /* -------------------- External C language linkage end -------------------- */

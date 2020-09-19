@@ -52,6 +52,8 @@
 
 #include "rkh.h"
 #include "panel.h"
+#include "relay.h"
+#include "switch.h"
 
 RKH_THIS_MODULE
 
@@ -85,7 +87,10 @@ void bsp_init( int argc, char *argv[] )
     gpioConfig( 0, GPIO_ENABLE );
     gpioConfig( LED1, GPIO_OUTPUT );
 
+    switchInit();
+    relayInit();
     panelInit();
+
     panelLedWrite( PANEL_LED_ON, PANEL_LED_GREEN );
 }
 

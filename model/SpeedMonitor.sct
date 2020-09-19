@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:sgraph="http://www.yakindu.org/sct/sgraph/2.0.0">
-  <sgraph:Statechart xmi:id="_jyYX4PEfEequ19raZtcvXg" specification="@EventDriven&#xA;@ChildFirstExecution&#xA;&#xA;interface:&#xA;&#xA;in event evHaslerSpeedValid&#xA;in event evPulseGenSpeedValid&#xA;in event evGPSSpeedValid&#xA;&#xA;out event evSpeedAvailable&#xA;out event evSpeedLost&#xA;&#xA;const SPEED_HASLER_TIMEOUT : integer = 10&#xA;const SPEED_PULSE_TIMEOUT : integer = 10&#xA;const SPEED_GPS_TIMEOUT : integer = 10&#xA;&#xA;operation panelDisplayDashedLine()" name="speedMonitor">
+  <sgraph:Statechart xmi:id="_jyYX4PEfEequ19raZtcvXg" specification="@EventDriven&#xA;@ChildFirstExecution&#xA;&#xA;interface:&#xA;&#xA;in event evHaslerSpeedValid&#xA;in event evPulseGenSpeedValid&#xA;in event evGPSSpeedValid&#xA;&#xA;out event evSpeedAvailable&#xA;out event evSpeedLost&#xA;&#xA;const SPEED_HASLER_TIMEOUT : integer = 10&#xA;const SPEED_PULSE_TIMEOUT : integer = 10&#xA;const SPEED_GPS_TIMEOUT : integer = 10&#xA;&#xA;operation panelDisplayDashedLine()&#xA;operation SpeedMonitorInit()" name="speedMonitor">
     <regions xmi:id="_lo_UMPEfEequ19raZtcvXg" name="r1">
       <vertices xsi:type="sgraph:Entry" xmi:id="_lo_UMfEfEequ19raZtcvXg">
-        <outgoingTransitions xmi:id="_lo_UMvEfEequ19raZtcvXg" specification="" target="_lo_7QPEfEequ19raZtcvXg"/>
+        <outgoingTransitions xmi:id="_lo_UMvEfEequ19raZtcvXg" specification="/ SpeedMonitorInit()" target="_lo_7QPEfEequ19raZtcvXg"/>
       </vertices>
       <vertices xsi:type="sgraph:State" xmi:id="_lo_7QPEfEequ19raZtcvXg" specification="every 1 s /&#xD;&#xA;raise evSpeedLost;&#xD;&#xA;panelDisplayDashedLine()" name="SpeedMissing" incomingTransitions="_2xQYgfYIEeq6Moi25ks08g _lo_UMvEfEequ19raZtcvXg _2nSkPPYIEeq6Moi25ks08g _2snJFPYIEeq6Moi25ks08g">
         <outgoingTransitions xmi:id="_2nQH8PYIEeq6Moi25ks08g" specification="evHaslerSpeedValid" target="_2nQvFfYIEeq6Moi25ks08g"/>
@@ -55,7 +55,7 @@
           </children>
           <styles xsi:type="notation:ShapeStyle" xmi:id="_lo-GHPEfEequ19raZtcvXg" fontName="Verdana" fillColor="0" lineColor="16777215"/>
           <styles xsi:type="notation:NamedStyle" xmi:id="_lo-GHfEfEequ19raZtcvXg" name="allowColors"/>
-          <layoutConstraint xsi:type="notation:Bounds" xmi:id="_lo-GHvEfEequ19raZtcvXg" x="1037" y="77"/>
+          <layoutConstraint xsi:type="notation:Bounds" xmi:id="_lo-GHvEfEequ19raZtcvXg" x="1033" y="74"/>
         </children>
         <children xmi:id="_lo-GH_EfEequ19raZtcvXg" type="State" element="_lo_7QPEfEequ19raZtcvXg">
           <children xsi:type="notation:DecorationNode" xmi:id="_lo-GIPEfEequ19raZtcvXg" type="StateName">
@@ -124,18 +124,18 @@
         <layoutConstraint xsi:type="notation:Bounds" xmi:id="_lo-GT_EfEequ19raZtcvXg"/>
       </children>
       <styles xsi:type="notation:ShapeStyle" xmi:id="_lo-GUPEfEequ19raZtcvXg" fontName="Verdana" fillColor="15790320" lineColor="12632256"/>
-      <layoutConstraint xsi:type="notation:Bounds" xmi:id="_lo-GUfEfEequ19raZtcvXg" x="24" y="30" width="1117" height="416"/>
+      <layoutConstraint xsi:type="notation:Bounds" xmi:id="_lo-GUfEfEequ19raZtcvXg" x="24" y="30" width="1159" height="416"/>
     </children>
     <styles xsi:type="notation:BooleanValueStyle" xmi:id="_jyjXAPEfEequ19raZtcvXg" name="inlineDefinitionSection"/>
     <styles xsi:type="notation:DiagramStyle" xmi:id="_jyjXAfEfEequ19raZtcvXg"/>
     <edges xmi:id="_lpEMsPEfEequ19raZtcvXg" type="Transition" element="_lo_UMvEfEequ19raZtcvXg" source="_lo-GFfEfEequ19raZtcvXg" target="_lo-GH_EfEequ19raZtcvXg">
       <children xsi:type="notation:DecorationNode" xmi:id="_lpEMsfEfEequ19raZtcvXg" type="TransitionExpression">
         <styles xsi:type="notation:ShapeStyle" xmi:id="_lpEMsvEfEequ19raZtcvXg"/>
-        <layoutConstraint xsi:type="notation:Location" xmi:id="_lpEMs_EfEequ19raZtcvXg" x="-3"/>
+        <layoutConstraint xsi:type="notation:Location" xmi:id="_lpEMs_EfEequ19raZtcvXg" x="-53" y="-34"/>
       </children>
       <styles xsi:type="notation:ConnectorStyle" xmi:id="_lpEMtPEfEequ19raZtcvXg" routing="Rectilinear" lineColor="4210752"/>
       <styles xsi:type="notation:FontStyle" xmi:id="_lpEMtfEfEequ19raZtcvXg" fontName="Verdana"/>
-      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_lpEMtvEfEequ19raZtcvXg" points="[-8, 9, -15, -45]$[-8, 52, -15, -2]"/>
+      <bendpoints xsi:type="notation:RelativeBendpoints" xmi:id="_lpEMtvEfEequ19raZtcvXg" points="[-8, 9, -19, -49]$[-8, 56, -19, -2]"/>
       <sourceAnchor xsi:type="notation:IdentityAnchor" xmi:id="_lpEMt_EfEequ19raZtcvXg" id="(1.0,0.3333333333333333)"/>
       <targetAnchor xsi:type="notation:IdentityAnchor" xmi:id="_lpEMuPEfEequ19raZtcvXg" id="(0.953139888632472,0.03701027444044204)"/>
     </edges>

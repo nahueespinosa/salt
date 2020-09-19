@@ -3,7 +3,7 @@ GeneratorModel for yakindu::c::rkh {
 	statechart switchMonitor {
 
 		feature Outlet {
-			targetProject = "salt"
+			targetProject = "salt-model"
 			targetFolder = "src-gen"
 			libraryTargetFolder = "src"
 		}

@@ -31,6 +31,7 @@
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 void panelDisplayDashedLine(void);
+void SpeedMonitorInit(void);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

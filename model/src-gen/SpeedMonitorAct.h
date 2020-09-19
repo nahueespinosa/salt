@@ -32,6 +32,7 @@ extern "C" {
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 /* ........................ Declares effect actions ........................ */
+void SpeedMonitor_ToSpeedMissingExt0(SpeedMonitor *const me, RKH_EVT_T *pe);
 void SpeedMonitor_SpeedMissingToSpeedMissingLoc0(SpeedMonitor *const me, RKH_EVT_T *pe);
 
 /* ......................... Declares entry actions ........................ */

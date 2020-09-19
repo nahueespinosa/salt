@@ -54,7 +54,7 @@ RKH_END_TRANS_TABLE
 
 
 /* ............................. Active object ............................. */
-RKH_SMA_CREATE(SpeedMonitor, speedMonitor, SpeedMonitorPrio, HCAL, &SpeedMissing, NULL, NULL);
+RKH_SMA_CREATE(SpeedMonitor, speedMonitor, SpeedMonitorPrio, HCAL, &SpeedMissing, SpeedMonitor_ToSpeedMissingExt0, NULL);
 RKH_SMA_DEF_PTR(speedMonitor);
 
 /* ------------------------------- Constants ------------------------------- */

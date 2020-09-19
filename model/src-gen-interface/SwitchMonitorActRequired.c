@@ -1,6 +1,6 @@
 /**
- *  \file       MainControlActRequired.c
- *  \brief      This file implements the required operations for MainControl
+ *  \file       SwitchMonitorActRequired.c
+ *  \brief      This file implements the required operations for SwitchMonitor
  *              active object.
  */
 
@@ -17,7 +17,7 @@
 #include "bsp.h"
 #include "signals.h"
 #include "rkhtrc_record.h"
-#include "MainControl.h"
+#include "SwitchMonitor.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
@@ -28,13 +28,8 @@
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
 void
-MainControlInit(void) {
+SwitchMonitorInit(void) {
 
-}
-
-rInt
-speedRead(void) {
-   return 0;
 }
 
 /* ------------------------------ End of file ------------------------------ */

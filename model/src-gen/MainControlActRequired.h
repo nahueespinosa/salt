@@ -30,7 +30,7 @@
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-void safetyInit(void);
+void MainControlInit(void);
 void safetyIsolatedModeDisable(void);
 void safetyIsolatedModeEnable(void);
 void safetySignalActivateCT(void);
