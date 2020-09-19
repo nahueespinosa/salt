@@ -26,7 +26,7 @@
 /* ---------------------------- Local functions ---------------------------- */
 /* ---------------------------- Global functions --------------------------- */
 void
-signals_publishSymbols(void)
+signalsPublishSymbols(void)
 {
     RKH_TR_FWK_SIG(evSwitchOn);
     RKH_TR_FWK_SIG(evSwitchOff);

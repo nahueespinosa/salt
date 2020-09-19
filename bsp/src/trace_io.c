@@ -56,6 +56,7 @@
 /* ------------------------------- Constants ------------------------------- */
 #define TRC_COM_PORT        UART_USB
 #define TRC_BAUD_RATE       115200
+#define TRC_UART_Init()     uartConfig( TRC_COM_PORT, TRC_BAUD_RATE )
 #define BSP_TS_RATE_HZ      BSP_TICK_RATE_HZ
 
 /* ---------------------------- Local data types --------------------------- */
@@ -69,16 +70,18 @@ rkh_trc_open( void )
 {
     rkh_trc_init();
 
-    uartConfig( TRC_COM_PORT, TRC_BAUD_RATE );
+    TRC_UART_Init();
 
     RKH_TRC_SEND_CFG( BSP_TS_RATE_HZ );
 }
 
-void rkh_trc_close( void )
+void
+rkh_trc_close( void )
 {
 }
 
-void rkh_trc_flush( void )
+void
+rkh_trc_flush( void )
 {
     rui8_t *blk;
     TRCQTY_T nbytes;
@@ -105,6 +108,7 @@ void rkh_trc_flush( void )
         }
     }
 }
+
 #endif
 
 /* ------------------------------ File footer ------------------------------ */

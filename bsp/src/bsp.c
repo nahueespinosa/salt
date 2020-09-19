@@ -51,12 +51,7 @@
 #include "bsp.h"
 
 #include "rkh.h"
-#include "rkhfwk_sched.h"
-#include "rkhfwk_pubsub.h"
 #include "panel.h"
-#include "MainControl.h"
-#include "SwitchMonitor.h"
-#include "SpeedMonitor.h"
 
 RKH_THIS_MODULE
 
@@ -92,24 +87,6 @@ void bsp_init( int argc, char *argv[] )
 
     panelInit();
     panelLedWrite( PANEL_LED_ON, PANEL_LED_GREEN );
-
-    rkh_fwk_init();
-
-    RKH_FILTER_ON_GROUP( RKH_TRC_ALL_GROUPS );
-    RKH_FILTER_ON_EVENT( RKH_TRC_ALL_EVENTS );
-    // RKH_FILTER_OFF_EVENT( RKH_TE_TMR_TOUT );
-    RKH_FILTER_OFF_EVENT( RKH_TE_SM_STATE );
-    RKH_FILTER_OFF_SMA( mainControl );
-    RKH_FILTER_OFF_SMA( speedMonitor );
-    RKH_FILTER_OFF_SMA( switchMonitor );
-    RKH_FILTER_OFF_ALL_SIGNALS();
-
-    rkh_pubsub_init();
-    rkh_pubsub_subscribe( 0, mainControl ); // Subscribe to channel of events number 0
-
-    RKH_TRC_OPEN();
-
-    RKH_ENA_INTERRUPT();
 }
 
 /* ------------------------------ End of file ------------------------------ */

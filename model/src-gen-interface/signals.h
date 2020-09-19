@@ -17,7 +17,7 @@
 #define __SIGNALS_H__
 
 /* ----------------------------- Include files ----------------------------- */
-#include "../src-gen-interface/priorities.h"
+#include "priorities.h"
 #include "rkhfwk_pubsub.h"
 
 /* ---------------------- External C language linkage ---------------------- */
@@ -53,7 +53,7 @@ typedef enum Signals
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
-void signals_publishSymbols(void);
+void signalsPublishSymbols(void);
 
 /* -------------------- External C language linkage end -------------------- */
 #ifdef __cplusplus

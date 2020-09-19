@@ -59,10 +59,10 @@ RKH_THIS_MODULE
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
 /* ----------------------- Local function prototypes ----------------------- */
-static bool_t tickHook( void *p );
+static void tickHook( void *p );
 
 /* ---------------------------- Local functions ---------------------------- */
-static bool_t
+static void
 tickHook( void *p )
 {
     RKH_TIM_TICK();
@@ -73,7 +73,7 @@ void
 rkh_hook_start( void )
 {
     tickInit( BSP_TICK_RATE_MS );
-    tickCallbackSet( tickHook, 0 );
+    tickCallbackSet( (callBackFuncPtr_t)tickHook, 0 );
 }
 
 void

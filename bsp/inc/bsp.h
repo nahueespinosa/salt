@@ -51,7 +51,6 @@
 #define __BSP_H__
 
 /* ----------------------------- Include files ----------------------------- */
-#include "sapi.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
