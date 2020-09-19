@@ -58,6 +58,10 @@ RKH_THIS_MODULE
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
+#if defined(RKH_CFG_SMA_TRC_SNDR_EN)
+static rui8_t rkhtick;
+#endif
+
 /* ----------------------- Local function prototypes ----------------------- */
 static void tickHook( void *p );
 
@@ -65,7 +69,7 @@ static void tickHook( void *p );
 static void
 tickHook( void *p )
 {
-    RKH_TIM_TICK();
+    RKH_TIM_TICK( &rkhtick );
 }
 
 /* ---------------------------- Global functions --------------------------- */

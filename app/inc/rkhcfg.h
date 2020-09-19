@@ -212,7 +212,7 @@
  *	hierarchical state machines uses up to 4 transition segments.
  *	Currently #RKH_CFG_SMA_MAX_TRC_SEGS cannot exceed 8.
  */
-#define RKH_CFG_SMA_MAX_TRC_SEGS        2u
+#define RKH_CFG_SMA_MAX_TRC_SEGS        4u
 
 /**
  *	If the #RKH_CFG_SMA_PSEUDOSTATE_EN is set to 1, the RKH allows
@@ -254,7 +254,7 @@
  *	If the #RKH_CFG_SMA_TRC_SNDR_EN and #RKH_CFG_TRC_EN are set to 1,
  *	when posting an event the RKH inserts a pointer to the sender object.
  */
-#define RKH_CFG_SMA_TRC_SNDR_EN         RKH_DISABLED
+#define RKH_CFG_SMA_TRC_SNDR_EN         RKH_ENABLED
 
 /**
  *	If the #RKH_CFG_SMA_INIT_EVT_EN is set to 1 then an initial event could
@@ -452,7 +452,7 @@
  *	If the #RKH_CFG_TRC_TMR_EN is set to 1 then RKH will include all trace
  *	records related to the native software timer.
  */
-#define RKH_CFG_TRC_TMR_EN              RKH_DISABLED
+#define RKH_CFG_TRC_TMR_EN              RKH_ENABLED
 
 /**
  *	If the #RKH_CFG_TRC_SM_EN is set to 1 then RKH will include all trace
@@ -595,7 +595,7 @@
  *  This provides valuable empirical data for proper sizing of the queue.
  *  See rkh_rq_get_lwm() function.
  */
-#define RKH_CFG_QUE_GET_LWMARK_EN        RKH_DISABLED
+#define RKH_CFG_QUE_GET_LWMARK_EN        RKH_ENABLED
 
 /**
  *	If the #RKH_CFG_QUE_GET_INFO_EN is set to 1 then RKH allows to collect and
@@ -624,7 +624,7 @@
  *	rkh_rq_is_full() function that allows to known if a queue is full.
  *	See rkh_rq_is_full() function.
  */
-#define RKH_CFG_QUE_IS_FULL_EN           RKH_DISABLED
+#define RKH_CFG_QUE_IS_FULL_EN           RKH_ENABLED
 
 /**
  *	If the #RKH_CFG_QUE_GET_NELEMS_EN is set to 1 then RKH will include the
@@ -640,7 +640,7 @@
  *	manner.
  *	See rkh_rq_put_lifo() function.
  */
-#define RKH_CFG_QUE_PUT_LIFO_EN          RKH_DISABLED
+#define RKH_CFG_QUE_PUT_LIFO_EN          RKH_ENABLED
 
 /* --- Configuration options related to fixed-sized memory block facility - */
 
@@ -690,7 +690,7 @@
  *	data for proper sizing of the memory pool.
  *	See rkh_mp_get_low_wmark() function.
  */
-#define RKH_CFG_MP_GET_LWM_EN           RKH_DISABLED
+#define RKH_CFG_MP_GET_LWM_EN           RKH_ENABLED
 
 /**
  *	If the #RKH_CFG_MP_GET_INFO_EN is set to 1 then RKH will include the
