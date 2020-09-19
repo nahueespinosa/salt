@@ -1,40 +1,29 @@
-/**
- *  \file       main.c
- *  \brief      Example application.
- */
+/*=============================================================================
+ * Author: Nahuel Espinosa <nahue.espinosa@gmail.com>
+ * Date: 2020/09/19
+ *===========================================================================*/
 
-/* -------------------------- Development history -------------------------- */
-/*
- */
+/*=====[Inclusions of function dependencies]=================================*/
 
-/* -------------------------------- Authors -------------------------------- */
-/*
- */
-
-/* --------------------------------- Notes --------------------------------- */
-/* ----------------------------- Include files ----------------------------- */
+#include "bsp.h"
 #include "rkh.h"
 #include "rkhfwk_sched.h"
-#include "bsp.h"
-
 #include "MainControl.h"
 #include "SwitchMonitor.h"
 #include "SpeedMonitor.h"
 
-/* ----------------------------- Local macros ------------------------------ */
+/*=====[Definition macros of private constants]==============================*/
+
 #define QSTO_SIZE           4
 
-/* ------------------------------- Constants ------------------------------- */
-/* ---------------------------- Local data types --------------------------- */
-/* ---------------------------- Global variables --------------------------- */
-/* ---------------------------- Local variables ---------------------------- */
+/*=====[Definitions of private global variables]=============================*/
+
 static RKH_EVT_T *mainControl_qsto[QSTO_SIZE];
 static RKH_EVT_T *switchMonitor_qsto[QSTO_SIZE];
 static RKH_EVT_T *speedMonitor_qsto[QSTO_SIZE];
 
-/* ----------------------- Local function prototypes ----------------------- */
-/* ---------------------------- Local functions ---------------------------- */
-/* ---------------------------- Global functions --------------------------- */
+/*=====[Implementation of public functions]==================================*/
+
 int main( int argc, char *argv[] )
 {
     bsp_init( argc, argv );
@@ -48,5 +37,3 @@ int main( int argc, char *argv[] )
     RKH_TRC_CLOSE();
     return 0;
 }
-
-/* ------------------------------ End of file ------------------------------ */

@@ -30,32 +30,26 @@
  */
 
 /**
- *  \file       bsp.c
- *  \brief      BSP for Cortex-M3 EDU-CIAA LPC4337 ARM-GCC
+ *  \file       hook.c
+ *  \brief      RKH hooks functions for Edu-CIAA
  *
  *  \ingroup    bsp
  */
 
 /* -------------------------- Development history -------------------------- */
 /*
- *  2017.06.23  DaBa  v1.0.00  Initial version
+ *  2017.04.14  DaBa  v2.4.05  Initial version
  */
 
 /* -------------------------------- Authors -------------------------------- */
 /*
- *  DaBa  Dario Bali\F1a       dariosb@gmail.com
+ *  DaBa  Dario Bali�a     dariosb@gmail.com
  */
-
 /* --------------------------------- Notes --------------------------------- */
 /* ----------------------------- Include files ----------------------------- */
-#include "rkh.h"
-#include "rkhfwk_sched.h"
-#include "rkhfwk_pubsub.h"
 #include "bsp.h"
-#include "panel.h"
-#include "MainControl.h"
-#include "SwitchMonitor.h"
-#include "SpeedMonitor.h"
+#include "rkh.h"
+#include "sapi.h"
 
 RKH_THIS_MODULE
 
@@ -64,51 +58,41 @@ RKH_THIS_MODULE
 /* ---------------------------- Local data types --------------------------- */
 /* ---------------------------- Global variables --------------------------- */
 /* ---------------------------- Local variables ---------------------------- */
-static RKH_TS_T tstamp;
-
 /* ----------------------- Local function prototypes ----------------------- */
+static bool_t tickHook( void *p );
+
 /* ---------------------------- Local functions ---------------------------- */
+static bool_t
+tickHook( void *p )
+{
+    RKH_TIM_TICK();
+}
+
 /* ---------------------------- Global functions --------------------------- */
-void bsp_timeTick( void )
+void
+rkh_hook_start( void )
 {
-    ++tstamp;
+    tickInit( BSP_TICK_RATE_MS );
+    tickCallbackSet( tickHook, 0 );
 }
 
-RKH_TS_T rkh_trc_getts( void )
+void
+rkh_hook_exit( void )
 {
-    return tstamp;
+    RKH_TRC_FLUSH();
 }
 
-void bsp_init( int argc, char *argv[] )
+void
+rkh_hook_timetick( void )
 {
-    ( void )argc;
-    ( void )argv;
+    bsp_timeTick();
+}
 
-    boardConfig();
-
-    gpioConfig( 0, GPIO_ENABLE );
-    gpioConfig( LED1, GPIO_OUTPUT );
-
-    panelInit();
-    panelLedWrite( PANEL_LED_ON, PANEL_LED_GREEN );
-
-    rkh_fwk_init();
-
-    RKH_FILTER_ON_GROUP( RKH_TRC_ALL_GROUPS );
-    RKH_FILTER_ON_EVENT( RKH_TRC_ALL_EVENTS );
-    // RKH_FILTER_OFF_EVENT( RKH_TE_TMR_TOUT );
-    RKH_FILTER_OFF_EVENT( RKH_TE_SM_STATE );
-    RKH_FILTER_OFF_SMA( mainControl );
-    RKH_FILTER_OFF_SMA( speedMonitor );
-    RKH_FILTER_OFF_SMA( switchMonitor );
-    RKH_FILTER_OFF_ALL_SIGNALS();
-
-    rkh_pubsub_init();
-    rkh_pubsub_subscribe( 0, mainControl ); // Subscribe to channel of events number 0
-
-    RKH_TRC_OPEN();
-
+void
+rkh_hook_idle( void )           /* called within critical section */
+{
     RKH_ENA_INTERRUPT();
+    RKH_TRC_FLUSH();
 }
 
-/* ------------------------------ End of file ------------------------------ */
+/* ------------------------------ File footer ------------------------------ */
