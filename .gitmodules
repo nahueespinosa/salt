@@ -1,0 +1,6 @@
+[submodule "ssp"]
+	path = ssp
+	url = https://github.com/leanfrancucci/ssp.git
+[submodule "libs/ssp"]
+	path = libs/ssp
+	url = https://github.com/leanfrancucci/ssp.git

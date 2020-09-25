@@ -12,6 +12,9 @@ USE_LPCOPEN=y
 USE_SAPI=y
 USE_RKH=y
 
+INCLUDES += -Ilibs/ssp/src
+SRC += $(wildcard libs/ssp/src/*.c)
+
 #INCLUDE PATHS
 INCLUDES += -Iapp/inc
 INCLUDES += -Ibsp/inc
