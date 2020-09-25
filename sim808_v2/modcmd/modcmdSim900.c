@@ -19,13 +19,13 @@
 /* ----------------------------- Include files ----------------------------- */
 #include "rkh.h"
 #include "rkhfwk_dynevt.h"
-#include "conmgr.h"
+// #include "conmgr.h"
 #include "signals.h"
 #include <string.h>
 #include <stdio.h>
-#include "../../sim808_v2/modcmd/modcmd.h"
-#include "../../sim808_v2/modmgr/modmgr.h"
-#include "../../sim808_v2/parser/sim900/sim900parser.h"
+#include "modcmd.h"
+#include "modmgr.h"
+#include "sim900parser.h"
 
 /* ----------------------------- Local macros ------------------------------ */
 /* ------------------------------- Constants ------------------------------- */
