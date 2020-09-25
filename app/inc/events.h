@@ -23,14 +23,14 @@
 /* ----------------------------- Include files ----------------------------- */
 #include "rkhevt.h"
 #include "rkhtmr.h"
-#include "epoch.h"
-#include "rmc.h"
-#include "Geo.h"
-#include "cbox.h"
-#include "GStatus.h"
-#include "IOStatus.h"
-#include "Trace.h"
-#include "Flowmeter.h"
+// #include "epoch.h"
+// #include "rmc.h"
+// #include "Geo.h"
+// #include "cbox.h"
+// #include "GStatus.h"
+// #include "IOStatus.h"
+// #include "Trace.h"
+// #include "Flowmeter.h"
 
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
@@ -124,12 +124,14 @@ struct ReceivedEvt
     ruint size;
 };
 
+/*
 typedef struct LocalTimeEvt LocalTimeEvt;
 struct LocalTimeEvt
 {
     ModMgrResp e;
     Time time;
 };
+*/
 
 typedef struct ImeiEvt ImeiEvt;
 struct ImeiEvt
@@ -162,6 +164,7 @@ struct SMSEvt
     char data[SMS_BUF_SIZE];
 };
 
+/*
 typedef struct RmcEvt RmcEvt;
 struct RmcEvt
 {
@@ -220,6 +223,7 @@ struct FlowmeterEvt
     FlowData flow1;
     FlowData flow2;
 };
+*/
 
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
