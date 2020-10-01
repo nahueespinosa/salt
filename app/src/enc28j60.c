@@ -13,8 +13,6 @@
 #include "enchw.h"
 #include "enc28j60.h"
 
-#define DEBUG(...)
-
 #if defined(ENC28J60_USE_PBUF) && !defined(DEBUG)
 #define DEBUG(...) LWIP_DEBUGF(NETIF_DEBUG, (__VA_ARGS__))
 #endif

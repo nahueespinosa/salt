@@ -1,5 +1,5 @@
-#ifndef MY__LWIPOPTS_H__
-#define MY__LWIPOPTS_H__
+#ifndef __LWIPOPTS_H__
+#define __LWIPOPTS_H__
 
 /** 
  * NO_SYS==1: Provides VERY minimal functionality. Otherwise,
@@ -17,6 +17,9 @@
 #define PBUF_POOL_SIZE                  0
 
 #define LWIP_DEBUG
+#define LWIP_DBG_MIN_LEVEL             LWIP_DBG_LEVEL_ALL
+#define NETIF_DEBUG                    LWIP_DBG_ON
+#define IP_DEBUG                       LWIP_DBG_ON
 
 /* add one timeout for testapp.c to the default timeouts */
 #define MEMP_NUM_SYS_TIMEOUT            (LWIP_TCP + IP_REASSEMBLY + LWIP_ARP + (2*LWIP_DHCP) + LWIP_AUTOIP + LWIP_IGMP + LWIP_DNS + PPP_SUPPORT + 1)

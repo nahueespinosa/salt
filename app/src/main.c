@@ -93,7 +93,11 @@ int main( int argc, char *argv[] )
    gpioWrite(LEDB, OFF);
    gpioWrite(LEDR, OFF);
    gpioWrite(LED1, ON);
-   gpioWrite(LED1, ON);
+   gpioWrite(LED2, ON);
+
+   uartInit( UART_USB, 115200 );
+
+   LWIP_PLATFORM_DIAG("Prueba de ENC28J60\r\n");
 
    mch_net_init();
 
