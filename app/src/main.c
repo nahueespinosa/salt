@@ -97,7 +97,7 @@ int main( int argc, char *argv[] )
 
    uartInit( UART_USB, 115200 );
 
-   LWIP_PLATFORM_DIAG("Prueba de ENC28J60\r\n");
+   LWIP_DEBUGF(NETIF_DEBUG, ("Prueba de %s\r\n", "ENC28J60"));
 
    mch_net_init();
 

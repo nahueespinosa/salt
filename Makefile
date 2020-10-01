@@ -69,7 +69,6 @@ LDFLAGS+=$(addprefix -L, $(wildcard $(dir $(LIBSDEPS))))
 LDFLAGS+=$(addprefix -l, $(LIBS))
 LDFLAGS+=-T$(LDSCRIPT)
 LDFLAGS+=-nostartfiles -Wl,-gc-sections -Wl,-Map=$(TARGET_MAP) -Wl,--cref
-LDFLAGS+=-specs=nosys.specs
 
 $(info Using optimization level $(OPT))
 
