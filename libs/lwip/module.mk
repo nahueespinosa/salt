@@ -15,6 +15,7 @@ INCLUDES += -I$(LWIP_BASE)/src/include/ipv4
 #SOURCE FILES
 SRC+=$(wildcard $(LWIP_BASE)/src/api/*.c)
 SRC+=$(wildcard $(LWIP_BASE)/src/core/*.c)
+SRC+=$(wildcard $(LWIP_BASE)/src/core/ipv4/*.c)
 SRC+=$(wildcard $(LWIP_BASE)/src/netif/*.c)
 SRC+=$(wildcard $(LWIP_BASE)/src/arch/*.c)
 
