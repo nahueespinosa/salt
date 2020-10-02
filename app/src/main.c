@@ -26,6 +26,8 @@
 #include "enc28j60.h"
 #include "testapp.h"
 
+#include "lwip/apps/mqtt.h"
+
 #include "sapi.h"
 
 /*=====[Definition macros of private constants]==============================*/
@@ -38,9 +40,11 @@ static RKH_EVT_T *mainControl_qsto[QSTO_SIZE];
 static RKH_EVT_T *switchMonitor_qsto[QSTO_SIZE];
 static RKH_EVT_T *speedMonitor_qsto[QSTO_SIZE];
 
-ip_addr_t mch_myip_addr = IPADDR4_INIT(0xc801a8c0UL); /* 192.168.1.200 */
-ip_addr_t gw_addr = IPADDR4_INIT(0x0101a8c0UL); /* 192.168.1.1 */
-ip_addr_t netmask = IPADDR4_INIT(0x00ffffffUL); /* 255.255.255.0 */
+ip_addr_t mch_myip_addr = IPADDR4_INIT_BYTES(192,168,0,200); /* 192.168.1.200 */
+ip_addr_t gw_addr = IPADDR4_INIT_BYTES(192,168,0,1); /* 192.168.1.1 */
+ip_addr_t netmask = IPADDR4_INIT_BYTES(255,255,255,0); /* 255.255.255.0 */
+
+ip_addr_t dest_addr = IPADDR4_INIT_BYTES(3,121,33,50);
 
 static struct netif mchdrv_netif;
 
@@ -84,10 +88,44 @@ uint32_t sys_now(void)
    return tickRead();
 }
 
+static void mqtt_connection_cb(mqtt_client_t *client, void *arg, mqtt_connection_status_t status)
+{
+  err_t err;
+  if(status == MQTT_CONNECT_ACCEPTED) {
+    printf("mqtt_connection_cb: Successfully connected\n");
+
+    /* Setup callback for incoming publish requests */
+    // mqtt_set_inpub_callback(client, mqtt_incoming_publish_cb, mqtt_incoming_data_cb, arg);
+
+    /* Subscribe to a topic named "subtopic" with QoS level 1, call mqtt_sub_request_cb with result */
+    // err = mqtt_subscribe(client, "subtopic", 1, mqtt_sub_request_cb, arg);
+
+    if(err != ERR_OK) {
+      printf("mqtt_subscribe return: %d\n", err);
+    }
+  } else {
+    printf("mqtt_connection_cb: Disconnected, reason: %d\n", status);
+
+    /* Its more nice to be connected, so try to reconnect */
+    //example_do_connect(client);
+  }
+}
+
+/* Called when publish is complete either with sucess or failure */
+static void mqtt_pub_request_cb(void *arg, err_t result)
+{
+  if(result != ERR_OK) {
+    printf("Publish result: %d\n", result);
+  }
+}
+
 /*=====[Implementation of public functions]==================================*/
 
 int main( int argc, char *argv[] )
 {
+   mqtt_client_t static_client;
+   struct mqtt_connect_client_info_t ci;
+
    bsp_init( argc, argv );
 
    gpioConfig(LED1, GPIO_OUTPUT);
@@ -105,6 +143,17 @@ int main( int argc, char *argv[] )
 
    testapp_init();
 
+   ci.client_id = "lwip_test";
+   ci.client_pass = 0;
+   ci.client_user = 0;
+   ci.keep_alive = 0;
+   ci.will_msg = 0;
+   ci.will_qos = 0;
+   ci.will_retain = 0;
+   ci.will_topic = 0;
+
+
+
    gpioWrite(LED1, OFF);
    gpioWrite(LED2, OFF);
 
@@ -113,6 +162,26 @@ int main( int argc, char *argv[] )
        mch_net_poll();
        sys_check_timeouts();
        delay(10);
+
+       if( !gpioRead(TEC1) ) {
+          delay(200);
+          mqtt_client_connect(&static_client, &dest_addr, MQTT_PORT, mqtt_connection_cb, 0, &ci);
+       }
+
+       if( !gpioRead(TEC2) ) {
+          mqtt_publish(&static_client, "/salt/", "{\"test\":\"ok\"}", sizeof("{\"test\":\"ok\"}"), 2, 0,
+                mqtt_pub_request_cb, NULL);
+          delay(200);
+       }
+
+       if( !gpioRead(TEC3) ) {
+          delay(200);
+       }
+
+       if( !gpioRead(TEC4) ) {
+          delay(200);
+          mqtt_disconnect(&static_client);
+       }
    }
 
    rkh_fwk_init();
