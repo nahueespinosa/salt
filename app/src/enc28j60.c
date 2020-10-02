@@ -10,8 +10,13 @@
  * DS39662D
  * */
 
-#include "enchw.h"
 #include "enc28j60.h"
+#include "chip.h"
+#include "sapi_gpio.h"
+
+#define ENC_RAMSIZE (8 * 1024)
+
+#define ENC_READLOCATION_ANY (uint16_t)(~0)
 
 #if defined(ENC28J60_USE_PBUF) && !defined(DEBUG)
 #define DEBUG(...) LWIP_DEBUGF(NETIF_DEBUG, (__VA_ARGS__))
@@ -21,8 +26,10 @@
 #error "Please provide a DEBUG(...) macro that behaves like a printf."
 #endif
 
-/** This access/cast happens too often to be written out explicitly */
-#define HWDEV (enchw_device_t*)dev->hwdev
+static void enc_hw_setup(enc_device_t *dev);
+static void enc_hw_select(enc_device_t *dev);
+static void enc_hw_unselect(enc_device_t *dev);
+static uint8_t enc_hw_exchangebyte(enc_device_t *dev, uint8_t byte);
 
 /** Initialize an ENC28J60 device. Returns 0 on success, or an unspecified
  * error code if something goes wrong.
@@ -33,7 +40,7 @@
  * */
 int enc_setup_basic(enc_device_t *dev)
 {
-	enc_hw_setup(HWDEV);
+	enc_hw_setup(dev);
 
 	if (enc_wait(dev))
 		return 1;
@@ -144,10 +151,10 @@ uint8_t enc_bist_manual(enc_device_t *dev)
 static uint8_t command(enc_device_t *dev, uint8_t first, uint8_t second)
 {
 	uint8_t result;
-	enc_hw_select(HWDEV);
-	enc_hw_exchangebyte(HWDEV, first);
-	result = enc_hw_exchangebyte(HWDEV, second);
-	enc_hw_unselect(HWDEV);
+	enc_hw_select(dev);
+	enc_hw_exchangebyte(dev, first);
+	result = enc_hw_exchangebyte(dev, second);
+	enc_hw_unselect(dev);
 	return result;
 }
 
@@ -193,22 +200,22 @@ void enc_RBM(enc_device_t *dev, uint8_t *dest, uint16_t start, uint16_t length)
 	if (start != ENC_READLOCATION_ANY)
 		enc_WCR16(dev, ENC_ERDPTL, start);
 
-	enc_hw_select(HWDEV);
-	enc_hw_exchangebyte(HWDEV, 0x3a);
+	enc_hw_select(dev);
+	enc_hw_exchangebyte(dev, 0x3a);
 	while(length--)
-		*(dest++) = enc_hw_exchangebyte(HWDEV, 0);
-	enc_hw_unselect(HWDEV);
+		*(dest++) = enc_hw_exchangebyte(dev, 0);
+	enc_hw_unselect(dev);
 }
 
 static void WBM_raw(enc_device_t *dev, uint8_t *src, uint16_t length)
 {
-	enc_hw_select(HWDEV);
-	enc_hw_exchangebyte(HWDEV, 0x7a);
+	enc_hw_select(dev);
+	enc_hw_exchangebyte(dev, 0x7a);
 	while(length--)
-		enc_hw_exchangebyte(HWDEV, *(src++));
-	enc_hw_unselect(HWDEV);
+		enc_hw_exchangebyte(dev, *(src++));
+	enc_hw_unselect(dev);
 	/** @todo this is actually just triggering another pause */
-	enc_hw_unselect(HWDEV);
+	enc_hw_unselect(dev);
 }
 
 void enc_WBM(enc_device_t *dev, uint8_t *src, uint16_t start, uint16_t length)
@@ -234,7 +241,7 @@ void enc_WCR16(enc_device_t *dev, uint8_t reg, uint16_t data) {
 }
 
 void enc_SRC(enc_device_t *dev) {
-	enc_hw_exchangebyte(HWDEV, 0xff);
+	enc_hw_exchangebyte(dev, 0xff);
 }
 
 /** Wait for the ENC28J60 clock to be ready. Returns 0 on success,
@@ -582,6 +589,50 @@ end:
 }
 #endif
 
+void enc_hw_setup(enc_device_t *dev)
+{
+   Chip_SCU_PinMuxSet( 0xF, 4, (SCU_MODE_PULLUP | SCU_MODE_FUNC0)); // SSP1_SCK
+   Chip_SCU_PinMuxSet( 0x1, 3, (SCU_MODE_PULLUP | SCU_MODE_INBUFF_EN | SCU_MODE_ZIF_DIS | SCU_MODE_FUNC5)); // SSP1_MISO
+   Chip_SCU_PinMuxSet( 0x1, 4, (SCU_MODE_PULLUP | SCU_MODE_FUNC5)); // SSP1_MOSI
 
+   // Initialize SSP Peripheral
+   Chip_SSP_Init(LPC_SSP1);
+
+   Chip_SSP_Set_Mode(LPC_SSP1, SSP_MODE_MASTER);
+   Chip_SSP_SetFormat(LPC_SSP1, SSP_BITS_8, SSP_FRAMEFORMAT_SPI, SSP_CLOCK_CPHA0_CPOL0);
+   Chip_SSP_SetBitRate(LPC_SSP1, 10000000);
+
+   Chip_SSP_Enable( LPC_SSP1 );
+
+   gpioConfig(GPIO0, GPIO_OUTPUT);
+   gpioWrite(GPIO0, ON);
+}
+
+void enc_hw_select(enc_device_t *dev)
+{
+   gpioWrite(GPIO0, OFF);
+}
+
+void enc_hw_unselect(enc_device_t *dev)
+{
+   gpioWrite(GPIO0, ON);
+}
+
+uint8_t enc_hw_exchangebyte(enc_device_t *dev, uint8_t byte)
+{
+   uint8_t rx;
+
+   Chip_SSP_DATA_SETUP_T xferConfig;
+
+   xferConfig.tx_data = &byte;
+   xferConfig.tx_cnt  = 0;
+   xferConfig.rx_data = &rx;
+   xferConfig.rx_cnt  = 0;
+   xferConfig.length  = 1;
+
+   Chip_SSP_RWFrames_Blocking( LPC_SSP1, &xferConfig );
+
+   return rx;
+}
 
 
