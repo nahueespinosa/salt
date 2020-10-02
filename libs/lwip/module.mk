@@ -10,7 +10,6 @@ DEFINES += USE_RKH
 
 #INCLUDES PATHS
 INCLUDES += -I$(LWIP_BASE)/src/include/
-INCLUDES += -I$(LWIP_BASE)/src/include/ipv4
 
 #SOURCE FILES
 SRC+=$(wildcard $(LWIP_BASE)/src/api/*.c)

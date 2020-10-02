@@ -1,8 +1,7 @@
 #include <lwip/raw.h>
 #include <lwip/pbuf.h>
 #include <lwip/udp.h>
-#include <lwip/timers.h>
-
+#include <lwip/timeouts.h>
 #include "sapi.h"
 
 /** Demo application that will listen to UDP port 1234, respond to everything
@@ -52,6 +51,6 @@ void testapp_init(void)
 	my_pcb = udp_new();
 	LWIP_ASSERT("my_pcb != NULL", my_pcb != NULL);
 
-	udp_recv(my_pcb, recv, NULL);
+	udp_recv(my_pcb, (udp_recv_fn)recv, NULL);
 	udp_bind(my_pcb, IP_ADDR_ANY, 1234);
 }

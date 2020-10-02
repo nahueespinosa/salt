@@ -13,6 +13,7 @@
 #include "enc28j60.h"
 #include "chip.h"
 #include "sapi_gpio.h"
+#include "lwip/timeouts.h"
 
 #define ENC_RAMSIZE (8 * 1024)
 
@@ -600,7 +601,7 @@ void enc_hw_setup(enc_device_t *dev)
 
    Chip_SSP_Set_Mode(LPC_SSP1, SSP_MODE_MASTER);
    Chip_SSP_SetFormat(LPC_SSP1, SSP_BITS_8, SSP_FRAMEFORMAT_SPI, SSP_CLOCK_CPHA0_CPOL0);
-   Chip_SSP_SetBitRate(LPC_SSP1, 10000000);
+   Chip_SSP_SetBitRate(LPC_SSP1, 1000000);
 
    Chip_SSP_Enable( LPC_SSP1 );
 

@@ -17,9 +17,10 @@
 #include "SpeedMonitor.h"
 
 #include "lwip/init.h"
+#include "lwip/ip_addr.h"
+#include "lwip/timeouts.h"
 #include "lwip/inet.h"
 #include "lwip/netif.h"
-#include "lwip/timers.h"
 #include "netif/etharp.h"
 #include "netif/mchdrv.h"
 #include "enc28j60.h"
@@ -37,8 +38,9 @@ static RKH_EVT_T *mainControl_qsto[QSTO_SIZE];
 static RKH_EVT_T *switchMonitor_qsto[QSTO_SIZE];
 static RKH_EVT_T *speedMonitor_qsto[QSTO_SIZE];
 
-struct ip_addr mch_myip_addr = {0xc801a8c0UL}; /* 192.168.1.200 */
-struct ip_addr gw_addr = {0x0101a8c0UL}, netmask = {0x00ffffffUL}; /* 192.168.1.1 */
+ip_addr_t mch_myip_addr = IPADDR4_INIT(0xc801a8c0UL); /* 192.168.1.200 */
+ip_addr_t gw_addr = IPADDR4_INIT(0x0101a8c0UL); /* 192.168.1.1 */
+ip_addr_t netmask = IPADDR4_INIT(0x00ffffffUL); /* 255.255.255.0 */
 
 static struct netif mchdrv_netif;
 
@@ -68,8 +70,8 @@ void mch_net_init(void)
         LWIP_ASSERT("mch_net_init: netif_add (mchdrv_init) failed\n", 0);
     }
 
-    netif_set_default(&mchdrv_netif);
     netif_set_up(&mchdrv_netif);
+    netif_set_default(&mchdrv_netif);
 }
 
 void mch_net_poll(void)
