@@ -33,7 +33,7 @@
  * */
 int enc_setup_basic(enc_device_t *dev)
 {
-	enchw_setup(HWDEV);
+	enc_hw_setup(HWDEV);
 
 	if (enc_wait(dev))
 		return 1;
@@ -144,10 +144,10 @@ uint8_t enc_bist_manual(enc_device_t *dev)
 static uint8_t command(enc_device_t *dev, uint8_t first, uint8_t second)
 {
 	uint8_t result;
-	enchw_select(HWDEV);
-	enchw_exchangebyte(HWDEV, first);
-	result = enchw_exchangebyte(HWDEV, second);
-	enchw_unselect(HWDEV);
+	enc_hw_select(HWDEV);
+	enc_hw_exchangebyte(HWDEV, first);
+	result = enc_hw_exchangebyte(HWDEV, second);
+	enc_hw_unselect(HWDEV);
 	return result;
 }
 
@@ -193,22 +193,22 @@ void enc_RBM(enc_device_t *dev, uint8_t *dest, uint16_t start, uint16_t length)
 	if (start != ENC_READLOCATION_ANY)
 		enc_WCR16(dev, ENC_ERDPTL, start);
 
-	enchw_select(HWDEV);
-	enchw_exchangebyte(HWDEV, 0x3a);
+	enc_hw_select(HWDEV);
+	enc_hw_exchangebyte(HWDEV, 0x3a);
 	while(length--)
-		*(dest++) = enchw_exchangebyte(HWDEV, 0);
-	enchw_unselect(HWDEV);
+		*(dest++) = enc_hw_exchangebyte(HWDEV, 0);
+	enc_hw_unselect(HWDEV);
 }
 
 static void WBM_raw(enc_device_t *dev, uint8_t *src, uint16_t length)
 {
-	enchw_select(HWDEV);
-	enchw_exchangebyte(HWDEV, 0x7a);
+	enc_hw_select(HWDEV);
+	enc_hw_exchangebyte(HWDEV, 0x7a);
 	while(length--)
-		enchw_exchangebyte(HWDEV, *(src++));
-	enchw_unselect(HWDEV);
+		enc_hw_exchangebyte(HWDEV, *(src++));
+	enc_hw_unselect(HWDEV);
 	/** @todo this is actually just triggering another pause */
-	enchw_unselect(HWDEV);
+	enc_hw_unselect(HWDEV);
 }
 
 void enc_WBM(enc_device_t *dev, uint8_t *src, uint16_t start, uint16_t length)
@@ -234,7 +234,7 @@ void enc_WCR16(enc_device_t *dev, uint8_t reg, uint16_t data) {
 }
 
 void enc_SRC(enc_device_t *dev) {
-	enchw_exchangebyte(HWDEV, 0xff);
+	enc_hw_exchangebyte(HWDEV, 0xff);
 }
 
 /** Wait for the ENC28J60 clock to be ready. Returns 0 on success,
@@ -581,3 +581,7 @@ end:
 	return (*buf == NULL) ? 2 : 0;
 }
 #endif
+
+
+
+
