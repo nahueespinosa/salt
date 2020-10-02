@@ -110,6 +110,7 @@ int main( int argc, char *argv[] )
        gpioWrite(LEDB, ON);
        mch_net_poll();
        sys_check_timeouts();
+       delay(10);
    }
 
    rkh_fwk_init();
