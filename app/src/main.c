@@ -24,7 +24,6 @@
 #include "netif/etharp.h"
 #include "netif/mchdrv.h"
 #include "enc28j60.h"
-#include "testapp.h"
 
 #include "lwip/apps/mqtt.h"
 #include "lwip/apps/mqtt_priv.h"
@@ -141,8 +140,6 @@ int main( int argc, char *argv[] )
    LWIP_DEBUGF(NETIF_DEBUG, ("Prueba de %s\r\n", "ENC28J60"));
 
    mch_net_init();
-
-   testapp_init();
 
    ci.client_id = "lwip_test";
    ci.client_pass = 0;

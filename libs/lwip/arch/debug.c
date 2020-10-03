@@ -31,8 +31,6 @@
 
 #include "lwip/opt.h"
 
-#include "sapi.h"
-
 /** @defgroup NET_LWIP_DEBUG LWIP debug re-direction
  * @ingroup NET_LWIP
  * Support functions for debug output for LWIP
@@ -70,8 +68,6 @@ void assert_printf(char *msg, int line, char *file)
 /* LWIP optimized assertion loop (no LWIP_DEBUG) */
 void assert_loop(void)
 {
-   gpioWrite(LEDB,OFF);
-   gpioWrite(LEDR,ON);
 	while (1) {}
 }
 
