@@ -4,10 +4,8 @@
  *
  * Driver for the MicroChip ENC28J60 Ethernet module.
  *
- * This software requires an implementation of the `enchw_*` interface
- * specified by `enchw.h` (which describes a very basic SPI interface), and
- * provides the various command types as well as read and write access to the
- * ENC28J60 memory.
+ * This software provides the various command types as well as read and write
+ * access to the ENC28J60 memory.
  *
  * Optionally, support for lwIP's pbuf memory allocation can be compiled in by
  * defining `ENC28J60_USE_PBUF`.

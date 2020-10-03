@@ -83,11 +83,6 @@ void mch_net_poll(void)
     mchdrv_poll(&mchdrv_netif);
 }
 
-uint32_t sys_now(void)
-{
-   return tickRead();
-}
-
 static void mqtt_connection_cb(mqtt_client_t *client, void *arg, mqtt_connection_status_t status)
 {
   err_t err;
@@ -150,8 +145,6 @@ int main( int argc, char *argv[] )
    ci.will_retain = 0;
    ci.will_topic = 0;
 
-
-
    gpioWrite(LED1, OFF);
    gpioWrite(LED2, OFF);
 
@@ -167,8 +160,7 @@ int main( int argc, char *argv[] )
        }
 
        if( !gpioRead(TEC2) ) {
-          mqtt_publish(&static_client, "/salt/", "{\"test\":\"ok\"}", sizeof("{\"test\":\"ok\"}"), 2, 0,
-                mqtt_pub_request_cb, NULL);
+          mqtt_publish(&static_client, "/salt/", "{\"test\":\"ok\"}", 13, 2, 0, mqtt_pub_request_cb, NULL);
           delay(200);
        }
 
