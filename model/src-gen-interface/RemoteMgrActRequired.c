@@ -44,8 +44,8 @@ ip_addr_t gw_addr = IPADDR4_INIT_BYTES(192,168,0,1);
 ip_addr_t netmask = IPADDR4_INIT_BYTES(255,255,255,0);
 ip_addr_t dest_addr = IPADDR4_INIT_BYTES(3,121,33,50);
 
-static struct netif mchdrv_netif;
-static enc_device_t mchdrv_hw;
+static struct netif enc_netif;
+static enc_device_t enc_device;
 static mqtt_client_t static_client;
 struct mqtt_connect_client_info_t ci;
 
@@ -87,23 +87,23 @@ void RemoteMgrInit(void) {
    // Initialize LWIP
    lwip_init();
 
-   mchdrv_netif.hwaddr_len = 6;
+   enc_netif.hwaddr_len = 6;
    /* demo mac address */
-   mchdrv_netif.hwaddr[0] = 0;
-   mchdrv_netif.hwaddr[1] = 1;
-   mchdrv_netif.hwaddr[2] = 2;
-   mchdrv_netif.hwaddr[3] = 3;
-   mchdrv_netif.hwaddr[4] = 4;
-   mchdrv_netif.hwaddr[5] = 5;
+   enc_netif.hwaddr[0] = 0;
+   enc_netif.hwaddr[1] = 1;
+   enc_netif.hwaddr[2] = 2;
+   enc_netif.hwaddr[3] = 3;
+   enc_netif.hwaddr[4] = 4;
+   enc_netif.hwaddr[5] = 5;
 
    // Add our netif to LWIP (netif_add calls our driver initialization function)
-   if (netif_add(&mchdrv_netif, &mch_myip_addr, &netmask, &gw_addr, &mchdrv_hw,
+   if (netif_add(&enc_netif, &mch_myip_addr, &netmask, &gw_addr, &enc_device,
                mchdrv_init, ethernet_input) == NULL) {
        LWIP_ASSERT("mch_net_init: netif_add (mchdrv_init) failed\n", 0);
    }
 
-   netif_set_up(&mchdrv_netif);
-   netif_set_default(&mchdrv_netif);
+   netif_set_up(&enc_netif);
+   netif_set_default(&enc_netif);
 
    ci.client_id = "lwip_test";
    ci.client_pass = 0;
@@ -116,7 +116,7 @@ void RemoteMgrInit(void) {
 }
 
 void RemoteMgrUpdate(void) {
-   mchdrv_poll(&mchdrv_netif);
+   mchdrv_poll(&enc_netif);
    sys_check_timeouts();
 }
 
