@@ -1,0 +1,4 @@
+[submodule "libs/lwip/lwip_2_1_2"]
+	path = libs/lwip/lwip_2_1_2
+	url = git://git.savannah.nongnu.org/lwip.git
+	branch = STABLE-2_1_x

@@ -27,6 +27,7 @@
 #include "testapp.h"
 
 #include "lwip/apps/mqtt.h"
+#include "lwip/apps/mqtt_priv.h"
 
 #include "sapi.h"
 
