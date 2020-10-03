@@ -1,6 +1,10 @@
 /**
- *  \file       priorities.h
- *  \brief      SALT Active object's priorities.
+ *  \file       RemoteMgrActAccess.h
+ *  \brief
+ */
+
+/* -------------------------- Development history -------------------------- */
+/*
  */
 
 /* -------------------------------- Authors -------------------------------- */
@@ -9,27 +13,18 @@
 
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __PRIORITIES_H__
-#define __PRIORITIES_H__
+#ifndef __REMOTEMGRACTACCESS_H__
+#define __REMOTEMGRACTACCESS_H__
 
 /* ----------------------------- Include files ----------------------------- */
+
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
-extern "C" {
+	extern "C" {
 #endif
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-/* ........................ Active object priorities ....................... */
-typedef enum Priorities Priorities;
-enum Priorities
-{
-    MainControlPrio,
-    SpeedMonitorPrio,
-    SwitchMonitorPrio,
-    RemoteMgrPrio,
-};
-
 /* ------------------------------- Data types ------------------------------ */
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
