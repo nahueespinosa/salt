@@ -66,11 +66,15 @@ static void mqtt_connection_cb(mqtt_client_t *client, void *arg, mqtt_connection
     if(err != ERR_OK) {
       printf("mqtt_subscribe return: %d\n", err);
     }
+
+    gpioWrite(LEDB, ON);
+
   } else {
     printf("mqtt_connection_cb: Disconnected, reason: %d\n", status);
 
     /* Its more nice to be connected, so try to reconnect */
     //example_do_connect(client);
+    gpioWrite(LEDR, ON);
   }
 }
 
@@ -97,8 +101,8 @@ void RemoteMgrInit(void) {
    enc_netif.hwaddr[5] = 5;
 
    // Add our netif to LWIP (netif_add calls our driver initialization function)
-   if (netif_add(&enc_netif, &mch_myip_addr, &netmask, &gw_addr, &enc_device,
-               mchdrv_init, ethernet_input) == NULL) {
+   if( netif_add(&enc_netif, &mch_myip_addr, &netmask, &gw_addr, &enc_device,
+               mchdrv_init, ethernet_input) == NULL ) {
        LWIP_ASSERT("mch_net_init: netif_add (mchdrv_init) failed\n", 0);
    }
 
@@ -113,6 +117,9 @@ void RemoteMgrInit(void) {
    ci.will_qos = 0;
    ci.will_retain = 0;
    ci.will_topic = 0;
+
+   gpioConfig(LEDB, GPIO_OUTPUT);
+   gpioConfig(LEDR, GPIO_OUTPUT);
 }
 
 void RemoteMgrUpdate(void) {
