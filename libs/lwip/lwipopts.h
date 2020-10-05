@@ -20,7 +20,7 @@
 
 #define LWIP_DEBUG
 #define LWIP_DBG_MIN_LEVEL              LWIP_DBG_LEVEL_ALL
-#define NETIF_DEBUG                     LWIP_DBG_ON
+// #define NETIF_DEBUG                     LWIP_DBG_ON
 #define MQTT_DEBUG                      LWIP_DBG_ON
 
 /* add one timeout for testapp.c to the default timeouts */
