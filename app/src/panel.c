@@ -162,15 +162,19 @@ void panelDisplayDashedLine( void ) {
 }
 
 bool_t panelTest( void ) {
+   bool_t retVal = TRUE;
+
    switch( as1116Test(AS1116_TEST_SHORT) ) {
       case AS1116_TEST_FAILED:
          gpioWrite(LEDR, ON);
+         retVal = FALSE;
          break;
       case AS1116_TEST_OK:
          gpioWrite(LEDG, ON);
          break;
       case AS1116_TEST_NO_RESPONSE:
          gpioWrite(LEDB, ON);
+         retVal = FALSE;
          break;
    }
 
@@ -183,12 +187,14 @@ bool_t panelTest( void ) {
    switch( as1116Test(AS1116_TEST_OPEN) ) {
       case AS1116_TEST_FAILED:
          gpioWrite(LEDR, ON);
+         retVal = FALSE;
          break;
       case AS1116_TEST_OK:
          gpioWrite(LEDG, ON);
          break;
       case AS1116_TEST_NO_RESPONSE:
          gpioWrite(LEDB, ON);
+         retVal = FALSE;
          break;
    }
 
@@ -197,4 +203,6 @@ bool_t panelTest( void ) {
    gpioWrite(LEDG, OFF);
    gpioWrite(LEDB, OFF);
    delay(200);
+
+   return retVal;
 }
