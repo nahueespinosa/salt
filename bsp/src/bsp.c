@@ -101,6 +101,7 @@ void bsp_init( int argc, char *argv[] )
     switchInit();
     relayInit();
     // panelInit();
+    // panelTest();
 
     panelLedWrite( PANEL_LED_ON, PANEL_LED_GREEN );
 }
