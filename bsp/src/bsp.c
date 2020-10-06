@@ -97,27 +97,6 @@ void bsp_init( int argc, char *argv[] )
     panelInit();
     panelTest();
 
-    panelDisplayOn();
-
-    // Juego de leds para mostrar el funcionamiento del panel
-    for( i = 0 ; i < 100000 ; i++ ) {
-       number = (float)i / 100;
-
-       panelDisplayWrite(number);
-
-       if( i < 25000 ) color = PANEL_LED_OFF;
-       else if( i < 50000 ) color = PANEL_LED_RED;
-       else if( i < 75000 ) color = PANEL_LED_GREEN;
-       else color = PANEL_LED_BLUE;
-
-       if( i % 25000 == 0 ) {
-          for( led = 0 ; led < PANEL_LED_MAX ; led++ ) {
-             panelLedWrite(led, color);
-             delay(100);
-          }
-       }
-    }
-
     panelLedWrite( PANEL_LED_ON, PANEL_LED_GREEN );
 }
 
