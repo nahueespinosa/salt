@@ -53,7 +53,7 @@ void panelInit(void) {
 
    config.clockSource = AS1116_INTERNAL_OSC;
    config.globalIntensity = AS1116_DUTY_7_16;
-   config.scanLimit = AS1116_LIMIT_8_DIGITS;
+   config.scanLimit = AS1116_LIMIT_7_DIGITS;
    config.decodeMode = AS1116_DECODE_MODE_B;
 
    as1116Init(config);
@@ -162,13 +162,39 @@ void panelDisplayDashedLine( void ) {
 }
 
 bool_t panelTest( void ) {
-   if( as1116Test(AS1116_TEST_OPEN) == AS1116_TEST_FAILED ) {
-      return false;
+   switch( as1116Test(AS1116_TEST_SHORT) ) {
+      case AS1116_TEST_FAILED:
+         gpioWrite(LEDR, ON);
+         break;
+      case AS1116_TEST_OK:
+         gpioWrite(LEDG, ON);
+         break;
+      case AS1116_TEST_NO_RESPONSE:
+         gpioWrite(LEDB, ON);
+         break;
    }
 
-   if( as1116Test(AS1116_TEST_SHORT) == AS1116_TEST_FAILED ) {
-      return false;
+   delay(200);
+   gpioWrite(LEDR, OFF);
+   gpioWrite(LEDG, OFF);
+   gpioWrite(LEDB, OFF);
+   delay(200);
+
+   switch( as1116Test(AS1116_TEST_OPEN) ) {
+      case AS1116_TEST_FAILED:
+         gpioWrite(LEDR, ON);
+         break;
+      case AS1116_TEST_OK:
+         gpioWrite(LEDG, ON);
+         break;
+      case AS1116_TEST_NO_RESPONSE:
+         gpioWrite(LEDB, ON);
+         break;
    }
 
-   return true;
+   delay(200);
+   gpioWrite(LEDR, OFF);
+   gpioWrite(LEDG, OFF);
+   gpioWrite(LEDB, OFF);
+   delay(200);
 }

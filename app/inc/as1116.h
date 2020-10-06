@@ -130,8 +130,9 @@ typedef enum {
 
 //! Enumeración de resultados del modo de prueba
 typedef enum {
-   AS1116_TEST_FAILED = 0,
-   AS1116_TEST_OK     = 1
+   AS1116_TEST_OK,
+   AS1116_TEST_FAILED,
+   AS1116_TEST_NO_RESPONSE
 } as1116TestResult_t;
 
 //! Enumeración de identificadores para los dígitos
@@ -215,9 +216,10 @@ void as1116DigitWrite( as1116DigitMap_t digit, uint8_t data );
  *
  * Si el módulo no está inicializado, devuelve AS1116_TEST_FAILED.
  *
- * @param[in]  type                 Tipo de prueba a ejecutar (cortocircuito o circuito abierto)
- * @return     AS1116_TEST_FAILED   Se detectó por lo menos una falla en un dígito
- * @return     AS1116_TEST_OK       No se detectó ninguna falla
+ * @param[in]  type                    Tipo de prueba a ejecutar (cortocircuito o circuito abierto)
+ * @return     AS1116_TEST_FAILED      Se detectó por lo menos una falla en un dígito
+ * @return     AS1116_TEST_NO_RESPONSE No hubo respuesta despues de una cantidad definida de intentos
+ * @return     AS1116_TEST_OK          No se detectó ninguna falla
  */
 as1116TestResult_t as1116Test( as1116TestType_t type );
 

@@ -79,6 +79,11 @@ RKH_TS_T rkh_trc_getts( void )
 
 void bsp_init( int argc, char *argv[] )
 {
+    int i;
+    float number;
+    ledColor_t color = 0;
+    ledMap_t led = 0;
+
     ( void )argc;
     ( void )argv;
 

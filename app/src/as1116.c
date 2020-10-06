@@ -15,6 +15,12 @@
 #define AS1116_REG_MASK                   0x1F
 #define AS1116_READ_BIT                   (1<<6)
 
+#define AS1116_CLOCK_FREQUENCY            500000
+
+/* Cantidad de intentos de lectura del registro de pruebas hasta leer
+ * una respuesta válida */
+#define AS1116_TEST_TIMEOUT               100
+
 // Register map
 #define AS1116_REG_NOP                    0x00
 #define AS1116_REG_DIGIT0                 0x01
@@ -123,10 +129,21 @@ static uint8_t as1116RegisterRead( uint8_t reg );
 void as1116Init( as1116Config_t config ) {
    initialized = true;
 
-   spiInit( AS1116_SPI );
+   Chip_SCU_PinMuxSet( 0xF, 4, (SCU_MODE_PULLUP | SCU_MODE_FUNC0)); // SSP1_SCK
+   Chip_SCU_PinMuxSet( 0x1, 3, (SCU_MODE_PULLUP | SCU_MODE_INBUFF_EN | SCU_MODE_ZIF_DIS | SCU_MODE_FUNC5)); // SSP1_MISO
+   Chip_SCU_PinMuxSet( 0x1, 4, (SCU_MODE_PULLUP | SCU_MODE_FUNC5)); // SSP1_MOSI
+
+   /* Inicializa el periférico SSP */
+   Chip_SSP_Init(LPC_SSP1);
+   Chip_SSP_Set_Mode(LPC_SSP1, SSP_MODE_MASTER);
+   Chip_SSP_SetFormat(LPC_SSP1, SSP_BITS_8, SSP_FRAMEFORMAT_SPI, SSP_CLOCK_CPHA0_CPOL0);
+   Chip_SSP_SetBitRate(LPC_SSP1, AS1116_CLOCK_FREQUENCY);
+   Chip_SSP_Enable( LPC_SSP1 );
+
    gpioConfig( AS1116_SSEL_PIN, GPIO_OUTPUT );
    gpioWrite( AS1116_SSEL_PIN, ON );
 
+   /* Inicializa la cantidad de dígitos a utilizar */
    usedDigits = config.scanLimit + 1;
 
    as1116RegisterWrite( AS1116_REG_SHUTDOWN, AS1116_SHUTDOWN_NORMAL_MODE_RESET );
@@ -134,7 +151,6 @@ void as1116Init( as1116Config_t config ) {
    as1116RegisterWrite( AS1116_REG_GLOBAL_INTENSITY, config.globalIntensity );
    as1116RegisterWrite( AS1116_REG_SCAN_LIMIT, config.scanLimit );
    as1116RegisterWrite( AS1116_REG_FEATURE, 0x00 | config.clockSource | (config.decodeMode << 2) );
-
    as1116RegisterWrite( AS1116_REG_DISPLAY_TEST_MODE, 0x00);
 }
 
@@ -153,6 +169,8 @@ void as1116DigitConfig( as1116DigitMap_t digit, as1116DigitConfig_t config ) {
 
    digitConfig[digit] = config;
 
+   /* Prepara el valor del registro DECODE_MODE_ENABLE de acuerdo a si está o
+    * no habilitada la decodificación para cada dígito particular */
    value = 0x00;
    for( index = 0 ; index < AS1116_DIGITS_MAX ; index++ ) {
       value |= digitConfig[index].decodeEnable << index;
@@ -160,6 +178,7 @@ void as1116DigitConfig( as1116DigitMap_t digit, as1116DigitConfig_t config ) {
 
    as1116RegisterWrite( AS1116_REG_DECODE_MODE_ENABLE, value );
 
+   /* Prepara el valor del registro de intensidad correspondiente */
    switch(digit) {
       case AS1116_DIGIT0:
       case AS1116_DIGIT1:
@@ -206,6 +225,7 @@ void as1116DigitWrite( as1116DigitMap_t digit, uint8_t data ){
 as1116TestResult_t as1116Test( as1116TestType_t type ) {
    uint8_t cmd;
    uint8_t value;
+   uint32_t timeout;
    as1116DigitMap_t digit;
 
    if( !initialized ){
@@ -221,13 +241,37 @@ as1116TestResult_t as1116Test( as1116TestType_t type ) {
          break;
    }
 
+   /* Comando de inicio de prueba */
    as1116RegisterWrite( AS1116_REG_DISPLAY_TEST_MODE, cmd );
 
+   /* Lee el registro de estado hasta que comienza la prueba */
+   timeout = 0;
+
    do {
-      delay(1);
       value = as1116RegisterRead( AS1116_REG_DISPLAY_TEST_MODE );
+      timeout++;
+
+      if( timeout >= AS1116_TEST_TIMEOUT ) {
+         return AS1116_TEST_NO_RESPONSE;
+      }
+
+   } while( (value & AS1116_TEST_LED_RUNNING) == 0 );
+
+   /* Lee el registro de estado hasta que termina la prueba */
+   timeout = 0;
+
+   do {
+      value = as1116RegisterRead( AS1116_REG_DISPLAY_TEST_MODE );
+      timeout++;
+
+      if( timeout >= AS1116_TEST_TIMEOUT ) {
+         return AS1116_TEST_NO_RESPONSE;
+      }
+
    } while( (value & AS1116_TEST_LED_RUNNING) != 0 );
 
+   /* Si se detectó una falla global se leen los registros de diagnóstico
+    * de cada dígito */
    if( (value & AS1116_TEST_LED_GLOBAL) != 0 ) {
       for( digit = 0 ; digit < usedDigits ; digit++ ) {
          value = as1116RegisterRead( digit + AS1116_REG_DIG0_DIAGNOSTIC );
@@ -248,11 +292,14 @@ void as1116RegisterWrite( uint8_t reg, uint8_t data ){
       return;
    }
 
+   /* Se invierten los bits de valor del registro */
    as1116Buffer[0] = bitReverseTable[data];
+   /* Se invierten los bits de dirección del registro */
    as1116Buffer[1] = bitReverseTable[(reg & AS1116_REG_MASK)];
 
    gpioWrite( AS1116_SSEL_PIN, OFF );
    spiWrite( AS1116_SPI, as1116Buffer, 2 );
+   delayInaccurateUs(1);
    gpioWrite( AS1116_SSEL_PIN, ON );
 }
 
@@ -261,13 +308,24 @@ uint8_t as1116RegisterRead( uint8_t reg ){
       return 0;
    }
 
+   /* Se invierten los bits de dirección del registro */
    as1116Buffer[0] = bitReverseTable[(reg & AS1116_REG_MASK) | AS1116_READ_BIT];
    as1116Buffer[1] = 0x00;
 
    gpioWrite( AS1116_SSEL_PIN, OFF );
    spiWrite( AS1116_SPI, as1116Buffer, 1 );
+
+   /* Cambia el formato a detección en flanco descendente porque el AS1116 cambia
+    * el estado del pin MISO sobre el flanco ascendente */
+   Chip_SSP_SetFormat(LPC_SSP1, SSP_BITS_8, SSP_FRAMEFORMAT_SPI, SSP_CLOCK_CPHA1_CPOL0);
+   delayInaccurateUs(1);
+
    gpioWrite( AS1116_SSEL_PIN, ON );
    spiRead( AS1116_SPI, as1116Buffer+1, 1 );
 
+   /* Vuelve al formato normal para escritura sobre el flanco ascendente */
+   Chip_SSP_SetFormat(LPC_SSP1, SSP_BITS_8, SSP_FRAMEFORMAT_SPI, SSP_CLOCK_CPHA0_CPOL0);
+
+   /* Devuelve el valor leído del registro, no es necesario invertir los bit */
    return as1116Buffer[1];
 }

@@ -97,9 +97,6 @@ void panelDisplayDashedLine( void );
  *
  * Realiza una prueba de cortocircuito seguida de una prueba de circuito
  * abierto en los leds conectados.
- *
- * @return true   La prueba realizada tuvo éxito
- * @return false  Se detectó una falla
  */
 bool_t panelTest( void );
 
