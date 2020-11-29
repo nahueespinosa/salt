@@ -43,7 +43,7 @@ static uint8_t digitGreen;
 static uint8_t digitBlue;
 
 //! Estado interno que indica si el display est� habilitado
-static bool_t displayEnabled = false;
+static bool displayEnabled = false;
 
 /*=====[Implementation of public functions]==================================*/
 
