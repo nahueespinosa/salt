@@ -17,3 +17,7 @@ El script de opciones de configuración para `OpenOCD` se encuentra dentro de la
 
 En la carpeta `model` se encuentran los diagramas de estado desarrollados con [YAKINDU Statechart Tools](https://www.itemis.com/en/yakindu/state-machine/) Professional Edition (version 3.5.12).
 Para importar se debe seleccionar el menú `File -> Import -> Existing Projects into Workspace` y buscar la carpeta `model` dentro del proyecto.
+
+## Pruebas automáticas
+
+Para ejecutar las pruebas automáticas se debe instalar [ceedling](http://www.throwtheswitch.org/ceedling) y ejecutarlo desde la raíz del repositorio.
