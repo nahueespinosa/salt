@@ -10,7 +10,7 @@
 
 /*=====[Inclusions of public function dependencies]==========================*/
 
-#include "sapi.h"
+#include <stdbool.h>
 
 /*=====[C++ - begin]=========================================================*/
 
@@ -20,7 +20,7 @@ extern "C" {
 
 /*==================[typedef]================================================*/
 
-//! Enumeración de leds disponibles en el sistema
+//! Enumeraciï¿½n de leds disponibles en el sistema
 typedef enum {
    PANEL_LED_ON,
    PANEL_LED_AL,
@@ -31,7 +31,7 @@ typedef enum {
    PANEL_LED_MAX
 } ledMap_t;
 
-//! Enumeración de los estados/colores posibles de los leds
+//! Enumeraciï¿½n de los estados/colores posibles de los leds
 typedef enum {
    PANEL_LED_OFF,
    PANEL_LED_RED,
@@ -42,10 +42,10 @@ typedef enum {
 /*=====[Prototypes (declarations) of public functions]=======================*/
 
 /**
- * @brief Inicializar módulo del panel de leds
+ * @brief Inicializar mï¿½dulo del panel de leds
  *
- * Inicializa el hardware necesario para la operación de los seis leds del
- * sistema y el display de cuatro dígitos.
+ * Inicializa el hardware necesario para la operaciï¿½n de los seis leds del
+ * sistema y el display de cuatro dï¿½gitos.
  */
 void panelInit( void );
 
@@ -58,35 +58,35 @@ void panelInit( void );
 void panelLedWrite( ledMap_t led, ledColor_t color );
 
 /**
- * @brief Habilitar el display de cuatro dígitos
+ * @brief Habilitar el display de cuatro dï¿½gitos
  *
- * Habilita el display pero no muestra ningún valor hasta que no se llame
- * a la función panelDisplayWrite.
+ * Habilita el display pero no muestra ningï¿½n valor hasta que no se llame
+ * a la funciï¿½n panelDisplayWrite.
  */
 void panelDisplayOn( void );
 
 /**
- * @brief Deshabilitar el display de cuatro dígitos
+ * @brief Deshabilitar el display de cuatro dï¿½gitos
  *
- * Apaga todos los segmentos e ignorará todas los llamados a la función
+ * Apaga todos los segmentos e ignorarï¿½ todas los llamados a la funciï¿½n
  * panelDisplayWrite.
  */
 void panelDisplayOff( void );
 
 /**
- * @brief Escribir el valor en el display de cuatro dígitos
+ * @brief Escribir el valor en el display de cuatro dï¿½gitos
  *
  * Muestra el valor pasado como argumento en el display (debe ser menor a 1000).
- * El formato está fijado a tres dígitos enteros para las unidades, decenas y
- * centenas más un dígito decimal después del punto.
+ * El formato estï¿½ fijado a tres dï¿½gitos enteros para las unidades, decenas y
+ * centenas mï¿½s un dï¿½gito decimal despuï¿½s del punto.
  *
- * Si el valor pasado como argumento excede el rango máximo, muestra "----"
+ * Si el valor pasado como argumento excede el rango mï¿½ximo, muestra "----"
  * en el display.
  */
 void panelDisplayWrite( float value );
 
 /**
- * @brief Escribir una línea punteada en el display de cuatro dígitos
+ * @brief Escribir una lï¿½nea punteada en el display de cuatro dï¿½gitos
  *
  * Muestra "----" en el display.
  */
@@ -98,10 +98,10 @@ void panelDisplayDashedLine( void );
  * Realiza una prueba de cortocircuito seguida de una prueba de circuito
  * abierto en los leds conectados.
  *
- * @return TRUE   La prueba realizada tuvo éxito
- * @return FALSE  Se detectó una falla
+ * @return TRUE   La prueba realizada tuvo ï¿½xito
+ * @return FALSE  Se detectï¿½ una falla
  */
-bool_t panelTest( void );
+bool panelTest( void );
 
 /*=====[C++ - end]===========================================================*/
 

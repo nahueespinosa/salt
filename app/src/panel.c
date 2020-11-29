@@ -21,8 +21,8 @@
 /*=====[Definitions of private global variables]=============================*/
 
 /**
- * Tabla interna para almacenar la relación entre los leds del sistema y
- * su posición dentro del dígito correpondiente
+ * Tabla interna para almacenar la relaciï¿½n entre los leds del sistema y
+ * su posiciï¿½n dentro del dï¿½gito correpondiente
  */
 static const uint8_t ledPosition[PANEL_LED_MAX] = {
    AS1116_SEGMENT_A_POS,
@@ -33,16 +33,16 @@ static const uint8_t ledPosition[PANEL_LED_MAX] = {
    AS1116_SEGMENT_D_POS
 };
 
-//! Valor interno del dígito conectado al los leds rojos
+//! Valor interno del dï¿½gito conectado al los leds rojos
 static uint8_t digitRed;
 
-//! Valor interno del dígito conectado al los leds verdes
+//! Valor interno del dï¿½gito conectado al los leds verdes
 static uint8_t digitGreen;
 
-//! Valor interno del dígito conectado al los leds azules
+//! Valor interno del dï¿½gito conectado al los leds azules
 static uint8_t digitBlue;
 
-//! Estado interno que indica si el display está habilitado
+//! Estado interno que indica si el display estï¿½ habilitado
 static bool_t displayEnabled = false;
 
 /*=====[Implementation of public functions]==================================*/
@@ -161,20 +161,20 @@ void panelDisplayDashedLine( void ) {
    }
 }
 
-bool_t panelTest( void ) {
-   bool_t retVal = TRUE;
+bool panelTest( void ) {
+   bool retVal = true;
 
    switch( as1116Test(AS1116_TEST_SHORT) ) {
       case AS1116_TEST_FAILED:
          gpioWrite(LEDR, ON);
-         retVal = FALSE;
+         retVal = false;
          break;
       case AS1116_TEST_OK:
          gpioWrite(LEDG, ON);
          break;
       case AS1116_TEST_NO_RESPONSE:
          gpioWrite(LEDB, ON);
-         retVal = FALSE;
+         retVal = false;
          break;
    }
 
@@ -187,14 +187,14 @@ bool_t panelTest( void ) {
    switch( as1116Test(AS1116_TEST_OPEN) ) {
       case AS1116_TEST_FAILED:
          gpioWrite(LEDR, ON);
-         retVal = FALSE;
+         retVal = false;
          break;
       case AS1116_TEST_OK:
          gpioWrite(LEDG, ON);
          break;
       case AS1116_TEST_NO_RESPONSE:
          gpioWrite(LEDB, ON);
-         retVal = FALSE;
+         retVal = false;
          break;
    }
 

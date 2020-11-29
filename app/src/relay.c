@@ -10,7 +10,7 @@
 
 /*=====[Definition macros of private constants]==============================*/
 
-//! Umbral de detección para inconsistencias en los relés
+//! Umbral de detecciï¿½n para inconsistencias en los relï¿½s
 #define RELAY_ERROR_THR    10
 
 /*=====[Definition macros of private constants]==============================*/
@@ -24,7 +24,7 @@ typedef struct {
 
 /*=====[Definitions of private global variables]=============================*/
 
-//! Vector que almacena configuración y el estado de cada relé
+//! Vector que almacena configuraciï¿½n y el estado de cada relï¿½
 static relayConfig_t relayConfig[RELAY_NUM] = {
 // {controlPin, statusPin, errorCount}
    {GPIO1     , GPIO7    , 0},    // RELAY_CT_1
@@ -42,13 +42,13 @@ static relayConfig_t relayConfig[RELAY_NUM] = {
 /*=====[Prototypes (declarations) of private functions]======================*/
 
 /**
- * @brief Leer el valor del pin de control del relé
+ * @brief Leer el valor del pin de control del relï¿½
  *
- * @param[in]   relay    Identificador del relé
- * @return      ON       El pin está en un estado lógico alto
- * @return      OFF      El pin está en un estado lógico bajo
+ * @param[in]   relay    Identificador del relï¿½
+ * @return      ON       El pin estï¿½ en un estado lï¿½gico alto
+ * @return      OFF      El pin estï¿½ en un estado lï¿½gico bajo
  */
-static bool_t relayControlRead(relay_t relay);
+static bool relayControlRead(relay_t relay);
 
 /*=====[Implementation of public functions]==================================*/
 
@@ -63,31 +63,31 @@ void relayInit(void) {
    }
 }
 
-void relayWrite(relay_t relay, bool_t value) {
+void relayWrite(relay_t relay, bool value) {
    gpioWrite(relayConfig[relay].controlPin, value);
 }
 
-bool_t relayRead(relay_t relay) {
+bool relayRead(relay_t relay) {
    return !gpioRead(relayConfig[relay].statePin);
 }
 
-bool_t relayCheck(relay_t relay) {
-   bool_t retValue = TRUE;
+bool relayCheck(relay_t relay) {
+   bool retValue = true;
 
    if( relayConfig[relay].errorCount >= RELAY_ERROR_THR ) {
-      retValue = FALSE;
+      retValue = false;
    }
 
    return retValue;
 }
 
-bool_t relayCheckAll(void) {
-   bool_t retValue = TRUE;
+bool relayCheckAll(void) {
+   bool retValue = true;
    int i;
 
    for( i = 0 ; i < RELAY_NUM ; i++ ) {
-      if( relayCheck(i) == FALSE ) {
-         retValue = FALSE;
+      if( relayCheck(i) == false ) {
+         retValue = false;
       }
    }
 
@@ -103,8 +103,8 @@ void relayUpdate(void) {
       case RELAY_CT_2:
       case RELAY_FE_1:
       case RELAY_FE_2:
-         /* Solo se pueden detectar inconsistencias si la llave está habilitada,
-          * porque de lo contrario estos relés se desactivan por hardware. */
+         /* Solo se pueden detectar inconsistencias si la llave estï¿½ habilitada,
+          * porque de lo contrario estos relï¿½s se desactivan por hardware. */
          if( relayControlRead(i) != relayRead(i) && switchRead() == ON ) {
             relayConfig[i].errorCount++;
          } else {
@@ -120,7 +120,7 @@ void relayUpdate(void) {
          break;
       }
 
-      /* Si se supera el RELAY_ERROR_THR se deja al límite para que no
+      /* Si se supera el RELAY_ERROR_THR se deja al lï¿½mite para que no
        * desborde la variable. */
       if( relayConfig[i].errorCount > RELAY_ERROR_THR ) {
          relayConfig[i].errorCount = RELAY_ERROR_THR;
@@ -130,6 +130,6 @@ void relayUpdate(void) {
 
 /*=====[Implementation of private functions]=================================*/
 
-static bool_t relayControlRead(relay_t relay) {
+static bool relayControlRead(relay_t relay) {
    return gpioRead(relayConfig[relay].controlPin);
 }
