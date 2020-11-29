@@ -7,6 +7,8 @@
 
 #include "panel.h"
 #include "as1116.h"
+#include "sapi_gpio.h"
+#include "sapi_delay.h"
 
 /*=====[Definition macros of private constants]==============================*/
 

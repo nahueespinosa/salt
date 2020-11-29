@@ -10,7 +10,7 @@
 
 /*=====[Inclusions of public function dependencies]==========================*/
 
-#include "sapi.h"
+#include <stdint.h>
 
 /*=====[C++ - begin]=========================================================*/
 
@@ -20,7 +20,7 @@ extern "C" {
 
 /*=====[Definition macros of public constants]===============================*/
 
-// Posiciones de los segmentos en el registro de cada dígito
+// Posiciones de los segmentos en el registro de cada dï¿½gito
 #define AS1116_SEGMENT_G_POS  0
 #define AS1116_SEGMENT_F_POS  1
 #define AS1116_SEGMENT_E_POS  2
@@ -32,19 +32,19 @@ extern "C" {
 
 /*==================[typedef]================================================*/
 
-//! Enumeración de los tipos de decodificador disponibles
+//! Enumeraciï¿½n de los tipos de decodificador disponibles
 typedef enum {
    AS1116_DECODE_MODE_B   = 0,   /* Code: 0 1 2 3 4 5 6 7 8 9 - E H L P blank */
    AS1116_DECODE_MODE_HEX = 1    /* Code: 0 1 2 3 4 5 6 7 8 9 A B C D E F */
 } as1116DecodeMode_t;
 
-//! Enumeración del estado del decodificador en cada dígito
+//! Enumeraciï¿½n del estado del decodificador en cada dï¿½gito
 typedef enum {
    AS1116_DECODE_DISABLED = 0,   /* Decode mode disabled */
    AS1116_DECODE_ENABLED  = 1    /* Code-B/HEX decode mode enabled */
 } as1116DecodeEnable_t;
 
-//! Enumeración de códigos en modo Code-B
+//! Enumeraciï¿½n de cï¿½digos en modo Code-B
 typedef enum {
    AS1116_DIGIT_CODE_0     = 0x00,
    AS1116_DIGIT_CODE_1     = 0x01,
@@ -66,11 +66,11 @@ typedef enum {
 } as1116DigitCode_t;
 
 /**
- * @brief Enumeración de los posibles niveles de intensidad
+ * @brief Enumeraciï¿½n de los posibles niveles de intensidad
  *
- * La intensidad se puede controlar globalmente para todos los dígitos
- * o individualmente para cada dígito.
- * El modulador escala la corriente en 16 pasos desde un máximo de 15/16
+ * La intensidad se puede controlar globalmente para todos los dï¿½gitos
+ * o individualmente para cada dï¿½gito.
+ * El modulador escala la corriente en 16 pasos desde un mï¿½ximo de 15/16
  * a 1/16 de la corriente pico ajustada por RSET.
  */
 typedef enum {
@@ -93,12 +93,12 @@ typedef enum {
 } as1116Intensity_t;
 
 /**
- * @brief Enumeración de valores posibles para el límite de escaneo
+ * @brief Enumeraciï¿½n de valores posibles para el lï¿½mite de escaneo
  *
- * Controla la cantidad de dígitos que se mostrarán.
- * Cuando se muestran los 8 dígitos, la frecuencia de actualización es
- * típicamente de 0,8kHz. Si el número de dígitos se reduce, la frecuencia
- * de actualización aumenta, por lo tanto influye en el brillo.
+ * Controla la cantidad de dï¿½gitos que se mostrarï¿½n.
+ * Cuando se muestran los 8 dï¿½gitos, la frecuencia de actualizaciï¿½n es
+ * tï¿½picamente de 0,8kHz. Si el nï¿½mero de dï¿½gitos se reduce, la frecuencia
+ * de actualizaciï¿½n aumenta, por lo tanto influye en el brillo.
  */
 typedef enum {
    AS1116_LIMIT_1_DIGITS   = 0x0,
@@ -111,31 +111,31 @@ typedef enum {
    AS1116_LIMIT_8_DIGITS   = 0x7
 } as1116ScanLimit_t;
 
-//! Enumeración para posibles fuentes de clock
+//! Enumeraciï¿½n para posibles fuentes de clock
 typedef enum {
    AS1116_INTERNAL_OSC  = 0,     /* Internal oscillator is used for system clock */
    AS1116_SERIAL_CLK    = 1      /* Pin CLK of the serial interface operates as system clock */
 } as1116ClockSource_t;
 
 /**
- * @brief Enumeración de modos de prueba
+ * @brief Enumeraciï¿½n de modos de prueba
  *
  * El integrado puede detectar leds en cortocircuito o en circuito abierto
- * según el modo seleccionado.
+ * segï¿½n el modo seleccionado.
  */
 typedef enum {
    AS1116_TEST_SHORT  = 0,
    AS1116_TEST_OPEN   = 1
 } as1116TestType_t;
 
-//! Enumeración de resultados del modo de prueba
+//! Enumeraciï¿½n de resultados del modo de prueba
 typedef enum {
    AS1116_TEST_OK,
    AS1116_TEST_FAILED,
    AS1116_TEST_NO_RESPONSE
 } as1116TestResult_t;
 
-//! Enumeración de identificadores para los dígitos
+//! Enumeraciï¿½n de identificadores para los dï¿½gitos
 typedef enum {
    AS1116_DIGIT0,
    AS1116_DIGIT1,
@@ -148,7 +148,7 @@ typedef enum {
    AS1116_DIGITS_MAX
 } as1116DigitMap_t;
 
-//! Estructura de configuración del módulo AS1116
+//! Estructura de configuraciï¿½n del mï¿½dulo AS1116
 typedef struct {
    as1116DecodeMode_t decodeMode;
    as1116Intensity_t globalIntensity;
@@ -156,7 +156,7 @@ typedef struct {
    as1116ClockSource_t clockSource;
 } as1116Config_t;
 
-//! Estructura de configuración para un dígito conectado al módulo AS1116
+//! Estructura de configuraciï¿½n para un dï¿½gito conectado al mï¿½dulo AS1116
 typedef struct {
    as1116DecodeEnable_t decodeEnable;
    as1116Intensity_t intensity;
@@ -166,40 +166,40 @@ typedef struct {
 /*=====[Prototypes (declarations) of public functions]=======================*/
 
 /**
- * @brief Inicializar driver para módulo AS1116
+ * @brief Inicializar driver para mï¿½dulo AS1116
  *
- * Inicializa el módulo SPI correspondiente y carga la configuración definida
+ * Inicializa el mï¿½dulo SPI correspondiente y carga la configuraciï¿½n definida
  * en la estructura del tipo as1116Config_t.
- * Los parámetros que se pueden configurar son: el tipo de decodificador
- * utilizado (decodeMode), la intensidad global de los dígitos (globalIntensity),
- * la cantidad de dígitos utilizados (scanLimit) y la fuente de clock del chip (clockSource).
+ * Los parï¿½metros que se pueden configurar son: el tipo de decodificador
+ * utilizado (decodeMode), la intensidad global de los dï¿½gitos (globalIntensity),
+ * la cantidad de dï¿½gitos utilizados (scanLimit) y la fuente de clock del chip (clockSource).
  *
- * @param[in]  config      Estructura de configuración del módulo AS1116
+ * @param[in]  config      Estructura de configuraciï¿½n del mï¿½dulo AS1116
  */
 void as1116Init( as1116Config_t config );
 
 /**
- * @brief Configurar uno de los dígitos conectados
+ * @brief Configurar uno de los dï¿½gitos conectados
  *
- * Configura el dígito con la estructura del tipo as1116DigitConfig_t.
- * Permite definir los parámetros configurables individuales de cada dígito
- * como: la intensidad, la habilitación del decodificador, y una máscara para
+ * Configura el dï¿½gito con la estructura del tipo as1116DigitConfig_t.
+ * Permite definir los parï¿½metros configurables individuales de cada dï¿½gito
+ * como: la intensidad, la habilitaciï¿½n del decodificador, y una mï¿½scara para
  * definir los pines utilizados en el circuito.
  *
- * Si el módulo no está inicializado, no ejecuta ninguna acción.
+ * Si el mï¿½dulo no estï¿½ inicializado, no ejecuta ninguna acciï¿½n.
  *
- * @param[in]  digit       Identificador del dígito
- * @param[in]  config      Estructura de configuración para el dígito
+ * @param[in]  digit       Identificador del dï¿½gito
+ * @param[in]  config      Estructura de configuraciï¿½n para el dï¿½gito
  */
 void as1116DigitConfig( as1116DigitMap_t digit, as1116DigitConfig_t config );
 
 /**
- * @brief Escribir un valor en uno de los dígitos conectados
+ * @brief Escribir un valor en uno de los dï¿½gitos conectados
  *
- * Si el módulo no está inicializado o el identificador representa un dígito
- * no utilizado, no ejecuta ninguna acción.
+ * Si el mï¿½dulo no estï¿½ inicializado o el identificador representa un dï¿½gito
+ * no utilizado, no ejecuta ninguna acciï¿½n.
  *
- * @param[in]  digit       Identificador del dígito
+ * @param[in]  digit       Identificador del dï¿½gito
  * @param[in]  data        Valor a escribir
  */
 void as1116DigitWrite( as1116DigitMap_t digit, uint8_t data );
@@ -207,19 +207,19 @@ void as1116DigitWrite( as1116DigitMap_t digit, uint8_t data );
 /**
  * @brief Ejecutar una prueba para diagnosticar el estado de los leds conectados
  *
- * Inicia un diagnóstico de los leds conectados al módulo, espera que termine y
+ * Inicia un diagnï¿½stico de los leds conectados al mï¿½dulo, espera que termine y
  * devuelve el resultado de la prueba.
  *
- * Si se detecta una falla global, se leen los registros de diagnóstico de todos
- * los dígitos utilizando la máscara configurada para cada uno (usedMask) para
+ * Si se detecta una falla global, se leen los registros de diagnï¿½stico de todos
+ * los dï¿½gitos utilizando la mï¿½scara configurada para cada uno (usedMask) para
  * no reportar errores en leds no conectados.
  *
- * Si el módulo no está inicializado, devuelve AS1116_TEST_FAILED.
+ * Si el mï¿½dulo no estï¿½ inicializado, devuelve AS1116_TEST_FAILED.
  *
  * @param[in]  type                    Tipo de prueba a ejecutar (cortocircuito o circuito abierto)
- * @return     AS1116_TEST_FAILED      Se detectó por lo menos una falla en un dígito
+ * @return     AS1116_TEST_FAILED      Se detectï¿½ por lo menos una falla en un dï¿½gito
  * @return     AS1116_TEST_NO_RESPONSE No hubo respuesta despues de una cantidad definida de intentos
- * @return     AS1116_TEST_OK          No se detectó ninguna falla
+ * @return     AS1116_TEST_OK          No se detectï¿½ ninguna falla
  */
 as1116TestResult_t as1116Test( as1116TestType_t type );
 
