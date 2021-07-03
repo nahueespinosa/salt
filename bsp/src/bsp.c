@@ -89,13 +89,19 @@ void bsp_init( int argc, char *argv[] )
 
     boardConfig();
 
+    gpioConfig(GPIO0, GPIO_OUTPUT);
+    gpioWrite(GPIO0, ON);              // ENC28J60 SSEL PIN should be up before panelInit()
+
+    gpioConfig(GPIO6, GPIO_OUTPUT);
+    gpioWrite(GPIO6, ON);
+
     gpioConfig( 0, GPIO_ENABLE );
     gpioConfig( LED1, GPIO_OUTPUT );
 
     switchInit();
     relayInit();
-    panelInit();
-    panelTest();
+    // panelInit();
+    // panelTest();
 
     panelLedWrite( PANEL_LED_ON, PANEL_LED_GREEN );
 }

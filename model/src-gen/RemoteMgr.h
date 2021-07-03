@@ -1,18 +1,12 @@
-/**
- *  \file       priorities.h
- *  \brief      SALT Active object's priorities.
- */
-
-/* -------------------------------- Authors -------------------------------- */
-/*
- */
-
 /* --------------------------------- Notes --------------------------------- */
 /* --------------------------------- Module -------------------------------- */
-#ifndef __PRIORITIES_H__
-#define __PRIORITIES_H__
+#ifndef __REMOTEMGR_H__
+#define __REMOTEMGR_H__
 
 /* ----------------------------- Include files ----------------------------- */
+#include "rkhsma.h"
+#include "rkhtmr.h"
+
 /* ---------------------- External C language linkage ---------------------- */
 #ifdef __cplusplus
 extern "C" {
@@ -20,17 +14,24 @@ extern "C" {
 
 /* --------------------------------- Macros -------------------------------- */
 /* -------------------------------- Constants ------------------------------ */
-/* ........................ Active object priorities ....................... */
-typedef enum Priorities Priorities;
-enum Priorities
-{
-    MainControlPrio,
-    SpeedMonitorPrio,
-    SwitchMonitorPrio,
-    RemoteMgrPrio,
-};
+/* ........................ Declares active object ......................... */
+RKH_SMA_DCLR(remoteMgr);
+
+/* ................... Declares states and pseudostates .................... */
+RKH_DCLR_BASIC_STATE Disconnected, Connected;
+RKH_DCLR_COMP_STATE Initialized;
 
 /* ------------------------------- Data types ------------------------------ */
+/* ............................. Active object ............................. */
+typedef struct RemoteMgr RemoteMgr;
+struct RemoteMgr
+{
+    RKH_SMA_T sma;      /* base structure */
+    RKHTmEvt tmEvtObj0;
+    RKHTmEvt tmEvtObj1;
+    RKHTmEvt tmEvtObj2;
+};
+
 /* -------------------------- External variables --------------------------- */
 /* -------------------------- Function prototypes -------------------------- */
 /* -------------------- External C language linkage end -------------------- */

@@ -1,6 +1,6 @@
 GeneratorModel for yakindu::c::rkh {
 
-	statechart mainControl {
+	statechart remoteMgr {
 
 		feature Outlet {
 			targetProject = "salt-model"

@@ -17,7 +17,7 @@
  *	Specify the maximum number of state machine applications (SMA) to be used
  *	by the application (can be a number in the range [1..64]).
  */
-#define RKH_CFG_FWK_MAX_SMA             3u
+#define RKH_CFG_FWK_MAX_SMA             4u
 
 /**
  *	If the dynamic event support (see #RKH_CFG_FWK_DYN_EVT_EN) is set to
@@ -390,7 +390,7 @@
  *	If the #RKH_CFG_TRC_EN is set to 1 then RKH will include the trace
  *	facility.
  */
-#define RKH_CFG_TRC_EN                  RKH_ENABLED
+#define RKH_CFG_TRC_EN                  RKH_DISABLED
 
 /**
  *	If the #RKH_CFG_TRC_RTFIL_EN is set to 1 then RKH will include

@@ -15,6 +15,7 @@
 #include "MainControl.h"
 #include "SwitchMonitor.h"
 #include "SpeedMonitor.h"
+#include "RemoteMgr.h"
 
 /*=====[Definition macros of private constants]==============================*/
 
@@ -25,6 +26,7 @@
 static RKH_EVT_T *mainControl_qsto[QSTO_SIZE];
 static RKH_EVT_T *switchMonitor_qsto[QSTO_SIZE];
 static RKH_EVT_T *speedMonitor_qsto[QSTO_SIZE];
+static RKH_EVT_T *remoteMgr_qsto[QSTO_SIZE];
 
 /*=====[Prototypes (declarations) of private functions]======================*/
 
@@ -52,6 +54,7 @@ int main( int argc, char *argv[] )
    RKH_SMA_ACTIVATE( mainControl, mainControl_qsto, QSTO_SIZE, 0, 0 );
    RKH_SMA_ACTIVATE( speedMonitor, speedMonitor_qsto, QSTO_SIZE, 0, 0 );
    RKH_SMA_ACTIVATE( switchMonitor, switchMonitor_qsto, QSTO_SIZE, 0, 0 );
+   RKH_SMA_ACTIVATE( remoteMgr, remoteMgr_qsto, QSTO_SIZE, 0, 0 );
 
    rkh_fwk_enter();
 
@@ -69,6 +72,7 @@ static void setupTraceFilters(void) {
    RKH_FILTER_OFF_EVENT( RKH_TE_SMA_LIFO );
    RKH_FILTER_OFF_SMA( mainControl );
    RKH_FILTER_OFF_SMA( speedMonitor );
-   RKH_FILTER_OFF_SMA( switchMonitor );
+   // RKH_FILTER_OFF_SMA( switchMonitor );
+   RKH_FILTER_OFF_SMA( remoteMgr );
    RKH_FILTER_OFF_ALL_SIGNALS();
 }
